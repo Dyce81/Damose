@@ -43,7 +43,8 @@ public class Mappa
             mappa.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mappa));
             mappa.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mappa));
             mappa.addKeyListener(new PanKeyListener(mappa));
-        } else if (!Wifi.wifi_connesso()) {
+        }
+        else {
 
         }
     }

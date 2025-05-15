@@ -29,6 +29,7 @@ public class Frame {
 
         mappa = new Mappa(frame);
 
+        frame.add(pannello_sup, BorderLayout.PAGE_START);
         frame.setVisible(true);
     }
 
