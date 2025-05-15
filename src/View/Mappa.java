@@ -2,6 +2,7 @@ package View;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
+import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.viewer.*;
@@ -33,7 +34,9 @@ public class Mappa
 
         MouseInputListener input_mouse = new PanMouseInputListener(mappa);
         mappa.addMouseListener(input_mouse);
+        mappa.addMouseMotionListener(input_mouse);
         mappa.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mappa));
         mappa.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mappa));
+        mappa.addKeyListener(new PanKeyListener(mappa));
     }
 }
