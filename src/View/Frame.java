@@ -1,10 +1,16 @@
 package View;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
 import java.awt.*;
+
+import org.jxmapviewer.painter.Painter;
 
 public class Frame {
     private JFrame frame;
+    public Mappa mappa;
 
     public Frame(int height, int width, String title)
     {
@@ -21,8 +27,13 @@ public class Frame {
         pannello_sup.add(testo_fermata);
         pannello_sup.add(avvia_ricerca_fermata);
 
-        Mappa mappa = new Mappa(frame);
+        mappa = new Mappa(frame);
 
         frame.setVisible(true);
+    }
+
+    public void imposta_painter_mappa(Painter p)
+    {
+        mappa.set_painter(p);
     }
 }

@@ -8,20 +8,21 @@ import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.viewer.*;
+import org.jxmapviewer.painter.Painter;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 
 public class Mappa
 {
+    public JXMapViewer mappa;
+
     //costruttore
-    Mappa(JFrame frame)
-    {
-        if (Wifi.wifi_connesso())
-        {
+    Mappa(JFrame frame) {
+        if (Wifi.wifi_connesso()) {
             //Definizione mappa - TODO: commentare tutto
-            JXMapViewer mappa = new JXMapViewer();
+            mappa = new JXMapViewer();
 
             TileFactoryInfo info = new OSMTileFactoryInfo();
             DefaultTileFactory tileFactory = new DefaultTileFactory(info);
@@ -42,11 +43,13 @@ public class Mappa
             mappa.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mappa));
             mappa.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mappa));
             mappa.addKeyListener(new PanKeyListener(mappa));
-        }
-
-        else if (!Wifi.wifi_connesso())
-        {
+        } else if (!Wifi.wifi_connesso()) {
 
         }
+    }
+
+    public void set_painter(Painter p)
+    {
+        mappa.setOverlayPainter(p);
     }
 }
