@@ -1,17 +1,14 @@
-
-import java.util.ArrayList;
-
 import Controller.Wifi;
 import Model.ElaboratoreFermate;
 import View.Frame;
-import Controller.ReaderStaticGTFS;
-import Model.Fermata;
-import org.jxmapviewer.viewer.*;
+import org.jxmapviewer.cache.FileBasedLocalCache;
+
+import java.io.File;
 
 public class Main
 {
-    public static void main(String[] args) {
-
+    public static void main(String[] args)
+    {
         Wifi wifi = new Wifi();
         wifi.wifi_controller();
 

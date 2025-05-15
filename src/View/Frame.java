@@ -5,11 +5,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.*;
+import java.security.PrivateKey;
 
 import org.jxmapviewer.painter.Painter;
 
 public class Frame {
-    private JFrame frame;
+    final JFrame frame;
     public Mappa mappa;
 
     public Frame(int height, int width, String title)
