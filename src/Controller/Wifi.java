@@ -16,7 +16,12 @@ public class Wifi
             public void run()
             {
                 //TODO: fare cose effettivamente
-                if (wifi_connesso()) System.out.println("WiFi connesso");
+                if (wifi_connesso())
+                    {
+                        System.out.println("WiFi connesso");
+
+                    }
+
                 else
                 {
                     System.out.println("WiFi non connesso :(");
