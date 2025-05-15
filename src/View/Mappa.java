@@ -19,12 +19,12 @@ import java.awt.*;
 
 public class Mappa
 {
-    JXMapViewer mappa;
+    public JXMapViewer mappa;
 
     //costruttore
     Mappa(JFrame frame)
     {
-        mappa = new JXMapViewer();
+            mappa = new JXMapViewer();
 
         if (Wifi.wifi_connesso())
         {
