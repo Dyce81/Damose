@@ -7,10 +7,8 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.viewer.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.util.Queue;
 
 public class Mappa
 {
