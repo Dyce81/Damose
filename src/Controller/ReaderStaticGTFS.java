@@ -16,7 +16,7 @@ public class ReaderStaticGTFS
     //Da lì si può poi generare ogni singola fermata (oggetto) sulla mappa
     public static ArrayList<String[]> leggi_csv(String path)
     {
-        //Senza try.. catch non è possibile usare FileReader
+        //Senza try... catch non è possibile usare FileReader
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path));
 

@@ -9,10 +9,6 @@ import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.viewer.*;
 import org.jxmapviewer.painter.Painter;
-
-import org.jxmapviewer.cache.FileBasedLocalCache;
-import java.io.File;
-
 import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
@@ -35,11 +31,12 @@ public class Mappa
             tileFactory.setThreadPoolSize(8);
         }
 
-        else
+        //TODO: capire come gestire la mappa offline
+        //else
         {
-            TileFactoryInfo info = new OSMTileFactoryInfo("ZIP archive", "jar:file:/C:/Users/Dado/IdeaProjects/Damose/data/.jxmapviewer2/tile.openstreetmap.zip!");
-            TileFactory tileFactory = new DefaultTileFactory(info);
-            mappa.setTileFactory(tileFactory);
+            //TileFactoryInfo info = new OSMTileFactoryInfo("ZIP archive", "jar:file:/C:/Users/Dado/IdeaProjects/Damose/data/.jxmapviewer2/tile.openstreetmap.zip!");
+            //TileFactory tileFactory = new DefaultTileFactory(info);
+            //mappa.setTileFactory(tileFactory);
         }
 
         //Metti Roma al centro della mappa

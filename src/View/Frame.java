@@ -5,7 +5,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.*;
-import java.security.PrivateKey;
 
 import org.jxmapviewer.painter.Painter;
 
