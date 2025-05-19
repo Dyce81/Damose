@@ -16,6 +16,7 @@ public class ElaboratoreFermate
     //Come suggerisce il nome, contiene tutti gli oggetti (derivati dalla classe "Model.Fermata") delle
     //fermate
     final static ArrayList<Fermata> lista_fermate = new ArrayList<Fermata>();
+    public final static ArrayList<String> nomi_fermate = new ArrayList<String>();
 
     //DATI GTFS Statici
 
@@ -24,6 +25,7 @@ public class ElaboratoreFermate
     //impossibile tracciare le linee - FORSE
 
     //elabora e posiziona tutte le fermate e restituisce un painter per farle disegnare dalla mappa
+    //PRESUME CHE "elabora_fermate()" SIA GIA' STATA CHIAMATA ----
     public Painter posiziona_fermate()
     {
         elabora_fermate();
@@ -57,6 +59,7 @@ public class ElaboratoreFermate
             double longit = Double.parseDouble(valori[4]);
             double latit = Double.parseDouble(valori[5]);
             lista_fermate.add(new Fermata(valori[0], valori[1], valori[2], valori[3], longit, latit, valori[6], valori[7], valori[8], valori[9], valori[10]));
+            nomi_fermate.add(valori[2]);
         }
     }
 }

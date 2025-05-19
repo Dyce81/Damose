@@ -13,9 +13,6 @@ import org.jxmapviewer.painter.Painter;
 import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -40,7 +37,7 @@ public class Mappa
         }
         else
         {
-            TileFactoryInfo info = new OSMTileFactoryInfo("ZIP archive", "jar:file:/././data/.jxmapviewer2/tile.openstreetmap.zip!");
+            TileFactoryInfo info = new OSMTileFactoryInfo("ZIP archive", "data/.jxmapviewer2/tile.openstreetmap.zip!");
             TileFactory tileFactory = new DefaultTileFactory(info);
             mappa.setTileFactory(tileFactory);
         }
