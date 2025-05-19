@@ -16,6 +16,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class Mappa
 {
@@ -53,23 +55,18 @@ public class Mappa
         MouseInputListener input_mouse = new PanMouseInputListener(mappa);
         mappa.addMouseListener(input_mouse);
         mappa.addMouseMotionListener(input_mouse);
-        mappa.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mappa)
+        mappa.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mappa));
+        mappa.addKeyListener(new PanKeyListener(mappa));
+
+        mappa.addPropertyChangeListener("zoom", new PropertyChangeListener()
         {
             @Override
-            public void mouseWheelMoved(MouseWheelEvent e)
+            public void propertyChange(PropertyChangeEvent evt)
             {
-                // non ottimale
-                int dir = e.getWheelRotation();
-                zoom += 1 * dir;
-                mappa.setZoom(zoom);
-                if (zoom < 5) {
-                    set_painter(painter);
-                } else {
-                    set_painter(null);
-                }
+                if (mappa.getZoom() < 5) set_painter(painter);
+                else set_painter(null);
             }
         });
-        mappa.addKeyListener(new PanKeyListener(mappa));
     }
 
     public void set_painter(Painter p)
