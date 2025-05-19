@@ -30,7 +30,7 @@ public class Wifi
             }
         };
 
-        timer_controllo_wifi.scheduleAtFixedRate(task_controllo, 0, 30000);
+        timer_controllo_wifi.scheduleAtFixedRate(task_controllo, 0, 10000);
     }
 
     public static boolean wifi_connesso()

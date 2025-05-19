@@ -15,7 +15,7 @@ public class ElaboratoreFermate
 {
     //Come suggerisce il nome, contiene tutti gli oggetti (derivati dalla classe "Model.Fermata") delle
     //fermate
-    private static ArrayList<Fermata> lista_fermate = new ArrayList<Fermata>();
+    final static ArrayList<Fermata> lista_fermate = new ArrayList<Fermata>();
 
     //DATI GTFS Statici
 
