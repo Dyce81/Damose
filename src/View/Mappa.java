@@ -67,7 +67,6 @@ public class Mappa
                 } else {
                     set_painter(null);
                 }
-
             }
         });
         mappa.addKeyListener(new PanKeyListener(mappa));
