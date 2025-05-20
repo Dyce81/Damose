@@ -66,9 +66,17 @@ public class Mappa
         });
     }
 
+    public void cambia_posizione(double latitude, double longitude)
+    {
+        //imposta la posizione effettiva
+        GeoPosition posizione = new GeoPosition(latitude, longitude);
+        mappa.setAddressLocation(posizione);
+        mappa.setZoom(3);
+    }
+
     public void set_painter(Painter p)
     {
-        if (painter == null) painter = p; // se painter non è già stato definito, impostalo correttamente
+        if (painter == null) painter = p; //se painter non è già stato definito, impostalo correttamente
         mappa.setOverlayPainter(p);
     }
 }

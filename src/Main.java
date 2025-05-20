@@ -1,9 +1,6 @@
 import Controller.Wifi;
 import Model.ElaboratoreFermate;
-import Model.Fermata;
 import View.Frame;
-
-import java.util.ArrayList;
 
 public class Main
 {
@@ -15,6 +12,7 @@ public class Main
         Frame frame = new Frame(600, 800, "Damose");
         ElaboratoreFermate elab_fermate = new ElaboratoreFermate();
         frame.imposta_painter_mappa(elab_fermate.posiziona_fermate());
+        frame.lista_fermate = ElaboratoreFermate.lista_fermate;
         frame.imposta_combo_box(ElaboratoreFermate.nomi_fermate);
     }
 }
