@@ -32,7 +32,23 @@ public class Fermata
         this.stazione_padre = ps;
     }
 
-    public String get_nome() { return this.nome_fermata; }
-    public double get_latitudine() { return this.latitudine; }
-    public double get_longitudine() { return this.longitudine; }
+    public String get_nome()
+    {
+        return this.nome_fermata;
+    }
+
+    public double get_latitudine()
+    {
+        return this.latitudine;
+    }
+
+    public double get_longitudine()
+    {
+        return this.longitudine;
+    }
+
+    public void toggle_selezione()
+    {
+        System.out.println("selezionato");
+    }
 }

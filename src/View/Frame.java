@@ -23,6 +23,7 @@ public class Frame {
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+
         //Casella testo e pulsante per la ricerca delle fermate
         JPanel pannello_sup = new JPanel();
         testo_fermata.setEditable(true);
@@ -41,10 +42,10 @@ public class Frame {
         frame.setVisible(true);
     }
 
-    public void imposta_painter_mappa(Painter p)
+    /*public void imposta_painter_mappa(Painter p)
     {
         mappa.set_painter(p);
-    }
+    }*/
 
     //questa funzione, oltre ad impostare la combo box, riempie l'array contenente tutte le fermate
     //public void imposta_combo_box(ArrayList<String> nomi)
@@ -65,6 +66,7 @@ public class Frame {
             if (Objects.equals(nome_fermata, f.nome_fermata)) //al posto di nome_fermata == f.nome_fermata
             {
                 mappa.cambia_posizione(f.get_latitudine(), f.get_longitudine());
+                f.toggle_selezione();
                 break;
             }
         }

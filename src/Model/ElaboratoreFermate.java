@@ -1,12 +1,15 @@
 package Model;
 
 import Controller.ReaderStaticGTFS;
-import org.jxmapviewer.viewer.DefaultWaypoint;
+import View.Mappa;
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.viewer.*;
 import org.jxmapviewer.painter.Painter;
-import org.jxmapviewer.viewer.DefaultWaypointRenderer;
-import org.jxmapviewer.viewer.Waypoint;
-import org.jxmapviewer.viewer.WaypointPainter;
 
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
@@ -17,6 +20,7 @@ public class ElaboratoreFermate
     //fermate
     public final static ArrayList<Fermata> lista_fermate = new ArrayList<Fermata>();
     public final static ArrayList<String> nomi_fermate = new ArrayList<String>();
+    Set<CustomWaypoint> waypoints = new HashSet<CustomWaypoint>();
 
     //DATI GTFS Statici
 
@@ -25,23 +29,33 @@ public class ElaboratoreFermate
     //impossibile tracciare le linee - FORSE
 
     //elabora e posiziona tutte le fermate e restituisce un painter per farle disegnare dalla mappa
-    public Painter posiziona_fermate()
+    public void posiziona_fermate(Mappa mappa)
     {
         elabora_fermate();
 
-        Set<Waypoint> waypoints = new HashSet<Waypoint>();
+        //Set<CustomWaypoint> waypoints = new HashSet<CustomWaypoint>();
 
         //Posizione le fermate
         for (Fermata fermata : lista_fermate)
         {
-            DefaultWaypoint wp = new DefaultWaypoint(fermata.get_latitudine(), fermata.get_longitudine());
-            waypoints.add(wp);
+            GeoPosition coords = new GeoPosition(fermata.get_latitudine(), fermata.get_longitudine());
+            //DefaultWaypoint wp = new DefaultWaypoint(coords);
+            //waypoints.add(wp);
+            CustomWaypoint cwp = new CustomWaypoint(fermata.get_nome(), coords);
+            waypoints.add(cwp);
         }
 
-        WaypointPainter<Waypoint> waypoint_painter = new WaypointPainter<Waypoint>();
+        //WaypointPainter<Waypoint> waypoint_painter = new WaypointPainter<Waypoint>();
+        WaypointPainter<CustomWaypoint> waypoint_painter = new CustomWaypointPainter();
         waypoint_painter.setWaypoints(waypoints);
 
-        return waypoint_painter;
+        /*for (CustomWaypoint w : waypoints)
+        {
+            mappa.mappa.add(w.getIcona()); //brutto
+        }*/
+
+        //forse
+        mappa.set_painter(waypoint_painter);
     }
 
     //Utilizza Controller.ReaderStaticGTFS per leggere il file delle fermate ed elaborare una lista di fermate
@@ -61,5 +75,32 @@ public class ElaboratoreFermate
             lista_fermate.add(new Fermata(valori[0], valori[1], valori[2], valori[3], longit, latit, valori[6], valori[7], valori[8], valori[9], valori[10]));
             nomi_fermate.add(valori[2].toUpperCase());
         }
+    }
+
+    //Collega alla mappa un mouse listener per poter interagire con i singoli waypoint (che sono immagini)
+    public void CustomMouseListener(JXMapViewer mappa)
+    {
+        mappa.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                Point puntoClick = e.getPoint();
+                Rectangle viewport = mappa.getViewportBounds();
+
+                for (CustomWaypoint wp : waypoints)
+                {
+                    Point2D punto = mappa.getTileFactory().geoToPixel(wp.getPosition(), mappa.getZoom());
+                    int x = (int)(punto.getX() - viewport.getX());
+                    int y = (int)(punto.getY() - viewport.getY());
+                    Rectangle bordi = new Rectangle(x - 15, y - 15, 30, 30);
+                    if (bordi.contains(puntoClick))
+                    {
+                        wp.cliccato();
+                        break;
+                    }
+                }
+            }
+        });
     }
 }
