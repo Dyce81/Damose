@@ -93,7 +93,7 @@ public class ElaboratoreFermate
                     Point2D punto = mappa.getTileFactory().geoToPixel(wp.getPosition(), mappa.getZoom());
                     int x = (int)(punto.getX() - viewport.getX());
                     int y = (int)(punto.getY() - viewport.getY());
-                    Rectangle bordi = new Rectangle(x - 15, y - 15, 30, 30);
+                    Rectangle bordi = new Rectangle(x - 15, y - 15, 30, 30); //TODO: rivedere i bordi
                     if (bordi.contains(puntoClick))
                     {
                         wp.cliccato();
