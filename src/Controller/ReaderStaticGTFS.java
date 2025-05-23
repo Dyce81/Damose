@@ -14,9 +14,9 @@ public class ReaderStaticGTFS
     //Questo metodo restituisce un'arraylist di array, dove ciascuna lista interna
     //indica i valori di una singola fermata; quindi l'array esterno racchiude tutte le fermate.
     //Da lì si può poi generare ogni singola fermata (oggetto) sulla mappa
-    public ArrayList<String[]> leggi_csv(String path)
+    public static ArrayList<String[]> leggi_csv(String path)
     {
-        //Senza try.. catch non è possibile usare FileReader
+        //Senza try... catch non è possibile usare FileReader
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path));
 
@@ -57,6 +57,7 @@ public class ReaderStaticGTFS
         }
 
         lista.add(buffer);
+        //System.out.println(lista); // da rimuovere
         return lista;
     }
 }

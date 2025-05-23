@@ -16,7 +16,12 @@ public class Wifi
             public void run()
             {
                 //TODO: fare cose effettivamente
-                if (wifi_connesso()) System.out.println("WiFi connesso");
+                if (wifi_connesso())
+                    {
+                        System.out.println("WiFi connesso");
+
+                    }
+
                 else
                 {
                     System.out.println("WiFi non connesso :(");
@@ -25,7 +30,7 @@ public class Wifi
             }
         };
 
-        timer_controllo_wifi.scheduleAtFixedRate(task_controllo, 0, 30000);
+        timer_controllo_wifi.scheduleAtFixedRate(task_controllo, 0, 10000);
     }
 
     public static boolean wifi_connesso()
