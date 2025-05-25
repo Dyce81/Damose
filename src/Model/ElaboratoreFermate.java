@@ -21,6 +21,10 @@ public class ElaboratoreFermate
     public final static ArrayList<Fermata> lista_fermate = new ArrayList<Fermata>();
     public final static ArrayList<String> nomi_fermate = new ArrayList<String>();
     Set<CustomWaypoint> waypoints = new HashSet<CustomWaypoint>();
+    //questo era originariamente locale all'interno del metodo "elabora_fermate"; probabilmente
+    //converebbe in locale, magari passandolo per riferimento come parametro quando si
+    //richiama la funzione
+    public static WaypointPainter<CustomWaypoint> waypoint_painter = new CustomWaypointPainter();
 
     //DATI GTFS Statici
 
@@ -45,8 +49,7 @@ public class ElaboratoreFermate
             waypoints.add(cwp);
         }
 
-        //WaypointPainter<Waypoint> waypoint_painter = new WaypointPainter<Waypoint>();
-        WaypointPainter<CustomWaypoint> waypoint_painter = new CustomWaypointPainter();
+        //WaypointPainter<CustomWaypoint> waypoint_painter = new CustomWaypointPainter();
         waypoint_painter.setWaypoints(waypoints);
 
         /*for (CustomWaypoint w : waypoints)
@@ -94,10 +97,20 @@ public class ElaboratoreFermate
                     int x = (int)(punto.getX() - viewport.getX());
                     int y = (int)(punto.getY() - viewport.getY());
                     Rectangle bordi = new Rectangle(x - 15, y - 15, 30, 30); //TODO: rivedere i bordi
+                    boolean trovato = false; //serve per cercare la fermata già selezionata
                     if (bordi.contains(puntoClick))
                     {
-                        wp.cliccato();
-                        break;
+                        // TODO: prima di cambiare la selezione, dovrebbe assicurarsi che tutti gli
+                        // altri waypoint non siano selezionati
+                        wp.seleziona();
+                        mappa.setOverlayPainter(waypoint_painter);
+                        if (trovato) break;
+                        //break;
+                    }
+                    else if (wp.selezionato) //brutto?
+                    {
+                        trovato = true;
+                        wp.deseleziona();
                     }
                 }
             }

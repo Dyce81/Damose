@@ -63,7 +63,7 @@ public class Frame {
         //cerca la fermata dentro la lista fermate;
         for (Fermata f : this.lista_fermate)
         {
-            if (Objects.equals(nome_fermata, f.nome_fermata)) //al posto di nome_fermata == f.nome_fermata
+            if (Objects.equals(nome_fermata, f.nome_fermata)) //Al posto di nome_fermata == f.nome_fermata
             {
                 mappa.cambia_posizione(f.get_latitudine(), f.get_longitudine());
                 f.toggle_selezione();

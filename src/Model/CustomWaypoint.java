@@ -11,7 +11,9 @@ import java.awt.event.MouseEvent;
 public class CustomWaypoint extends DefaultWaypoint
 {
     //private final JButton icona;
-    private final Image icona;
+    public boolean selezionato = false;
+
+    private Image icona;
     private final String testo;
 
     public CustomWaypoint(String testo, GeoPosition coords)
@@ -20,13 +22,6 @@ public class CustomWaypoint extends DefaultWaypoint
         this.testo = testo;
         ImageIcon img_icon = new ImageIcon("assets/bus-solid.png");
         this.icona = img_icon.getImage();
-        /*icona = new JButton(img_icon);
-        icona.setSize(48, 24);
-        icona.setBorder(null);
-        icona.setMargin(new Insets(0, 0, 0, 0));
-        icona.setContentAreaFilled(false);
-        icona.addMouseListener(new CustomWaypointMouseListener());
-        icona.setVisible(true);*/
     }
 
     public Image getIcona()
@@ -44,30 +39,21 @@ public class CustomWaypoint extends DefaultWaypoint
         System.out.println("cliccato");
     }
 
-    /*private static class CustomWaypointMouseListener implements MouseListener
+    public void seleziona()
     {
-        @Override
-        public void mouseClicked(MouseEvent e)
-        {
-            System.out.println("cliccato");
-        }
+        if (selezionato) return; //superfluo?
 
-        @Override
-        public void mousePressed(MouseEvent e)
-        {
-        }
+        selezionato = true;
+        ImageIcon img_icon = new ImageIcon("assets/bus-solid_selezionato.png");
+        icona = img_icon.getImage();
+    }
 
-        @Override
-        public void mouseReleased(MouseEvent e)
-        {
-        }
+    public void deseleziona()
+    {
+        if (!selezionato) return;
 
-        public void mouseEntered(MouseEvent e)
-        {
-        }
-
-        public void mouseExited(MouseEvent e)
-        {
-        }
-    }*/
+        selezionato = false;
+        ImageIcon img_icon = new ImageIcon("assets/bus-solid.png");
+        icona = img_icon.getImage();
+    }
 }
