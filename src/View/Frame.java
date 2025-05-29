@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ public class Frame {
         frame = new JFrame(title);
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
 
 
         //Casella testo e pulsante per la ricerca delle fermate
@@ -34,9 +36,30 @@ public class Frame {
                 cerca_fermata(e);
             }
         });
-        pannello_sup.add(testo_fermata);
 
         mappa = new Mappa(frame);
+
+        //tasto per l'accesso alla pagina di login
+        ImageIcon profileIcon = new ImageIcon("data/images/profile-logo.png");
+        JButton profileButton = new JButton();
+        profileButton.setIcon(profileIcon);
+        profileButton.setContentAreaFilled(false);
+        profileButton.setBorder(null);
+        profileButton.setPreferredSize(new Dimension(50, 50));
+        profileButton.addActionListener(new ActionListener()
+        {public void actionPerformed(ActionEvent e)
+            {
+                String s = e.getActionCommand();
+                if(s.equals("profile"))
+                {
+                    LoginPage loginPage = new LoginPage();
+                }
+            }
+        });
+
+        pannello_sup.add(testo_fermata);
+        pannello_sup.add(profileButton);
+        pannello_sup.setBackground(new Color(175, 62, 62));
 
         frame.add(pannello_sup, BorderLayout.PAGE_START);
         frame.setVisible(true);

@@ -1,5 +1,7 @@
 package Controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,7 +21,6 @@ public class Wifi
                 if (wifi_connesso())
                     {
                         System.out.println("WiFi connesso");
-
                     }
 
                 else
