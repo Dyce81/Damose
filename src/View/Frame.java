@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Objects;
+import View.LoginPage;
 
 import Model.Fermata;
 import org.jxmapviewer.painter.Painter;
@@ -21,13 +22,14 @@ public class Frame {
     {
         //Creazione finestra e definizione dimensione e operazione di chiusura
         frame = new JFrame(title);
+        frame.setLayout(new BorderLayout());
         frame.setSize(width, height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
 
         //Casella testo e pulsante per la ricerca delle fermate
-        JPanel pannello_sup = new JPanel();
+        JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 5));;
         testo_fermata.setEditable(true);
         testo_fermata.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e)
@@ -40,20 +42,18 @@ public class Frame {
         mappa = new Mappa(frame);
 
         //tasto per l'accesso alla pagina di login
-        ImageIcon profileIcon = new ImageIcon("data/images/profile-logo.png");
+        ImageIcon profileIcon = new ImageIcon("assets/profile-logo.png");
         JButton profileButton = new JButton();
         profileButton.setIcon(profileIcon);
         profileButton.setContentAreaFilled(false);
         profileButton.setBorder(null);
         profileButton.setPreferredSize(new Dimension(50, 50));
+
+        //accesso alla pagina di login
         profileButton.addActionListener(new ActionListener()
         {public void actionPerformed(ActionEvent e)
             {
-                String s = e.getActionCommand();
-                if(s.equals("profile"))
-                {
-                    LoginPage loginPage = new LoginPage();
-                }
+                LoginPage loginPage = new LoginPage();
             }
         });
 
