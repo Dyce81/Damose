@@ -10,42 +10,55 @@ public class LoginPage
     public LoginPage()
     {
         JDialog loginPage = new JDialog();
-        loginPage.setSize(500,400);
+        loginPage.setSize(450,270);
         loginPage.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         loginPage.setLocationRelativeTo(null);
         loginPage.setModal(true);
+        loginPage.setLayout(null);
 
-        loginPage.setLayout(new BorderLayout());
+        JPanel panel = new JPanel();
+        panel.setBounds(68, 20, 300, 180);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        loginPage.add(panel);
 
         JLabel benvenuto = new JLabel("benvenuto");
         benvenuto.setText("Benvenuto nella pagina di Login");
-        benvenuto.setHorizontalAlignment(SwingConstants.CENTER);
+        benvenuto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(benvenuto);
+        panel.add(Box.createVerticalStrut(10));
 
-        SpringLayout layout = new SpringLayout();
-        JPanel user_pswd = new JPanel(layout);
-
-        JTextField username = new JTextField(5);
+        JTextField username = new JTextField(3);
+        String username_input = username.getText();
+        username.setAlignmentX(Component.CENTER_ALIGNMENT);
         JLabel usrn_txt = new JLabel("username:");
         usrn_txt.setLabelFor(username);
-        user_pswd.add(usrn_txt);
-        user_pswd.add(username);
+        usrn_txt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(usrn_txt);
+        panel.add(username);
+        panel.add(Box.createVerticalStrut(10));
 
-        JTextField password = new JTextField(5);
+        JTextField password = new JTextField(3);
+        String password_input = password.getText();
+        password.setAlignmentX(Component.CENTER_ALIGNMENT);
         JLabel pswd_txt = new JLabel("password:");
-        user_pswd.add(pswd_txt);
-        user_pswd.add(password);
+        pswd_txt.setLabelFor(password);
+        pswd_txt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(pswd_txt);
+        panel.add(password);
+        panel.add(Box.createVerticalStrut(10));
 
-        loginPage.add(user_pswd, BorderLayout.CENTER);
-        SpringUtilities.makeCompactGrid(user_pswd, 2, 2, 6, 6, 6, 6);
+        JButton accedi = new JButton("accedi");
+        accedi.setText("Accedi");
+        accedi.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(accedi);
+        panel.add(Box.createVerticalStrut(10));
 
         JButton registrati = new JButton("registrati");
         registrati.setText("Non sei registrato? Registrati ora!");
-        registrati.setHorizontalAlignment(SwingConstants.CENTER);
+        registrati.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(registrati);
 
-
-        loginPage.add(benvenuto, BorderLayout.PAGE_START);
-        loginPage.add(registrati, BorderLayout.PAGE_END);
-
+        loginPage.add(panel);
         loginPage.setVisible(true);
     }
 }
