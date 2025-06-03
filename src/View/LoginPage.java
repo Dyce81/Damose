@@ -9,6 +9,7 @@ public class LoginPage
 {
     public LoginPage()
     {
+        //setup finestra
         JDialog loginPage = new JDialog();
         loginPage.setSize(450,270);
         loginPage.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -16,6 +17,7 @@ public class LoginPage
         loginPage.setModal(true);
         loginPage.setLayout(null);
 
+        //pannello in cui inserire i componenti
         JPanel panel = new JPanel();
         panel.setBounds(68, 20, 300, 180);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
