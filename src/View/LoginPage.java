@@ -1,9 +1,9 @@
 package View;
 
-import Controller.SpringUtilities;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class LoginPage
 {
@@ -24,7 +24,7 @@ public class LoginPage
         loginPage.add(panel);
 
         JLabel benvenuto = new JLabel("benvenuto");
-        benvenuto.setText("Benvenuto nella pagina di Login");
+        benvenuto.setText("Benvenuto nella pagina di login");
         benvenuto.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(benvenuto);
         panel.add(Box.createVerticalStrut(10));
@@ -59,6 +59,25 @@ public class LoginPage
         registrati.setText("Non sei registrato? Registrati ora!");
         registrati.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(registrati);
+        registrati.addActionListener(new ActionListener()
+        {public void actionPerformed(ActionEvent e)
+        {
+
+            if (accedi.getText().equals("Accedi"))
+            {
+                registrati.setText("Hai già un account? Accedi ora!");
+                accedi.setText("Registrati");
+                benvenuto.setText("Benvenuto nella pagina di registrazione");
+            }
+            else if (accedi.getText().equals("Registrati"))
+            {
+                registrati.setText("Non sei registrato? Registrati ora!");
+                accedi.setText("Accedi");
+                benvenuto.setText("Benvenuto nella pagina di login");
+            }
+
+        }
+        });
 
         loginPage.add(panel);
         loginPage.setVisible(true);
