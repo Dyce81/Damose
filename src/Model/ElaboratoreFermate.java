@@ -4,7 +4,6 @@ import Controller.ReaderStaticGTFS;
 import View.Mappa;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.*;
-import org.jxmapviewer.painter.Painter;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -14,11 +13,11 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 
-public class ElaboratoreFermate
-{
+public class ElaboratoreFermate {
     //Come suggerisce il nome, contiene tutti gli oggetti (derivati dalla classe "Model.Fermata") delle
     //fermate
-    public final static ArrayList<Fermata> lista_fermate = new ArrayList<Fermata>();
+    ////public final static ArrayList<Fermata> lista_fermate = new ArrayList<Fermata>();
+    public final static ArrayList<CustomWaypoint> listaFermate = new ArrayList<>();
     public final static ArrayList<String> nomi_fermate = new ArrayList<String>();
     Set<CustomWaypoint> waypoints = new HashSet<CustomWaypoint>();
     //questo era originariamente locale all'interno del metodo "elabora_fermate"; probabilmente
@@ -33,24 +32,24 @@ public class ElaboratoreFermate
     //impossibile tracciare le linee - FORSE
 
     //elabora e posiziona tutte le fermate e restituisce un painter per farle disegnare dalla mappa
-    public void posiziona_fermate(Mappa mappa)
-    {
-        elabora_fermate();
+    ////public void posiziona_fermate(Mappa mappa) {
+        //elabora_fermate();
+        ////elaboraFermate();
 
         //Set<CustomWaypoint> waypoints = new HashSet<CustomWaypoint>();
 
         //Posizione le fermate
-        for (Fermata fermata : lista_fermate)
+        /*for (Fermata fermata : lista_fermate)
         {
             GeoPosition coords = new GeoPosition(fermata.get_latitudine(), fermata.get_longitudine());
             //DefaultWaypoint wp = new DefaultWaypoint(coords);
             //waypoints.add(wp);
             CustomWaypoint cwp = new CustomWaypoint(fermata.get_nome(), coords);
             waypoints.add(cwp);
-        }
+        }*/
 
         //WaypointPainter<CustomWaypoint> waypoint_painter = new CustomWaypointPainter();
-        waypoint_painter.setWaypoints(waypoints);
+        ////waypoint_painter.setWaypoints(waypoints);
 
         /*for (CustomWaypoint w : waypoints)
         {
@@ -58,11 +57,36 @@ public class ElaboratoreFermate
         }*/
 
         //forse
+        ////mappa.set_painter(waypoint_painter);
+    ////}
+
+    //QUESTA QUI!!!!
+    public void posizionaFermate(Mappa mappa) {
+        ArrayList<String[]> listaValoriFermate = new ArrayList<String[]>();
+        listaValoriFermate = ReaderStaticGTFS.leggi_csv("data/rome_static_gtfs/stops.txt");
+
+        //ArrayList<Fermata> lista = new ArrayList<Fermata>();
+        nomi_fermate.add("-- Seleziona una fermata --");
+
+        for (String[] valori : listaValoriFermate) {
+            double longit = Double.parseDouble(valori[4]);
+            double latit = Double.parseDouble(valori[5]);
+            GeoPosition coords = new GeoPosition(longit, latit);
+            CustomWaypoint cwp = new CustomWaypoint(valori[2], coords);
+            waypoints.add(cwp);
+
+            nomi_fermate.add(valori[2].toUpperCase());
+            listaFermate.add(cwp);
+        }
+
+        waypoint_painter.setWaypoints(waypoints);
+
+        //forse
         mappa.set_painter(waypoint_painter);
     }
 
     //Utilizza Controller.ReaderStaticGTFS per leggere il file delle fermate ed elaborare una lista di fermate
-    public static void elabora_fermate()
+    /*public static void elabora_fermate()
     {
         ArrayList<String[]> lista_valori_fermate = new ArrayList<String[]>();
         lista_valori_fermate = ReaderStaticGTFS.leggi_csv("data/rome_static_gtfs/stops.txt");
@@ -78,36 +102,46 @@ public class ElaboratoreFermate
             lista_fermate.add(new Fermata(valori[0], valori[1], valori[2], valori[3], longit, latit, valori[6], valori[7], valori[8], valori[9], valori[10]));
             nomi_fermate.add(valori[2].toUpperCase());
         }
-    }
+    }*/
+
+    /*public void elaboraFermate() {
+        ArrayList<String[]> listaValoriFermate = new ArrayList<String[]>();
+        listaValoriFermate = ReaderStaticGTFS.leggi_csv("data/rome_static_gtfs/stops.txt");
+
+        ArrayList<Fermata> lista = new ArrayList<Fermata>();
+        nomi_fermate.add("-- Seleziona una fermata --");
+
+        for (String[] valori : listaValoriFermate) {
+            double longit = Double.parseDouble(valori[4]);
+            double latit = Double.parseDouble(valori[5]);
+            GeoPosition coords = new GeoPosition(longit, latit);
+            CustomWaypoint cwp = new CustomWaypoint(valori[3], coords);
+            waypoints.add(cwp);
+        }
+    }*/
 
     //Collega alla mappa un mouse listener per poter interagire con i singoli waypoint (che sono immagini)
-    public void CustomMouseListener(JXMapViewer mappa)
-    {
-        mappa.addMouseListener(new MouseAdapter()
-        {
+    public void CustomMouseListener(JXMapViewer mappa) {
+        mappa.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e)
-            {
+            public void mouseClicked(MouseEvent e) {
                 Point puntoClick = e.getPoint();
                 Rectangle viewport = mappa.getViewportBounds();
+                boolean trovato = false; //serve per cercare la fermata già selezionata
 
-                for (CustomWaypoint wp : waypoints)
-                {
+                for (CustomWaypoint wp : waypoints) {
                     Point2D punto = mappa.getTileFactory().geoToPixel(wp.getPosition(), mappa.getZoom());
-                    int x = (int)(punto.getX() - viewport.getX());
-                    int y = (int)(punto.getY() - viewport.getY());
+                    int x = (int) (punto.getX() - viewport.getX());
+                    int y = (int) (punto.getY() - viewport.getY());
+                    ////System.out.println("analizzato");
                     Rectangle bordi = new Rectangle(x - 15, y - 15, 30, 30); //TODO: rivedere i bordi
-                    boolean trovato = false; //serve per cercare la fermata già selezionata
-                    if (bordi.contains(puntoClick))
-                    {
-                        // TODO: prima di cambiare la selezione, dovrebbe assicurarsi che tutti gli
-                        // altri waypoint non siano selezionati
+                    if (bordi.contains(puntoClick)) {
                         wp.seleziona();
                         mappa.setOverlayPainter(waypoint_painter);
+                        ////System.out.println("trovato!");
                         if (trovato) break;
                         //break;
-                    }
-                    else if (wp.selezionato) //brutto?
+                    } else if (wp.selezionato) //brutto?
                     {
                         trovato = true;
                         wp.deseleziona();

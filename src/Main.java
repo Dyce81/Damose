@@ -16,9 +16,10 @@ public class Main
         Frame frame = new Frame(600, 800, "Damose");
         ElaboratoreFermate elab_fermate = new ElaboratoreFermate();
         //frame.imposta_painter_mappa(elab_fermate.posiziona_fermate());
-        elab_fermate.posiziona_fermate(frame.mappa);
+        //elab_fermate.posiziona_fermate(frame.mappa);
+        elab_fermate.posizionaFermate(frame.mappa);
         elab_fermate.CustomMouseListener(frame.mappa.mappa); //da rivedere -- vedere disclaimer sopra
-        frame.lista_fermate = ElaboratoreFermate.lista_fermate;
+        frame.listaFermate = ElaboratoreFermate.listaFermate;
         frame.imposta_combo_box(ElaboratoreFermate.nomi_fermate);
     }
 }

@@ -5,38 +5,45 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseEvent;
 
 public class CustomWaypoint extends DefaultWaypoint
 {
     //private final JButton icona;
     public boolean selezionato = false;
 
+    private final String nome;
+    private final double longitudine;
+    private final double latitudine;
     private Image icona;
-    private final String testo;
 
-    public CustomWaypoint(String testo, GeoPosition coords)
+    public CustomWaypoint(String nome, GeoPosition coords)
     {
         super(coords);
-        this.testo = testo;
+        this.nome = nome;
+        this.longitudine = coords.getLongitude();
+        this.latitudine = coords.getLatitude();
         ImageIcon img_icon = new ImageIcon("assets/bus-solid.png");
         this.icona = img_icon.getImage();
+    }
+
+    public String getNome()
+    {
+        return nome;
+    }
+
+    public double getLongitudine()
+    {
+        return longitudine;
+    }
+
+    public double getLatitudine()
+    {
+        return latitudine;
     }
 
     public Image getIcona()
     {
         return icona;
-    }
-
-    public String getTesto()
-    {
-        return testo;
-    }
-
-    public void cliccato()
-    {
-        System.out.println("cliccato");
     }
 
     public void seleziona()

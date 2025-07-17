@@ -4,19 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Objects;
-import View.LoginPage;
 
-import Model.Fermata;
-import org.jxmapviewer.painter.Painter;
+import Model.CustomWaypoint;
 
 public class Frame {
-    final JFrame frame;
-    public Mappa mappa;
-    private JComboBox testo_fermata = new JComboBox();
-    public ArrayList<Fermata> lista_fermate;
+    public final JFrame frame;
+    public final Mappa mappa;
+    ////public ArrayList<Fermata> lista_fermate;
+    public ArrayList<CustomWaypoint> listaFermate;
+    private final JComboBox testoFermata = new JComboBox(); //TODO: può essere definito nel costruttore passando direttamente l'array dei nomi delle fermate
+
+    private CustomWaypoint ultimaFermata;
 
     public Frame(int height, int width, String title)
     {
@@ -27,17 +26,10 @@ public class Frame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
-
         //Casella testo e pulsante per la ricerca delle fermate
         JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 5));;
-        testo_fermata.setEditable(true);
-        testo_fermata.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e)
-            {
-                //System.out.println(lista_fermate);
-                cerca_fermata(e);
-            }
-        });
+        testoFermata.setEditable(true);
+        testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
 
         mappa = new Mappa(frame);
 
@@ -57,7 +49,7 @@ public class Frame {
             }
         });
 
-        pannello_sup.add(testo_fermata);
+        pannello_sup.add(testoFermata);
         pannello_sup.add(profileButton);
         pannello_sup.setBackground(new Color(175, 62, 62));
 
@@ -65,31 +57,30 @@ public class Frame {
         frame.setVisible(true);
     }
 
-    /*public void imposta_painter_mappa(Painter p)
-    {
-        mappa.set_painter(p);
-    }*/
-
-    //questa funzione, oltre ad impostare la combo box, riempie l'array contenente tutte le fermate
-    //public void imposta_combo_box(ArrayList<String> nomi)
+    //questa funzione riempie la combo box con i nomi delle fermate
     public void imposta_combo_box(ArrayList<String> nomi)
     {
         for (String s : nomi)
-            testo_fermata.addItem(s);
+            testoFermata.addItem(s);
     }
 
-    private void cerca_fermata(ActionEvent e)
+    private void cercaFermata(ActionEvent e)
     {
-        if (testo_fermata.getSelectedItem() == null) return; //magari con codice di errore
-        String nome_fermata = testo_fermata.getSelectedItem().toString();
+        if (testoFermata.getSelectedItem() == null) return; //magari con codice di errore
+        String nomeFermata = testoFermata.getSelectedItem().toString();
+
+        //la fermata precedentemente selezionata (se è presente) non serve più
+        if (ultimaFermata != null)
+            ultimaFermata.deseleziona();
 
         //cerca la fermata dentro la lista fermate;
-        for (Fermata f : this.lista_fermate)
+        for (CustomWaypoint f : this.listaFermate)
         {
-            if (Objects.equals(nome_fermata, f.nome_fermata)) //Al posto di nome_fermata == f.nome_fermata
+            if (f.getNome().equals(nomeFermata)) //fermata trovata
             {
-                mappa.cambia_posizione(f.get_latitudine(), f.get_longitudine());
-                f.toggle_selezione();
+                mappa.cambia_posizione(f.getLatitudine(), f.getLongitudine());
+                ultimaFermata = f;
+                f.seleziona();
                 break;
             }
         }
