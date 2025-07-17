@@ -25,6 +25,8 @@ public class ElaboratoreFermate {
     //richiama la funzione
     public static WaypointPainter<CustomWaypoint> waypoint_painter = new CustomWaypointPainter();
 
+    private CustomWaypoint ultimaFermata;
+
     //DATI GTFS Statici
 
     //probabilmente questa intera parte deve essere fatta da zero - attualmente, avendo le fermate
@@ -127,24 +129,19 @@ public class ElaboratoreFermate {
             public void mouseClicked(MouseEvent e) {
                 Point puntoClick = e.getPoint();
                 Rectangle viewport = mappa.getViewportBounds();
-                boolean trovato = false; //serve per cercare la fermata già selezionata
+
+                if (ultimaFermata != null)
+                    ultimaFermata.deseleziona();
 
                 for (CustomWaypoint wp : waypoints) {
                     Point2D punto = mappa.getTileFactory().geoToPixel(wp.getPosition(), mappa.getZoom());
                     int x = (int) (punto.getX() - viewport.getX());
                     int y = (int) (punto.getY() - viewport.getY());
-                    ////System.out.println("analizzato");
                     Rectangle bordi = new Rectangle(x - 15, y - 15, 30, 30); //TODO: rivedere i bordi
                     if (bordi.contains(puntoClick)) {
                         wp.seleziona();
+                        ultimaFermata = wp;
                         mappa.setOverlayPainter(waypoint_painter);
-                        ////System.out.println("trovato!");
-                        if (trovato) break;
-                        //break;
-                    } else if (wp.selezionato) //brutto?
-                    {
-                        trovato = true;
-                        wp.deseleziona();
                     }
                 }
             }
