@@ -27,7 +27,7 @@ public class Frame {
         frame.setLocationRelativeTo(null);
 
         //Casella testo e pulsante per la ricerca delle fermate
-        JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 5));;
+        JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 5));
         testoFermata.setEditable(true);
         testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
 
@@ -64,6 +64,7 @@ public class Frame {
             testoFermata.addItem(s);
     }
 
+    //la ricerca delle fermate è gestita dal frame tramite questo metodo
     private void cercaFermata(ActionEvent e)
     {
         if (testoFermata.getSelectedItem() == null) return; //magari con codice di errore

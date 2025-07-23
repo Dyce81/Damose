@@ -21,8 +21,8 @@ public class ElaboratoreFermate {
     //Come suggerisce il nome, contiene tutti gli oggetti (derivati dalla classe "Model.Fermata") delle
     //fermate
     public final static ArrayList<CustomWaypoint> listaFermate = new ArrayList<>();
-    public final static ArrayList<String> nomi_fermate = new ArrayList<String>();
-    Set<CustomWaypoint> waypoints = new HashSet<CustomWaypoint>();
+    public final static ArrayList<String> nomi_fermate = new ArrayList<>();
+    Set<CustomWaypoint> waypoints = new HashSet<>();
     //questo era originariamente locale all'interno del metodo "elabora_fermate"; probabilmente
     //converebbe in locale, magari passandolo per riferimento come parametro quando si
     //richiama la funzione
@@ -33,7 +33,7 @@ public class ElaboratoreFermate {
     //DATI GTFS Statici
 
     public void posizionaFermate(Mappa mappa) {
-        ArrayList<String[]> listaValoriFermate = new ArrayList<String[]>();
+        ArrayList<String[]> listaValoriFermate;
         listaValoriFermate = ReaderStaticGTFS.leggi_csv("data/rome_static_gtfs/stops.txt");
 
         nomi_fermate.add("-- Seleziona una fermata --");
