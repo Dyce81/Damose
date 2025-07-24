@@ -13,7 +13,9 @@ public class Frame {
     public final Mappa mappa;
     ////public ArrayList<Fermata> lista_fermate;
     public ArrayList<CustomWaypoint> listaFermate;
+
     private final JComboBox testoFermata = new JComboBox(); //TODO: può essere definito nel costruttore passando direttamente l'array dei nomi delle fermate
+    private InformazioniFermata pannelloInformazioni;
 
     private CustomWaypoint ultimaFermata;
 
@@ -32,6 +34,10 @@ public class Frame {
         testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
 
         mappa = new Mappa(frame);
+
+        //Pannello informazioni laterale per le fermate
+        pannelloInformazioni = new InformazioniFermata();
+        frame.add(pannelloInformazioni.getPannello(), BorderLayout.WEST);
 
         //tasto per l'accesso alla pagina di login
         ImageIcon profileIcon = new ImageIcon("assets/profile-logo.png");
@@ -82,8 +88,15 @@ public class Frame {
                 mappa.cambia_posizione(f.getLatitudine(), f.getLongitudine());
                 ultimaFermata = f;
                 f.seleziona();
+                mostraInformazioni(f.getNome());
                 break;
             }
         }
+    }
+
+    //Questo metodo mostra le informazioni della fermata selezionata (al lato della finestra?)
+    public void mostraInformazioni(String nome)
+    {
+        pannelloInformazioni.setNome(nome);
     }
 }
