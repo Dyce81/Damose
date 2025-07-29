@@ -1,5 +1,6 @@
 package Model;
 
+import View.InformazioniFermata;
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -15,6 +16,8 @@ public class CustomWaypoint extends DefaultWaypoint
     private final double longitudine;
     private final double latitudine;
     private Image icona;
+
+    private static InformazioniFermata pannelloInformazioni; // E' l'observer in questo caso
 
     public CustomWaypoint(String nome, GeoPosition coords)
     {
@@ -46,6 +49,11 @@ public class CustomWaypoint extends DefaultWaypoint
         return icona;
     }
 
+    public static void setPannello(InformazioniFermata pannello)
+    {
+        pannelloInformazioni = pannello;
+    }
+
     public void seleziona()
     {
         if (selezionato) return; //superfluo?
@@ -53,6 +61,11 @@ public class CustomWaypoint extends DefaultWaypoint
         selezionato = true;
         ImageIcon img_icon = new ImageIcon("assets/bus-solid_selezionato.png");
         icona = img_icon.getImage();
+
+        // qui praticamente si deve ridefinire da zero il corpo di un metodo già presente in "Frame"
+        // (mostraInformazioni()); se possibile, vedere se ci si può riferire direttamente a quello
+        // (forse rendendo il pannello dentro frame statico?)
+        pannelloInformazioni.setNome(this.nome);
     }
 
     public void deseleziona()

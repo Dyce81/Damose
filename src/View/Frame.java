@@ -15,7 +15,7 @@ public class Frame {
     public ArrayList<CustomWaypoint> listaFermate;
 
     private final JComboBox testoFermata = new JComboBox(); //TODO: può essere definito nel costruttore passando direttamente l'array dei nomi delle fermate
-    private InformazioniFermata pannelloInformazioni;
+    private final InformazioniFermata pannelloInformazioni;
 
     private CustomWaypoint ultimaFermata;
 
@@ -98,5 +98,10 @@ public class Frame {
     public void mostraInformazioni(String nome)
     {
         pannelloInformazioni.setNome(nome);
+    }
+
+    public InformazioniFermata getPannelloInformazioni()
+    {
+        return this.pannelloInformazioni;
     }
 }

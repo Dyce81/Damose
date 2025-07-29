@@ -1,4 +1,5 @@
 import Controller.Wifi;
+import Model.CustomWaypoint;
 import Model.ElaboratoreFermate;
 import View.Frame;
 
@@ -21,5 +22,6 @@ public class Main
         elab_fermate.CustomMouseListener(frame.mappa.mappa); //da rivedere -- vedere disclaimer sopra
         frame.listaFermate = ElaboratoreFermate.listaFermate;
         frame.imposta_combo_box(ElaboratoreFermate.nomi_fermate);
+        CustomWaypoint.setPannello(frame.getPannelloInformazioni());
     }
 }

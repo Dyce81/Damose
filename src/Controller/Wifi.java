@@ -32,6 +32,7 @@ public class Wifi
         };
 
         timer_controllo_wifi.scheduleAtFixedRate(task_controllo, 0, 10000);
+        //il "period" reale dovrebbe essere 30000
     }
 
     public static boolean wifi_connesso()
