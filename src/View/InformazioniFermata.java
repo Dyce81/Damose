@@ -1,5 +1,6 @@
 package View;
 
+import Model.CustomWaypoint;
 import Model.Route;
 
 import javax.swing.*;
@@ -10,6 +11,7 @@ public class InformazioniFermata
 {
     private final JPanel pannello;
     private final JLabel nome;
+    private final JLabel tipoMezzo;
     private final JTextArea lineeServite;
 
     public InformazioniFermata()
@@ -19,12 +21,14 @@ public class InformazioniFermata
         pannello.setPreferredSize(new Dimension(200, pannello.getHeight())); //forse? (non proprio responsive)
 
         nome = new JLabel("Seleziona una fermata.");
+        tipoMezzo = new JLabel("");
         lineeServite = new JTextArea("");
         lineeServite.setBackground(new Color(143, 51, 51));
         lineeServite.setEditable(false);
 
         pannello.setLayout(new BoxLayout(pannello, BoxLayout.Y_AXIS));
         pannello.add(nome);
+        pannello.add(tipoMezzo);
         pannello.add(lineeServite);
     }
 
@@ -36,6 +40,22 @@ public class InformazioniFermata
     public void setNome(String nome)
     {
         this.nome.setText(nome + '\n');
+    }
+
+    public void setTipoMezzo(String tipoMezzo)
+    {
+        System.out.println();
+        this.tipoMezzo.setText("Tipo mezzo: " + tipoMezzo);
+    }
+
+    public void impostaInfo(CustomWaypoint fermata)
+    {
+        nome.setText(fermata.getNome());
+
+        if (fermata.getId().startsWith("ITO"))
+            tipoMezzo.setText("Metropolitana");
+        else
+            tipoMezzo.setText("Autobus");
     }
 
     public void setLineeServite(ArrayList<Route> linee)

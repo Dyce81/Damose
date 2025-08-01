@@ -21,8 +21,8 @@ public class ElaboratoreFermate {
     //Come suggerisce il nome, contiene tutti gli oggetti (derivati dalla classe "Model.Fermata") delle
     //fermate
     public final static ArrayList<CustomWaypoint> listaFermate = new ArrayList<>();
-    public final static ArrayList<String> nomi_fermate = new ArrayList<>();
-    Set<CustomWaypoint> waypoints = new HashSet<>();
+    //public final static ArrayList<String> nomi_fermate = new ArrayList<>();
+    private final Set<CustomWaypoint> waypoints = new HashSet<>();
     //questo era originariamente locale all'interno del metodo "elabora_fermate"; probabilmente
     //converebbe in locale, magari passandolo per riferimento come parametro quando si
     //richiama la funzione
@@ -36,7 +36,7 @@ public class ElaboratoreFermate {
         ArrayList<String[]> listaValoriFermate;
         listaValoriFermate = ReaderStaticGTFS.leggi_csv("data/rome_static_gtfs/stops.txt");
 
-        nomi_fermate.add("-- Seleziona una fermata --");
+        //nomi_fermate.add("-- Seleziona una fermata --");
 
         for (String[] valori : listaValoriFermate) {
             double longit = Double.parseDouble(valori[4]);
@@ -45,7 +45,7 @@ public class ElaboratoreFermate {
             CustomWaypoint cwp = new CustomWaypoint(valori[0], valori[2], coords);
             waypoints.add(cwp);
 
-            nomi_fermate.add(valori[2].toUpperCase());
+            //nomi_fermate.add(valori[2].toUpperCase());
             listaFermate.add(cwp);
         }
 
@@ -70,7 +70,9 @@ public class ElaboratoreFermate {
                     Point2D punto = mappa.getTileFactory().geoToPixel(wp.getPosition(), mappa.getZoom());
                     int x = (int) (punto.getX() - viewport.getX());
                     int y = (int) (punto.getY() - viewport.getY());
-                    Rectangle bordi = new Rectangle(x, y, 15, 15); //TODO: rivedere i bordi
+                    Rectangle bordi = new Rectangle(x - 8, y - 8, 17, 17); //TODO: rivedere i bordi
+                    //8 sopra è un po' un numero magico - in questo caso la metà (-1) di 17, ovvero
+                    //la metà della grandezza dell'icona delle fermate
                     if (bordi.contains(puntoClick)) {
                         wp.seleziona();
                         ultimaFermata = wp;

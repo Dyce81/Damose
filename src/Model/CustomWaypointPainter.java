@@ -35,7 +35,8 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
             || y > altezza + offsetVisibilita) continue;
 
             Image icona = wp.getIcona();
-            g.drawImage(icona, x, y, null);
+            //g.drawImage(icona, x, y, null);
+            g.drawImage(icona, x - icona.getWidth(null) / 2, y - icona.getHeight(null) / 2, null);
             //JButton icona = wp.getIcona();
             //icona.setLocation(iconaX - icona.getWidth() / 2, iconaY - icona.getHeight() / 2);
         }

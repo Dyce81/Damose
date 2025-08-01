@@ -13,7 +13,6 @@ import java.util.Set;
 
 public class CustomWaypoint extends DefaultWaypoint
 {
-    //private final JButton icona;
     public boolean selezionato = false;
 
     private final String id;
@@ -21,6 +20,10 @@ public class CustomWaypoint extends DefaultWaypoint
     private final double longitudine;
     private final double latitudine;
     private Image icona;
+
+    private static final Image iconaAutobus = new ImageIcon("assets/bus-solid_grande.png").getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
+    private static final Image iconaMetro = new ImageIcon("assets/metro_icona.png").getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
+    private static final Image iconaSelezionata = new ImageIcon("assets/fermata-selezionata.png").getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 
     private static InformazioniFermata pannelloInformazioni; // E' l'observer in questo caso
 
@@ -31,8 +34,17 @@ public class CustomWaypoint extends DefaultWaypoint
         this.nome = nome;
         this.longitudine = coords.getLongitude();
         this.latitudine = coords.getLatitude();
-        ImageIcon img_icon = new ImageIcon("assets/bus-solid.png");
-        this.icona = img_icon.getImage();
+
+        if (id.startsWith("ITO")) {
+            icona = iconaMetro;
+        } else {
+            icona = iconaAutobus;
+        }
+    }
+
+    public String getId()
+    {
+        return id;
     }
 
     public String getNome()
@@ -65,14 +77,18 @@ public class CustomWaypoint extends DefaultWaypoint
         if (selezionato) return; //superfluo?
 
         selezionato = true;
-        ImageIcon img_icon = new ImageIcon("assets/bus-solid_selezionato.png");
-        icona = img_icon.getImage();
+        icona = iconaSelezionata;
         trovaLinee();
+
+        //TODO: commento inutile da cancellare più tardi perché ho paura che in realtà serva \/
 
         // qui praticamente si deve ridefinire da zero il corpo di un metodo già presente in "Frame"
         // (mostraInformazioni()); se possibile, vedere se ci si può riferire direttamente a quello
         // (forse rendendo il pannello dentro frame statico?)
-        pannelloInformazioni.setNome(this.nome);
+        ////pannelloInformazioni.setNome(this.nome);
+        //pannelloInformazioni.setTipoMezzo();
+
+        pannelloInformazioni.impostaInfo(this);
     }
 
     public void deseleziona()
@@ -80,8 +96,12 @@ public class CustomWaypoint extends DefaultWaypoint
         if (!selezionato) return;
 
         selezionato = false;
-        ImageIcon img_icon = new ImageIcon("assets/bus-solid.png");
-        icona = img_icon.getImage();
+
+        if (id.startsWith("ITO")) {
+            icona = iconaMetro;
+        } else {
+            icona = iconaAutobus;
+        }
     }
 
     //Questo metodo trova le linee che passano per questa fermata
@@ -108,4 +128,10 @@ public class CustomWaypoint extends DefaultWaypoint
         pannelloInformazioni.setLineeServite(lineeTrovate);
         return lineeTrovate;
     }
+
+    /*@Override
+    public String toString()
+    {
+        return nome;
+    }*/
 }

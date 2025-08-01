@@ -23,7 +23,9 @@ public class Main
         elab_fermate.posizionaFermate(frame.mappa);
         elab_fermate.CustomMouseListener(frame.mappa.mappa); //da rivedere -- vedere disclaimer sopra
         frame.listaFermate = ElaboratoreFermate.listaFermate;
-        frame.imposta_combo_box(ElaboratoreFermate.nomi_fermate);
+        //frame.imposta_combo_box(ElaboratoreFermate.nomi_fermate);
         CustomWaypoint.setPannello(frame.getPannelloInformazioni());
+        frame.imposta_combo_box(); //se questa riga viene spostata sopra, la combobox NON funziona,
+        //quindi più tardi questa cosa è da aggiustare perché è indecente :(
     }
 }

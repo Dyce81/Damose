@@ -6,8 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import Model.ComboBoxRenderer;
 import Model.CustomWaypoint;
-import com.sun.tools.javac.Main;
+
+//TODO: la classe inizia ad essere un po' troppo lunga, quindi più tardi sarebbe meglio scomporre in varie classi il frame
 
 public class Frame {
     public final JFrame frame;
@@ -33,6 +35,24 @@ public class Frame {
         JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 5));
         testoFermata.setEditable(true);
         testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
+        //tentativi molto fallimentari di implementare icone al lato dei testi (TODO: fare dopo)
+        //testoFermata.setRenderer(new ComboBoxRenderer());
+        /*testoFermata.setRenderer(new ListCellRenderer<String>() {
+            @Override
+            public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel testo = new JLabel(value);
+                //testo.setIcon(value.getIcona());
+
+                if (isSelected)
+                {
+                    testo.setBackground(list.getSelectionBackground());
+                } else {
+                    testo.setBackground(list.getBackground());
+                }
+
+                return testo;
+            }
+        });*/
 
         mappa = new Mappa(frame);
 
@@ -65,10 +85,28 @@ public class Frame {
     }
 
     //questa funzione riempie la combo box con i nomi delle fermate
-    public void imposta_combo_box(ArrayList<String> nomi)
+    /*public void imposta_combo_box(ArrayList<String> nomi)
     {
+        /*testoFermata.setRenderer(new DefaultListCellRenderer()
+        {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+            {
+                JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                Icon icona = new Icon()
+            }
+        });
+
         for (String s : nomi)
             testoFermata.addItem(s);
+    }*/
+
+    public void imposta_combo_box()
+    {
+        for (CustomWaypoint f : listaFermate)
+        {
+            testoFermata.addItem(f.getNome());
+        }
     }
 
     //la ricerca delle fermate è gestita dal frame tramite questo metodo
@@ -89,14 +127,14 @@ public class Frame {
                 mappa.cambia_posizione(f.getLatitudine(), f.getLongitudine());
                 ultimaFermata = f;
                 f.seleziona();
-                mostraInformazioni(f);
+                //mostraInformazioni(f);
                 break;
             }
         }
     }
 
     //Questo metodo mostra le informazioni della fermata selezionata (al lato della finestra?)
-    public void mostraInformazioni(CustomWaypoint fermata)
+    /*public void mostraInformazioni(CustomWaypoint fermata)
     {
         pannelloInformazioni.setNome(fermata.getNome());
 
@@ -105,8 +143,8 @@ public class Frame {
         /*for (Map<String, String> orario : orari)
         {
             if (orario.get(""));
-        }*/
-    }
+        }
+    }*/
 
     public InformazioniFermata getPannelloInformazioni()
     {
