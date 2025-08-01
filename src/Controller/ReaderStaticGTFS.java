@@ -1,19 +1,81 @@
 package Controller;
 
+import Model.Route;
+import Model.Trip;
+import Model.StopTime;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /*                                  IMPORTANTE
     Sarebbe meglio usare una libreria come OpenCSV per leggere i file .csv; per il momento
     è stato implementato un metodo (dividi_stringa).
  */
 
+//SOLO PER ADESSO questa classe contiene anche il riferimento (statico) alle liste di routes, trips,
+//(shapes) e stopTimes
+
 public class ReaderStaticGTFS
 {
+    public static ArrayList<Route> routes = new ArrayList<>();
+    public static ArrayList<Trip> trips = new ArrayList<>();
+    public static ArrayList<StopTime> stopTimes = new ArrayList<>();
+
+    public static void iniziaPROVVISORIO()
+    {
+        ArrayList<String[]> provvisorio = leggi_csv("data/rome_static_gtfs/routes.txt");
+
+        for (String[] lista : provvisorio)
+        {
+            Route aggiungi = new Route("", "", 0, "");
+
+            aggiungi.setId(lista[0]);
+            aggiungi.setNome(lista[2]);
+            aggiungi.setTipo(Integer.parseInt(lista[4]));
+            aggiungi.setUrl(lista[5]);
+            //System.out.println(aggiungi);
+
+            routes.add(aggiungi);
+        }
+
+        provvisorio = leggi_csv("data/rome_static_gtfs/trips.txt");
+
+        for (String[] lista : provvisorio)
+        {
+            Trip aggiungi = new Trip("", "", "");
+
+            aggiungi.setId(lista[2]);
+            aggiungi.setRouteId(lista[0]);
+            aggiungi.setHeadsign(lista[3]);
+            //System.out.println(aggiungi);
+
+            trips.add(aggiungi);
+        }
+
+        provvisorio = leggi_csv("data/rome_static_gtfs/stop_times.txt");
+
+        for (String[] lista : provvisorio)
+        {
+            StopTime aggiungi = new StopTime("", "", "", "");
+
+            aggiungi.setTripId(lista[0]);
+            aggiungi.setStopId(lista[3]);
+            aggiungi.setOrarioArrivo(lista[1]);
+            aggiungi.setOrarioPartenza(lista[2]);
+            //System.out.println(aggiungi);
+
+            stopTimes.add(aggiungi);
+        }
+    }
+
     //Questo metodo restituisce un'arraylist di array, dove ciascuna lista interna
     //indica i valori di una singola fermata; quindi l'array esterno racchiude tutte le fermate.
     //Da lì si può poi generare ogni singola fermata (oggetto) sulla mappa
+
+    //più generalmente restituisce una lista di lista (quest'ultima contiene i valori di ogni riga)
     public static ArrayList<String[]> leggi_csv(String path)
     {
         //Senza try... catch non è possibile usare FileReader
@@ -23,7 +85,8 @@ public class ReaderStaticGTFS
             ArrayList<String[]> lista_fermate = new ArrayList<String[]>();
 
             String linea;
-            linea = reader.readLine(); //Ignora la prima riga (contiene i nomi dei campi)
+            //linea = reader.readLine(); //Ignora la prima riga (contiene i nomi dei campi)
+            reader.readLine();
             while ((linea = reader.readLine()) != null)
             {
                 String[] valori = dividi_stringa(linea, ',').toArray(new String[0]);

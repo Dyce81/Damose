@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import Model.CustomWaypoint;
+import com.sun.tools.javac.Main;
 
 public class Frame {
     public final JFrame frame;
@@ -88,16 +89,23 @@ public class Frame {
                 mappa.cambia_posizione(f.getLatitudine(), f.getLongitudine());
                 ultimaFermata = f;
                 f.seleziona();
-                mostraInformazioni(f.getNome());
+                mostraInformazioni(f);
                 break;
             }
         }
     }
 
     //Questo metodo mostra le informazioni della fermata selezionata (al lato della finestra?)
-    public void mostraInformazioni(String nome)
+    public void mostraInformazioni(CustomWaypoint fermata)
     {
-        pannelloInformazioni.setNome(nome);
+        pannelloInformazioni.setNome(fermata.getNome());
+
+        //PROVA!!!!
+        ArrayList<String> tripsIds = new ArrayList<>();
+        /*for (Map<String, String> orario : orari)
+        {
+            if (orario.get(""));
+        }*/
     }
 
     public InformazioniFermata getPannelloInformazioni()

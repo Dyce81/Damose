@@ -1,3 +1,4 @@
+import Controller.ReaderStaticGTFS;
 import Controller.Wifi;
 import Model.CustomWaypoint;
 import Model.ElaboratoreFermate;
@@ -15,6 +16,7 @@ public class Main
         wifi.wifi_controller();
 
         Frame frame = new Frame(600, 800, "Damose");
+        ReaderStaticGTFS.iniziaPROVVISORIO();
         ElaboratoreFermate elab_fermate = new ElaboratoreFermate();
         //frame.imposta_painter_mappa(elab_fermate.posiziona_fermate());
         //elab_fermate.posiziona_fermate(frame.mappa);

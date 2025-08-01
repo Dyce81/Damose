@@ -42,7 +42,7 @@ public class ElaboratoreFermate {
             double longit = Double.parseDouble(valori[4]);
             double latit = Double.parseDouble(valori[5]);
             GeoPosition coords = new GeoPosition(longit, latit);
-            CustomWaypoint cwp = new CustomWaypoint(valori[2], coords);
+            CustomWaypoint cwp = new CustomWaypoint(valori[0], valori[2], coords);
             waypoints.add(cwp);
 
             nomi_fermate.add(valori[2].toUpperCase());
