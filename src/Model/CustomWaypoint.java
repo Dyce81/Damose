@@ -129,9 +129,9 @@ public class CustomWaypoint extends DefaultWaypoint
         return lineeTrovate;
     }
 
-    /*@Override
+    @Override
     public String toString()
     {
         return nome;
-    }*/
+    }
 }

@@ -4,32 +4,32 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ComboBoxRenderer extends JLabel implements ListCellRenderer
+public class ComboBoxRenderer extends JLabel implements ListCellRenderer<CustomWaypoint>
 {
-    private final ArrayList<ImageIcon> immagini = new ArrayList<>();
+    private static final Image iconaAutobus = new ImageIcon("assets/autobus_icona.png").getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
+    private static final Image iconaMetro = new ImageIcon("assets/metro_icona.png").getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
 
     public ComboBoxRenderer()
     {
         setOpaque(true);
-        setHorizontalAlignment(CENTER);
+        setHorizontalAlignment(LEADING);
         setVerticalAlignment(CENTER);
-
-        immagini.add(new ImageIcon("assets/autobus_icona.png"));
-        immagini.add(new ImageIcon("assets/metro_icona.png"));
+        setPreferredSize(new Dimension(230, 40));
+        setIconTextGap(12);
+        setBorder(BorderFactory.createEmptyBorder(3, 9, 3, 3));
     }
 
     public Component getListCellRendererComponent(
-            JList list,
-            Object value,
+            JList<? extends CustomWaypoint> list,
+            CustomWaypoint value,
             int index,
             boolean isSelected,
             boolean cellHasFocus
     )
     {
-        int indiceSelezionato = ((Integer)value).intValue();
+        //int indiceSelezionato = ((Integer)value).intValue();
 
-        if (isSelected)
-        {
+        if (isSelected) {
             setBackground(list.getSelectionBackground());
             setForeground(list.getSelectionForeground());
         } else {
@@ -37,10 +37,12 @@ public class ComboBoxRenderer extends JLabel implements ListCellRenderer
             setForeground(list.getForeground());
         }
 
-        ImageIcon icona = immagini.get(0);
-        setIcon(icona);
+        if (value.getId().startsWith("ITO"))
+            setIcon(new ImageIcon(iconaMetro)); //questa creazione ogni volta di un oggetto non è proprio carina, vedere se si può risolvere in modo carino
+        else
+            setIcon(new ImageIcon(iconaAutobus));
 
-        setText("prova");
+        setText(value.getNome());
 
         return this;
     }

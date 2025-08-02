@@ -35,8 +35,10 @@ public class Frame {
         JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 5));
         testoFermata.setEditable(true);
         testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
-        //tentativi molto fallimentari di implementare icone al lato dei testi (TODO: fare dopo)
-        //testoFermata.setRenderer(new ComboBoxRenderer());
+
+        testoFermata.setRenderer(new ComboBoxRenderer());
+        testoFermata.setMaximumRowCount(5);
+
         /*testoFermata.setRenderer(new ListCellRenderer<String>() {
             @Override
             public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -105,7 +107,8 @@ public class Frame {
     {
         for (CustomWaypoint f : listaFermate)
         {
-            testoFermata.addItem(f.getNome());
+            //testoFermata.addItem(f.getNome());
+            testoFermata.addItem(f);
         }
     }
 
