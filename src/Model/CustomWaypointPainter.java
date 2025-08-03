@@ -21,7 +21,23 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
     protected void doPaint(Graphics2D g, JXMapViewer map, int larghezza, int altezza)
     {
         if (map.getZoom() > 3)
+        {
+            for (CustomWaypoint wp : getWaypoints())
+            {
+                if (wp.selezionato)
+                {
+                    Point2D punto = map.getTileFactory().geoToPixel(wp.getPosition(), map.getZoom());
+                    Rectangle viewport = map.getViewportBounds();
+                    int x = (int) (punto.getX() - viewport.getX());
+                    int y = (int) (punto.getY() - viewport.getY());
+
+                    Image icona = wp.getIcona();
+                    g.drawImage(icona, x - icona.getWidth(null) / 2, y - icona.getHeight(null) / 2, null);
+                    return;
+                }
+            }
             return;
+        }
 
         for (CustomWaypoint wp : getWaypoints())
         {

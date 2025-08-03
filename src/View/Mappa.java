@@ -56,16 +56,6 @@ public class Mappa
         mappa.addMouseMotionListener(input_mouse);
         mappa.addMouseWheelListener(new ZoomMouseWheelListenerCursor(mappa));
         mappa.addKeyListener(new PanKeyListener(mappa));
-
-        mappa.addPropertyChangeListener("zoom", new PropertyChangeListener()
-        {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt)
-            {
-                if (mappa.getZoom() < 5) set_painter(painter);
-                else set_painter(null);
-            }
-        });
     }
 
     public void cambia_posizione(double latitude, double longitude)
@@ -78,11 +68,7 @@ public class Mappa
 
     public void set_painter(Painter<JXMapViewer> p)
     {
-        if (compound)
-        {
-
-            return;
-        }
+        if (compound) return;
         if (painter == null) painter = p; //se painter non è già stato definito, impostalo correttamente
 
         mappa.setOverlayPainter(p);
