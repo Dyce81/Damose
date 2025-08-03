@@ -182,15 +182,11 @@ public class Frame {
                 })
                 .filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));*/
 
-        System.out.println(viaggioSelezionato.getShapeId());
-
         List<GeoPosition> percorso = ReaderStaticGTFS.shapes.stream()
                 .filter(sp -> sp.getId().equals(viaggioSelezionato.getShapeId()))
                 .sorted(Comparator.comparingInt(PuntoShape::getSequenza))
                 .map(sp -> new GeoPosition(sp.getLatitudine(), sp.getLongitudine()))
                 .collect(Collectors.toList());
-
-        System.out.println(percorso);
 
         RoutePainter routePainter = new RoutePainter(percorso);
 
@@ -198,7 +194,9 @@ public class Frame {
         painters.add(mappa.painter);
         painters.add(routePainter);
         CompoundPainter<JXMapViewer> painter = new CompoundPainter<>(painters);
+        mappa.compound = false;
         mappa.set_painter(painter);
+        mappa.compound = true;
     }
 
     //Questo metodo mostra le informazioni della fermata selezionata (al lato della finestra?)
