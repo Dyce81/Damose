@@ -4,20 +4,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import Model.ComboBoxRenderer;
-import Model.CustomWaypoint;
+import Controller.ReaderStaticGTFS;
+import Model.*;
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.painter.CompoundPainter;
+import org.jxmapviewer.painter.Painter;
+import org.jxmapviewer.viewer.GeoPosition;
 
 //TODO: la classe inizia ad essere un po' troppo lunga, quindi più tardi sarebbe meglio scomporre in varie classi il frame
 
 public class Frame {
     public final JFrame frame;
     public final Mappa mappa;
-    ////public ArrayList<Fermata> lista_fermate;
     public ArrayList<CustomWaypoint> listaFermate;
 
-    private final JComboBox testoFermata = new JComboBox(); //TODO: può essere definito nel costruttore passando direttamente l'array dei nomi delle fermate
+    private final JComboBox<CustomWaypoint> testoFermata = new JComboBox<>();
+    private final JComboBox<Route> testoLinea = new JComboBox<>();
+    //private final JComboBox<String> testoLinea = new JComboBox<>();
     private final InformazioniFermata pannelloInformazioni;
 
     private CustomWaypoint ultimaFermata;
@@ -33,11 +40,16 @@ public class Frame {
 
         //Casella testo e pulsante per la ricerca delle fermate
         JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 5));
+
         testoFermata.setEditable(true);
         testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
-
         testoFermata.setRenderer(new ComboBoxRenderer());
         testoFermata.setMaximumRowCount(5);
+
+        testoLinea.setEditable(true);
+        testoLinea.addActionListener(this::cercaLinea);
+        testoLinea.setRenderer(new RoutesComboBoxRenderer());
+        testoLinea.setMaximumRowCount(5);
 
         /*testoFermata.setRenderer(new ListCellRenderer<String>() {
             @Override
@@ -78,6 +90,7 @@ public class Frame {
             }
         });
 
+        pannello_sup.add(testoLinea);
         pannello_sup.add(testoFermata);
         pannello_sup.add(profileButton);
         pannello_sup.setBackground(new Color(175, 62, 62));
@@ -103,12 +116,19 @@ public class Frame {
             testoFermata.addItem(s);
     }*/
 
+    //Fa esattamente quello che sembra
     public void imposta_combo_box()
     {
+        testoFermata.addItem(new CustomWaypoint("null", "- Seleziona una fermata -", new GeoPosition(0, 0)));
         for (CustomWaypoint f : listaFermate)
         {
-            //testoFermata.addItem(f.getNome());
             testoFermata.addItem(f);
+        }
+
+        testoLinea.addItem(new Route("null", "- Seleziona una linea -", -1, ""));
+        for (Route l : ReaderStaticGTFS.routes)
+        {
+            testoLinea.addItem(l);
         }
     }
 
@@ -134,6 +154,51 @@ public class Frame {
                 break;
             }
         }
+    }
+
+    private void cercaLinea(ActionEvent e)
+    {
+        if (testoLinea.getSelectedItem() == null) return;
+        //System.out.println(testoLinea.getSelectedItem());
+        String nomeLinea = testoLinea.getSelectedItem().toString();
+
+        //provvisorio!!!!
+        ArrayList<Trip> viaggi = ReaderStaticGTFS.trips.stream()
+                .filter(trip -> trip.getRouteId().equals(nomeLinea)).collect(Collectors.toCollection(ArrayList::new));
+
+        if (viaggi.isEmpty()) return;
+
+        Trip viaggioSelezionato = viaggi.getFirst();
+
+        /*ArrayList<GeoPosition> percorso = ReaderStaticGTFS.stopTimes.stream()
+                .filter(st -> st.getTripId().equals(viaggioSelezionato.getId()))
+                .sorted(Comparator.comparingInt(StopTime::getStopSequenza))
+                .map(st -> {
+                    CustomWaypoint f = listaFermate.stream()
+                            .filter(s -> s.getId().equals(st.getStopId()))
+                            .findFirst()
+                            .orElse(null);
+                    return f != null ? new GeoPosition(f.getLatitudine(), f.getLongitudine()) : null;
+                })
+                .filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));*/
+
+        System.out.println(viaggioSelezionato.getShapeId());
+
+        List<GeoPosition> percorso = ReaderStaticGTFS.shapes.stream()
+                .filter(sp -> sp.getId().equals(viaggioSelezionato.getShapeId()))
+                .sorted(Comparator.comparingInt(PuntoShape::getSequenza))
+                .map(sp -> new GeoPosition(sp.getLatitudine(), sp.getLongitudine()))
+                .collect(Collectors.toList());
+
+        System.out.println(percorso);
+
+        RoutePainter routePainter = new RoutePainter(percorso);
+
+        List<Painter<JXMapViewer>> painters = new ArrayList<>();
+        painters.add(mappa.painter);
+        painters.add(routePainter);
+        CompoundPainter<JXMapViewer> painter = new CompoundPainter<>(painters);
+        mappa.set_painter(painter);
     }
 
     //Questo metodo mostra le informazioni della fermata selezionata (al lato della finestra?)

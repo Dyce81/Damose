@@ -2,7 +2,7 @@ package Model;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.Objects;
 
 public class ComboBoxRenderer extends JLabel implements ListCellRenderer<CustomWaypoint>
 {
@@ -14,7 +14,7 @@ public class ComboBoxRenderer extends JLabel implements ListCellRenderer<CustomW
         setOpaque(true);
         setHorizontalAlignment(LEADING);
         setVerticalAlignment(CENTER);
-        setPreferredSize(new Dimension(230, 40));
+        setPreferredSize(new Dimension(270, 40));
         setIconTextGap(12);
         setBorder(BorderFactory.createEmptyBorder(3, 9, 3, 3));
     }
@@ -27,8 +27,6 @@ public class ComboBoxRenderer extends JLabel implements ListCellRenderer<CustomW
             boolean cellHasFocus
     )
     {
-        //int indiceSelezionato = ((Integer)value).intValue();
-
         if (isSelected) {
             setBackground(list.getSelectionBackground());
             setForeground(list.getSelectionForeground());
@@ -37,10 +35,15 @@ public class ComboBoxRenderer extends JLabel implements ListCellRenderer<CustomW
             setForeground(list.getForeground());
         }
 
-        if (value.getId().startsWith("ITO"))
-            setIcon(new ImageIcon(iconaMetro)); //questa creazione ogni volta di un oggetto non è proprio carina, vedere se si può risolvere in modo carino
-        else
-            setIcon(new ImageIcon(iconaAutobus));
+        if (Objects.equals(value.getId(), "null"))
+        {
+            setIcon(null);
+        } else {
+            if (value.getId().startsWith("ITO"))
+                setIcon(new ImageIcon(iconaMetro)); //questa creazione ogni volta di un oggetto non è proprio carina, vedere se si può risolvere in modo carino
+            else
+                setIcon(new ImageIcon(iconaAutobus));
+        }
 
         setText(value.getNome());
 

@@ -20,7 +20,7 @@ public class Mappa
 {
     private int zoom = 3;
     public JXMapViewer mappa;
-    public Painter painter = null;
+    public Painter<JXMapViewer> painter = null;
 
     //costruttore
     Mappa(JFrame frame)
@@ -74,7 +74,7 @@ public class Mappa
         mappa.setZoom(2);
     }
 
-    public void set_painter(Painter p)
+    public void set_painter(Painter<JXMapViewer> p)
     {
         if (painter == null) painter = p; //se painter non è già stato definito, impostalo correttamente
         mappa.setOverlayPainter(p);

@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.PuntoShape;
 import Model.Route;
 import Model.Trip;
 import Model.StopTime;
@@ -23,6 +24,7 @@ public class ReaderStaticGTFS
     public static ArrayList<Route> routes = new ArrayList<>();
     public static ArrayList<Trip> trips = new ArrayList<>();
     public static ArrayList<StopTime> stopTimes = new ArrayList<>();
+    public static ArrayList<PuntoShape> shapes = new ArrayList<>();
 
     public static void iniziaPROVVISORIO()
     {
@@ -45,7 +47,7 @@ public class ReaderStaticGTFS
 
         for (String[] lista : provvisorio)
         {
-            Trip aggiungi = new Trip("", "", "");
+            Trip aggiungi = new Trip("", "", "", lista[7]);
 
             aggiungi.setId(lista[2]);
             aggiungi.setRouteId(lista[0]);
@@ -68,6 +70,17 @@ public class ReaderStaticGTFS
             //System.out.println(aggiungi);
 
             stopTimes.add(aggiungi);
+        }
+
+        provvisorio = leggi_csv("data/rome_static_gtfs/shapes.txt");
+
+        for (String[] lista : provvisorio)
+        {
+            double latitudine = Double.parseDouble(lista[1]);
+            double longitudine = Double.parseDouble(lista[2]);
+            int sequenza = Integer.parseInt(lista[3]);
+
+            shapes.add(new PuntoShape(lista[0], latitudine, longitudine, sequenza));
         }
     }
 

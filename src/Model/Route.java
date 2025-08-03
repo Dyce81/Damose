@@ -35,6 +35,6 @@ public class Route
     @Override
     public String toString()
     {
-        return this.id + " " + this.nome + " " + this.tipo + " " + this.url;
+        return nome;
     }
 }

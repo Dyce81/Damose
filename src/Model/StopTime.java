@@ -6,6 +6,7 @@ public class StopTime
     private String stopId;
     private String orarioArrivo;
     private String orarioPartenza;
+    private int stopSequenza;
 
     public StopTime(String tripId, String stopId, String orarioArrivo, String orarioPartenza)
     {
@@ -45,6 +46,11 @@ public class StopTime
 
     public void setOrarioPartenza(String orarioPartenza) {
         this.orarioPartenza = orarioPartenza;
+    }
+
+    public int getStopSequenza()
+    {
+        return stopSequenza;
     }
 
     @Override

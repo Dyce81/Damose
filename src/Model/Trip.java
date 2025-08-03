@@ -5,12 +5,14 @@ public class Trip
     private String id;
     private String routeId;
     private String headsign;
+    private String shapeId;
 
-    public Trip(String id, String routeId, String headsign)
+    public Trip(String id, String routeId, String headsign, String shapeId)
     {
         this.id = id;
         this.routeId = routeId;
         this.headsign = headsign;
+        this.shapeId = shapeId;
     }
 
     public String getId() {
@@ -35,6 +37,14 @@ public class Trip
 
     public void setHeadsign(String headsign) {
         this.headsign = headsign;
+    }
+
+    public String getShapeId() {
+        return shapeId;
+    }
+
+    public void setShapeId(String shapeId) {
+        this.shapeId = shapeId;
     }
 
     @Override
