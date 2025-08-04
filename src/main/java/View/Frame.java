@@ -85,9 +85,9 @@ public class Frame {
         //accesso alla pagina di login
         profileButton.addActionListener(new ActionListener()
         {public void actionPerformed(ActionEvent e)
-            {
-                LoginPage loginPage = new LoginPage();
-            }
+        {
+            LoginPage loginPage = new LoginPage();
+        }
         });
 
         pannello_sup.add(testoLinea);

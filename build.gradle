@@ -22,6 +22,7 @@ repositories {
 // Definisce le dipendenze del tuo progetto
 dependencies {
     implementation 'org.jxmapviewer:jxmapviewer2:2.8'
+    implementation 'com.h2database:h2:2.3.232'
 }
 
 // Configurazione per il plugin per JAR eseguibile

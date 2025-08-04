@@ -48,7 +48,7 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
 
             //Se l'icona è fuori dallo schermo, non la disegnare
             if (x < -offsetVisibilita || x > larghezza + offsetVisibilita || y < -offsetVisibilita
-            || y > altezza + offsetVisibilita) continue;
+                    || y > altezza + offsetVisibilita) continue;
 
             Image icona = wp.getIcona();
             //g.drawImage(icona, x, y, null);

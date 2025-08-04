@@ -123,7 +123,7 @@ public class CustomWaypoint extends DefaultWaypoint
         for (Route r : ReaderStaticGTFS.routes)
             if (routeIds.contains(r.getId()))
                 lineeTrovate.add(r);
-                //System.out.println("- " + r.getNome() + " (" + r.getUrl() +")");
+        //System.out.println("- " + r.getNome() + " (" + r.getUrl() +")");
 
         pannelloInformazioni.setLineeServite(lineeTrovate);
         return lineeTrovate;
@@ -135,3 +135,4 @@ public class CustomWaypoint extends DefaultWaypoint
         return nome;
     }
 }
+
