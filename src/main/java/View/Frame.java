@@ -202,6 +202,8 @@ public class Frame {
         mappa.compound = false;
         mappa.set_painter(painter);
         mappa.compound = true;
+
+        mappa.mappa.zoomToBestFit(new HashSet<>(percorso), 0.7);
     }
 
     //Questo metodo mostra le informazioni della fermata selezionata (al lato della finestra?)
