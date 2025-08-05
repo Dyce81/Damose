@@ -72,7 +72,11 @@ public class Frame {
 
         //Pannello informazioni laterale per le fermate
         pannelloInformazioni = new InformazioniFermata();
-        frame.add(pannelloInformazioni.getPannello(), BorderLayout.WEST);
+        JScrollPane pannello = new JScrollPane(pannelloInformazioni.getPannello());
+        pannello.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        pannello.setBorder(null);
+        frame.add(pannello, BorderLayout.WEST);
+        //forse?
 
         //tasto per l'accesso alla pagina di login
         ImageIcon profileIcon = new ImageIcon("assets/profile-logo.png");
@@ -139,8 +143,8 @@ public class Frame {
         String nomeFermata = testoFermata.getSelectedItem().toString();
 
         //la fermata precedentemente selezionata (se è presente) non serve più
-        //if (ultimaFermata != null)
-        //    ultimaFermata.deseleziona();
+        if (ElaboratoreFermate.ultimaFermata != null)
+            ElaboratoreFermate.ultimaFermata.deseleziona();
 
         //cerca la fermata dentro la lista fermate;
         for (CustomWaypoint f : this.listaFermate)
@@ -148,15 +152,10 @@ public class Frame {
             if (f.getNome().equals(nomeFermata)) //fermata trovata
             {
                 mappa.cambia_posizione(f.getLatitudine(), f.getLongitudine());
-                //ultimaFermata = f;
+                ElaboratoreFermate.ultimaFermata = f;
                 f.seleziona();
                 //mostraInformazioni(f);
                 break;
-            }
-            else
-            {
-                //if (f.selezionato)
-                //    System.out.println("c"); //f.deseleziona();
             }
         }
     }

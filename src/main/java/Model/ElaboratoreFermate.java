@@ -28,7 +28,7 @@ public class ElaboratoreFermate {
     //richiama la funzione
     public static WaypointPainter<CustomWaypoint> waypoint_painter = new CustomWaypointPainter();
 
-    private CustomWaypoint ultimaFermata;
+    public static CustomWaypoint ultimaFermata;
 
     //DATI GTFS Statici
 
@@ -60,11 +60,14 @@ public class ElaboratoreFermate {
         mappa.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (Mappa.getMapViewer().getZoom() > 3)
+                    return;
+
                 Point puntoClick = e.getPoint();
                 Rectangle viewport = mappa.getViewportBounds();
 
-                if (ultimaFermata != null)
-                    ultimaFermata.deseleziona();
+                //if (ultimaFermata != null)
+                //    ultimaFermata.deseleziona();
 
                 for (CustomWaypoint wp : waypoints) {
                     Point2D punto = mappa.getTileFactory().geoToPixel(wp.getPosition(), mappa.getZoom());
@@ -74,9 +77,20 @@ public class ElaboratoreFermate {
                     //8 sopra è un po' un numero magico - in questo caso la metà (-1) di 17, ovvero
                     //la metà della grandezza dell'icona delle fermate
                     if (bordi.contains(puntoClick)) {
+                        if (wp.selezionato)
+                        {
+                            wp.deseleziona();
+                            ultimaFermata = null;
+                            return;
+                        }
+
+                        if (ultimaFermata != null)
+                            ultimaFermata.deseleziona();
+
                         wp.seleziona();
                         ultimaFermata = wp;
                         mappa.setOverlayPainter(waypoint_painter);
+                        break;
                     }
                 }
             }

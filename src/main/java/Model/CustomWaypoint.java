@@ -2,6 +2,7 @@ package Model;
 
 import Controller.ReaderStaticGTFS;
 import View.InformazioniFermata;
+import View.Mappa;
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -89,6 +90,7 @@ public class CustomWaypoint extends DefaultWaypoint
         //pannelloInformazioni.setTipoMezzo();
 
         pannelloInformazioni.impostaInfo(this);
+        Mappa.getMapViewer().repaint();
     }
 
     public void deseleziona()
@@ -102,6 +104,9 @@ public class CustomWaypoint extends DefaultWaypoint
         } else {
             icona = iconaAutobus;
         }
+
+        pannelloInformazioni.resetPannello();
+        Mappa.getMapViewer().repaint();
     }
 
     //Questo metodo trova le linee che passano per questa fermata
