@@ -16,11 +16,12 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 
 public class Mappa
 {
     private int zoom = 3;
-    public JXMapViewer mappa;
+    public static JXMapViewer mappa;
     public Painter<JXMapViewer> painter = null;
     public boolean compound = false;
 
@@ -72,5 +73,10 @@ public class Mappa
         if (painter == null) painter = p; //se painter non è già stato definito, impostalo correttamente
 
         mappa.setOverlayPainter(p);
+    }
+
+    public static JXMapViewer getMapViewer()
+    {
+        return mappa;
     }
 }
