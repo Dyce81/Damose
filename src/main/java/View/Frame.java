@@ -72,7 +72,11 @@ public class Frame {
 
         //Pannello informazioni laterale per le fermate
         pannelloInformazioni = new InformazioniFermata();
-        frame.add(pannelloInformazioni.getPannello(), BorderLayout.WEST);
+        JScrollPane pannello = new JScrollPane(pannelloInformazioni.getPannello());
+        pannello.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        pannello.setBorder(null);
+        frame.add(pannello, BorderLayout.WEST);
+        //forse?
 
         //tasto per l'accesso alla pagina di login
         ImageIcon profileIcon = new ImageIcon("assets/profile-logo.png");

@@ -60,6 +60,9 @@ public class ElaboratoreFermate {
         mappa.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (Mappa.getMapViewer().getZoom() > 3)
+                    return;
+
                 Point puntoClick = e.getPoint();
                 Rectangle viewport = mappa.getViewportBounds();
 

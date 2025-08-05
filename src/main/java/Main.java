@@ -3,6 +3,7 @@ import Controller.Wifi;
 import Model.CustomWaypoint;
 import Model.ElaboratoreFermate;
 import View.Frame;
+import View.Mappa;
 
 //disclaimer: il progetto potrebbe essere organizzato meglio - magari separando ulteriormente la logica
 //della creazione delle fermate, creando un'altra classe WaypointManager che si occupa di piazzare
@@ -21,7 +22,8 @@ public class Main
         //frame.imposta_painter_mappa(elab_fermate.posiziona_fermate());
         //elab_fermate.posiziona_fermate(frame.mappa);
         elab_fermate.posizionaFermate(frame.mappa);
-        elab_fermate.CustomMouseListener(frame.mappa.mappa); //da rivedere -- vedere disclaimer sopra
+        //elab_fermate.CustomMouseListener(frame.mappa.mappa); //da rivedere -- vedere disclaimer sopra
+        elab_fermate.CustomMouseListener(Mappa.getMapViewer());
         frame.listaFermate = ElaboratoreFermate.listaFermate;
         //frame.imposta_combo_box(ElaboratoreFermate.nomi_fermate);
         CustomWaypoint.setPannello(frame.getPannelloInformazioni());

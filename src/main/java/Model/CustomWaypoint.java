@@ -105,6 +105,7 @@ public class CustomWaypoint extends DefaultWaypoint
             icona = iconaAutobus;
         }
 
+        pannelloInformazioni.resetPannello();
         Mappa.getMapViewer().repaint();
     }
 
