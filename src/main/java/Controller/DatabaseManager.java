@@ -14,13 +14,13 @@ public class DatabaseManager
     // private static final String DB_URL = "jdbc:h2:mem:testdb;
 
     // URL per database H2 persistente (salvato su file)
-    private static final String DB_URL = "jdbc:h2:./data/mydb"; // Il database sarà in ./data/mydb.mv.db
+    private static final String DB_URL = "jdbc:h2:./data/mydb";
     private static final String USER = "sa";
-    private static final String PASS = "password"; // Password per H2, da NON usare per utenti reali
+    private static final String PASS = "password";
 
     public DatabaseManager()
     {
-        // Carica il driver JDBC (non sempre strettamente necessario con i driver moderni, ma buona pratica)
+        // Carica il driver JDBC
         try {
             Class.forName(JDBC_DRIVER);
         } catch (ClassNotFoundException e) {
