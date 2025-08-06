@@ -1,6 +1,6 @@
 package View;
 
-import Controller.CredentialChecker;
+import Controller.DatabaseManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +21,7 @@ public class LoginPage
         loginPage.setModal(true);
         loginPage.setLayout(null);
 
+        Color green = new Color(4, 175, 27);
 
         //pannello in cui inserire i componenti
         JPanel panel = new JPanel();
@@ -91,42 +92,79 @@ public class LoginPage
                 String username_input = username.getText();
                 String password_input = password.getText();
 
-                //se è in fase di registrazione
-                if (acc_reg.getText().equals("Registrati"))
+                if (username_input.length() < 5)
                 {
-                    if (CredentialChecker.registra_utente(username_input, password_input) == 5)
+                    avviso.setText("username troppo corto!");
+                    avviso.setForeground(Color.RED);
+                }
+
+                else if (username_input.length() > 15)
+                {
+                    avviso.setText("username troppo lungo!");
+                    avviso.setForeground(Color.RED);
+                }
+
+                else if (password_input.length() < 6)
+                {
+                    avviso.setText("password troppo corta!");
+                    avviso.setForeground(Color.RED);
+                }
+
+                else if (password_input.length() > 12)
+                {
+                    avviso.setText("password troppo lunga!");
+                    avviso.setForeground(Color.RED);
+                }
+
+                else
+                {
+                    int delay = 1200;
+
+                    //se è in fase di registrazione
+                    if (acc_reg.getText().equals("Registrati"))
                     {
+                        DatabaseManager.addUser(username_input, password_input);
                         avviso.setText("Registrazione completata! Accesso eseguito!");
-                        avviso.setForeground(Color.GREEN);
+                        avviso.setForeground(green);
+
+                        Timer timer = new Timer(delay, new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                // Chiama il metodo dispose() per chiudere il JDialog
+                                loginPage.dispose();
+                            }
+                        });
+                        timer.setRepeats(false);
+                        timer.start();
                     }
-                    else if (CredentialChecker.registra_utente(username_input, password_input) == 0)
+                    //se è in fase di accesso
+                    else if (acc_reg.getText().equals("Accedi"))
                     {
-                        avviso.setText("username troppo corto!");
-                        avviso.setForeground(Color.RED);
-                    }
-                    else if (CredentialChecker.registra_utente(username_input, password_input) == 1)
-                    {
-                        avviso.setText("username troppo lungo!");
-                        avviso.setForeground(Color.RED);
-                    }
-                    else if (CredentialChecker.registra_utente(username_input, password_input) == 2)
-                    {
-                        avviso.setText("password troppo corta!");
-                        avviso.setForeground(Color.RED);
-                    }
-                    else if (CredentialChecker.registra_utente(username_input, password_input) == 3)
-                    {
-                        avviso.setText("password troppo lunga!");
-                        avviso.setForeground(Color.RED);
+                        String hashed_pswd = DatabaseManager.getUserPasswordHash(username_input);
+                        if (hashed_pswd.equals(password_input))
+                        {
+                            avviso.setText("Accesso eseguito!");
+                            avviso.setForeground(green);
+
+                            Timer timer = new Timer(delay, new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    // Chiama il metodo dispose() per chiudere il JDialog
+                                    loginPage.dispose();
+                                }
+                            });
+                            timer.setRepeats(false);
+                            timer.start();
+                        }
+                        else
+                            {
+                            avviso.setText("Utente o password errati");
+                            avviso.setForeground(Color.RED);
+                            }
                     }
                 }
-                //se è in fase di accesso
-                //else
-                {
-                    //controllo se username e password sono corretti
                 }
-            }
-        });
+            });
 
 
         JButton cambia_mod = new JButton("cambia_modalità");
