@@ -74,6 +74,7 @@ public class Frame {
         pannelloInformazioni = new InformazioniFermata();
         JScrollPane pannello = new JScrollPane(pannelloInformazioni.getPannello());
         pannello.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        pannello.getVerticalScrollBar().setUnitIncrement(6);
         pannello.setBorder(null);
         frame.add(pannello, BorderLayout.WEST);
         //forse?

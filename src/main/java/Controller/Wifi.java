@@ -8,6 +8,8 @@ import java.util.TimerTask;
 
 public class Wifi
 {
+    public static boolean WiFi;
+
     public void wifi_controller()
     {
         //questa cosa non mi convice al 100% - probabilmente da rivedere
@@ -21,11 +23,13 @@ public class Wifi
                 if (wifi_connesso())
                     {
                         System.out.println("WiFi connesso");
+                        WiFi = true;
                     }
 
                 else
                 {
                     System.out.println("WiFi non connesso :(");
+                    WiFi = false;
                     //return;
                 }
             }

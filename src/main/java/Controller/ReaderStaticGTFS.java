@@ -8,6 +8,7 @@ import Model.StopTime;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.lang.reflect.Array;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -61,7 +62,7 @@ public class ReaderStaticGTFS
 
         for (String[] lista : provvisorio)
         {
-            StopTime aggiungi = new StopTime("", "", "", "");
+            StopTime aggiungi = new StopTime("", "", lista[1], lista[2]);
 
             aggiungi.setTripId(lista[0]);
             aggiungi.setStopId(lista[3]);
@@ -135,5 +136,17 @@ public class ReaderStaticGTFS
         lista.add(buffer);
         //System.out.println(lista); // da rimuovere
         return lista;
+    }
+
+    public static LocalTime parseTimeCorretto(String tempo)
+    {
+        String[] parti = tempo.split(":");
+        int ore = Integer.parseInt(parti[0]);
+        int minuti = Integer.parseInt(parti[1]);
+        int secondi = Integer.parseInt(parti[2]);
+
+        ore %= 24;
+
+        return LocalTime.of(ore, minuti, secondi);
     }
 }

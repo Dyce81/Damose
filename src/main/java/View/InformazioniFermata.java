@@ -1,13 +1,18 @@
 package View;
 
-import Model.CustomWaypoint;
-import Model.Route;
+import Controller.ReaderStaticGTFS;
+import Model.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class InformazioniFermata
 {
@@ -17,6 +22,7 @@ public class InformazioniFermata
     private final JLabel tipoMezzo;
     private final JLabel lineeServite;
     private JPanel pulsantiLinee;
+    private final JPanel infoLinea;
 
     private static final Color rossoScuro = new Color(143, 51, 51);
 
@@ -36,12 +42,16 @@ public class InformazioniFermata
         pulsantiLinee.setBackground(rossoScuro);
         pulsantiLinee.setLayout(new BoxLayout(pulsantiLinee, BoxLayout.Y_AXIS));
 
+        infoLinea = new JPanel();
+        infoLinea.setBackground(rossoScuro);
+
         pannello.setLayout(new BoxLayout(pannello, BoxLayout.Y_AXIS));
         pannello.add(indicazioneFermata);
         pannello.add(nome);
         pannello.add(tipoMezzo);
         pannello.add(lineeServite);
         pannello.add(pulsantiLinee);
+        pannello.add(infoLinea);
     }
 
     public JPanel getPannello()
@@ -88,8 +98,7 @@ public class InformazioniFermata
             pulsanteLinea.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    String linea = pulsanteLinea.getText();
-                    System.out.println(linea);
+                    mostraInfoLinea(pulsanteLinea.getText());
                 }
             });
 
@@ -99,6 +108,45 @@ public class InformazioniFermata
         lineeServite.setText("Linee servite:");
         pannello.revalidate();
         pannello.repaint();
+    }
+
+    public void mostraInfoLinea(String id)
+    {
+        //la ricerca manuale dovrebbe essere fatta solo se !Wifi.WiFi, altrimenti si usano i dati
+        //GTFS dinamici. e comunque va ottimizzato qui perché ci mette circa 10 secondi per
+        //trovare la prossima linea
+
+        infoLinea.removeAll();
+        CustomWaypoint fermata = ElaboratoreFermate.ultimaFermata;
+
+        JLabel testoLinea = new JLabel("Linea selezionata: " + id);
+        JLabel prossimoArrivo = new JLabel("Prossimo arrivo: ");
+
+        List<Trip> viaggi = ReaderStaticGTFS.trips.stream()
+                .filter(trip -> trip.getRouteId().equals(id))
+                //.filter(trip -> trip.isServiceActiveToday
+                .toList();
+
+        List<String> viaggiValidi = viaggi.stream()
+                .map(Trip::getId).toList();
+
+        LocalTime adesso = LocalTime.now();
+
+        Optional<StopTime> prossimoStopTime = ReaderStaticGTFS.stopTimes.stream()
+                .filter(st -> viaggiValidi.contains(st.getTripId()))
+                .filter(st -> st.getStopId().equals(fermata.getId()))
+                .filter(st -> st.getOrarioArrivo().isAfter(adesso))
+                .min(Comparator.comparing(StopTime::getOrarioArrivo));
+
+        if (prossimoStopTime.isPresent())
+        {
+            StopTime st = prossimoStopTime.get();
+            System.out.println(st);
+        }
+
+        infoLinea.add(testoLinea);
+
+        pannello.scrollRectToVisible(new Rectangle(infoLinea.getBounds()));
     }
 
     public void resetPannello()
