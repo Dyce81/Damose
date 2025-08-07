@@ -1,6 +1,7 @@
 package View;
 
 import Controller.ReaderStaticGTFS;
+import Controller.Wifi;
 import Model.*;
 
 import javax.swing.*;
@@ -84,30 +85,34 @@ public class InformazioniFermata
     {
         pulsantiLinee.removeAll();
 
-        for (Route r : linee)
-        {
-            //infoLinee.append("- ").append(r.getId()).append(", ").append(r.getUrl()).append('\n');
-            //infoLinee.append("- ").append(r.getId()).append('\n');
+        if (Wifi.WiFi) {
 
-            JButton pulsanteLinea = new JButton(r.getId());
-            pulsanteLinea.setBorderPainted(false);
-            pulsanteLinea.setBackground(rossoScuro);
-            pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
-            pulsanteLinea.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-            pulsanteLinea.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    mostraInfoLinea(pulsanteLinea.getText());
-                }
-            });
-
-            pulsantiLinee.add(pulsanteLinea);
         }
+        else {
+            for (Route r : linee) {
+                //infoLinee.append("- ").append(r.getId()).append(", ").append(r.getUrl()).append('\n');
+                //infoLinee.append("- ").append(r.getId()).append('\n');
 
-        lineeServite.setText("Linee servite:");
-        pannello.revalidate();
-        pannello.repaint();
+                JButton pulsanteLinea = new JButton(r.getId());
+                pulsanteLinea.setBorderPainted(false);
+                pulsanteLinea.setBackground(rossoScuro);
+                pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
+                pulsanteLinea.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                pulsanteLinea.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        mostraInfoLinea(pulsanteLinea.getText());
+                    }
+                });
+
+                pulsantiLinee.add(pulsanteLinea);
+            }
+
+            lineeServite.setText("Linee servite:");
+            pannello.revalidate();
+            pannello.repaint();
+        }
     }
 
     public void mostraInfoLinea(String id)

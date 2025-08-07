@@ -23,6 +23,7 @@ repositories {
 dependencies {
     implementation 'org.jxmapviewer:jxmapviewer2:2.8'
     implementation 'com.h2database:h2:2.3.232'
+    implementation 'com.google.transit:gtfs-realtime-bindings:0.0.4'
 }
 
 // Configurazione per il plugin per JAR eseguibile
