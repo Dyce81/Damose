@@ -17,6 +17,7 @@ java {
 repositories {
     // Gradle cerca le dipendenze in questi repository
     mavenCentral()
+    google()
 }
 
 // Definisce le dipendenze del progetto

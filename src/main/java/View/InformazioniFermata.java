@@ -1,19 +1,28 @@
 package View;
 
+import Controller.DynamicGTFS;
 import Controller.ReaderStaticGTFS;
 import Controller.Wifi;
 import Model.*;
+import com.google.transit.realtime.GtfsRealtime;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InputStream;
+import java.net.URL;
+import java.time.Instant;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import com.google.transit.realtime.GtfsRealtime.*;
 
 public class InformazioniFermata
 {
@@ -85,34 +94,27 @@ public class InformazioniFermata
     {
         pulsantiLinee.removeAll();
 
-        if (Wifi.WiFi) {
+        for (Route r : linee) {
+            //infoLinee.append("- ").append(r.getId()).append(", ").append(r.getUrl()).append('\n');
+            //infoLinee.append("- ").append(r.getId()).append('\n');
 
+            JButton pulsanteLinea = new JButton(r.getId());
+            pulsanteLinea.setBorderPainted(false);
+            pulsanteLinea.setBackground(rossoScuro);
+            pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
+            pulsanteLinea.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            pulsanteLinea.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    mostraInfoLinea(pulsanteLinea.getText());
+                }
+            });
+            pulsantiLinee.add(pulsanteLinea);
         }
-        else {
-            for (Route r : linee) {
-                //infoLinee.append("- ").append(r.getId()).append(", ").append(r.getUrl()).append('\n');
-                //infoLinee.append("- ").append(r.getId()).append('\n');
-
-                JButton pulsanteLinea = new JButton(r.getId());
-                pulsanteLinea.setBorderPainted(false);
-                pulsanteLinea.setBackground(rossoScuro);
-                pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
-                pulsanteLinea.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-                pulsanteLinea.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        mostraInfoLinea(pulsanteLinea.getText());
-                    }
-                });
-
-                pulsantiLinee.add(pulsanteLinea);
-            }
-
-            lineeServite.setText("Linee servite:");
-            pannello.revalidate();
-            pannello.repaint();
-        }
+        lineeServite.setText("Linee servite:");
+        pannello.revalidate();
+        pannello.repaint();
     }
 
     public void mostraInfoLinea(String id)
@@ -120,6 +122,13 @@ public class InformazioniFermata
         //la ricerca manuale dovrebbe essere fatta solo se !Wifi.WiFi, altrimenti si usano i dati
         //GTFS dinamici. e comunque va ottimizzato qui perché ci mette circa 10 secondi per
         //trovare la prossima linea
+
+        if (Wifi.WiFi)
+        {
+            //DynamicGTFS.getVehiclePosition();
+            DynamicGTFS.getTripUpdate(id, ElaboratoreFermate.ultimaFermata.getId());
+            return;
+        }
 
         infoLinea.removeAll();
         CustomWaypoint fermata = ElaboratoreFermate.ultimaFermata;
