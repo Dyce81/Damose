@@ -4,25 +4,14 @@ import Controller.DynamicGTFS;
 import Controller.ReaderStaticGTFS;
 import Controller.Wifi;
 import Model.*;
-import com.google.transit.realtime.GtfsRealtime;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.InputStream;
-import java.net.URL;
-import java.time.Instant;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import com.google.transit.realtime.GtfsRealtime.*;
 
 public class InformazioniFermata
 {
@@ -31,7 +20,7 @@ public class InformazioniFermata
     private final JLabel nome;
     private final JLabel tipoMezzo;
     private final JLabel lineeServite;
-    private JPanel pulsantiLinee;
+    private final JPanel pulsantiLinee;
     private final JPanel infoLinea;
 
     private static final Color rossoScuro = new Color(143, 51, 51);
@@ -70,17 +59,6 @@ public class InformazioniFermata
         return this.pannello;
     }
 
-    public void setNome(String nome)
-    {
-        this.nome.setText(nome + '\n');
-    }
-
-    public void setTipoMezzo(String tipoMezzo)
-    {
-        System.out.println();
-        this.tipoMezzo.setText("Tipo mezzo: " + tipoMezzo);
-    }
-
     public void impostaInfo(CustomWaypoint fermata)
     {
         nome.setText(fermata.getNome());
@@ -105,12 +83,7 @@ public class InformazioniFermata
             pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
             pulsanteLinea.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            pulsanteLinea.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    mostraInfoLinea(pulsanteLinea.getText());
-                }
-            });
+            pulsanteLinea.addActionListener(e -> mostraInfoLinea(pulsanteLinea.getText()));
             pulsantiLinee.add(pulsanteLinea);
         }
         lineeServite.setText("Linee servite:");
