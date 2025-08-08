@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class InformazioniFermata
@@ -27,6 +28,7 @@ public class InformazioniFermata
     private final JPanel infoLinea;
 
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private static ScheduledFuture<?> task;
 
     private static final Color rossoScuro = new Color(143, 51, 51);
     private static final Color rosso = new Color(175, 62, 62);
@@ -92,6 +94,7 @@ public class InformazioniFermata
             pulsanteLinea.addActionListener(e -> mostraInfoLinea(pulsanteLinea.getText()));
             pulsantiLinee.add(pulsanteLinea);
         }
+
         lineeServite.setText("Linee servite:");
         pannello.revalidate();
         pannello.repaint();
@@ -113,62 +116,53 @@ public class InformazioniFermata
         if (Wifi.WiFi)
         {
             //DynamicGTFS.getVehiclePosition();
-            /*String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
-            if (tempo.isEmpty()) tempo = "(Nessun orario previsto)";
-            // TODO: qui sopra magari predirlo staticamente - avvisando l'utente
 
-            prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
-
-            infoLinea.add(testoLinea);
-            infoLinea.add(prossimoArrivo);
-            pannello.scrollRectToVisible(new Rectangle(infoLinea.getBounds()));*/
-
-            scheduler.scheduleAtFixedRate(() ->
+            task = scheduler.scheduleAtFixedRate(() ->
             {
+                if (!Wifi.WiFi) //non so se funziona
+                {
+                    task.cancel(true);
+                    mostraInfoLinea(id);
+                }
+
                 String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
                 if (tempo.isEmpty()) tempo = "(Nessun orario previsto)";
                 // TODO: qui sopra magari predirlo staticamente - avvisando l'utente
 
                 prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
-
-                //System.out.println("Prossimo arrivo previsto: " + tempo);
             }, 0, 15, TimeUnit.SECONDS);
-            return;
         }
+        else {
 
-        //else...
+            List<Trip> viaggi = ReaderStaticGTFS.trips.stream()
+                    .filter(trip -> trip.getRouteId().equals(id))
+                    //.filter(trip -> trip.isServiceActiveToday
+                    .toList();
 
-        scheduler.shutdown();
+            List<String> viaggiValidi = viaggi.stream()
+                    .map(Trip::getId).toList();
 
-        List<Trip> viaggi = ReaderStaticGTFS.trips.stream()
-                .filter(trip -> trip.getRouteId().equals(id))
-                //.filter(trip -> trip.isServiceActiveToday
-                .toList();
+            LocalTime adesso = LocalTime.now();
 
-        List<String> viaggiValidi = viaggi.stream()
-                .map(Trip::getId).toList();
+            Optional<StopTime> prossimoStopTime = ReaderStaticGTFS.stopTimes.stream()
+                    .filter(st -> viaggiValidi.contains(st.getTripId()))
+                    .filter(st -> st.getStopId().equals(fermata.getId()))
+                    .filter(st -> st.getOrarioArrivo().isAfter(adesso))
+                    .min(Comparator.comparing(StopTime::getOrarioArrivo));
 
-        LocalTime adesso = LocalTime.now();
-
-        Optional<StopTime> prossimoStopTime = ReaderStaticGTFS.stopTimes.stream()
-                .filter(st -> viaggiValidi.contains(st.getTripId()))
-                .filter(st -> st.getStopId().equals(fermata.getId()))
-                .filter(st -> st.getOrarioArrivo().isAfter(adesso))
-                .min(Comparator.comparing(StopTime::getOrarioArrivo));
-
-        if (prossimoStopTime.isPresent())
-        {
-            StopTime st = prossimoStopTime.get();
-            System.out.println(st);
+            if (prossimoStopTime.isPresent()) {
+                StopTime st = prossimoStopTime.get();
+                System.out.print("OFFLINE!!!: ");
+                System.out.println(st);
+            }
         }
-
-        infoLinea.add(testoLinea);
-
-        pannello.scrollRectToVisible(new Rectangle(infoLinea.getBounds()));
     }
 
     public void resetPannello()
     {
+        if (task != null) task.cancel(true);
+        infoLinea.removeAll();
+        infoLinea.repaint();
         System.out.println("reset pannello");
     }
 }
