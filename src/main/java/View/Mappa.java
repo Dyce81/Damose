@@ -4,19 +4,18 @@ import Controller.Wifi;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
+import org.jxmapviewer.cache.FileBasedLocalCache;
 import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
-import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.*;
 import org.jxmapviewer.painter.Painter;
 
 import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
 
 public class Mappa
 {
@@ -30,17 +29,21 @@ public class Mappa
     {
         mappa = new JXMapViewer();
 
-        if (Wifi.wifi_connesso())
+        if (Wifi.WiFi)
         {
             TileFactoryInfo info = new OSMTileFactoryInfo();
             DefaultTileFactory tileFactory = new DefaultTileFactory(info);
             mappa.setTileFactory(tileFactory);
 
             tileFactory.setThreadPoolSize(8);
+
+            //Imposta una cache per le tiles
+            File cacheDir = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
+            tileFactory.setLocalCache(new FileBasedLocalCache(cacheDir, false));
         }
         else
         {
-            TileFactoryInfo info = new OSMTileFactoryInfo("ZIP archive", "data/.jxmapviewer2/tile.openstreetmap.zip!");
+            TileFactoryInfo info = new OSMTileFactoryInfo("offline", System.getProperty("user.home") + File.separator + ".jxmapviewer2/tile.openstreetmap");
             TileFactory tileFactory = new DefaultTileFactory(info);
             mappa.setTileFactory(tileFactory);
         }

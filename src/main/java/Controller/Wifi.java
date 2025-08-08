@@ -26,7 +26,7 @@ public class Wifi
                         WiFi = true;
                     }
 
-                else
+                else if (!wifi_connesso())
                 {
                     System.out.println("WiFi non connesso :(");
                     WiFi = false;
