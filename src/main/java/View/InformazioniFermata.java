@@ -53,6 +53,7 @@ public class InformazioniFermata
         pulsantiLinee.setLayout(new BoxLayout(pulsantiLinee, BoxLayout.Y_AXIS));
 
         infoLinea = new JPanel();
+        infoLinea.setLayout(new BoxLayout(infoLinea, BoxLayout.Y_AXIS));
         infoLinea.setBackground(rossoScuro);
 
         pannello.setLayout(new BoxLayout(pannello, BoxLayout.Y_AXIS));
@@ -123,18 +124,32 @@ public class InformazioniFermata
         //GTFS dinamici. e comunque va ottimizzato qui perché ci mette circa 10 secondi per
         //trovare la prossima linea
 
-        if (Wifi.WiFi)
-        {
-            //DynamicGTFS.getVehiclePosition();
-            DynamicGTFS.getTripUpdate(id, ElaboratoreFermate.ultimaFermata.getId());
-            return;
-        }
+        JLabel prossimoArrivo = new JLabel("Prossimo arrivo: ");
+        JLabel testoLinea = new JLabel("Linea selezionata: " + id);
 
         infoLinea.removeAll();
         CustomWaypoint fermata = ElaboratoreFermate.ultimaFermata;
 
-        JLabel testoLinea = new JLabel("Linea selezionata: " + id);
-        JLabel prossimoArrivo = new JLabel("Prossimo arrivo: ");
+        if (Wifi.WiFi)
+        {
+            //DynamicGTFS.getVehiclePosition();
+            String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
+            if (tempo.isEmpty()) tempo = "(Nessun orario previsto)";
+
+            prossimoArrivo.setText("Prossimo arrivo: " + tempo);
+
+            infoLinea.add(testoLinea);
+            infoLinea.add(prossimoArrivo);
+            pannello.scrollRectToVisible(new Rectangle(infoLinea.getBounds()));
+
+            return;
+        }
+
+        //infoLinea.removeAll();
+        //CustomWaypoint fermata = ElaboratoreFermate.ultimaFermata;
+
+        //JLabel testoLinea = new JLabel("Linea selezionata: " + id);
+        //JLabel prossimoArrivo = new JLabel("Prossimo arrivo: ");
 
         List<Trip> viaggi = ReaderStaticGTFS.trips.stream()
                 .filter(trip -> trip.getRouteId().equals(id))

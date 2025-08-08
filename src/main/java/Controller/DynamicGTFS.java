@@ -51,7 +51,7 @@ public class DynamicGTFS
         return null;
     }
 
-    public static void getTripUpdate(String routeId, String stopId)
+    public static String getTripUpdate(String routeId, String stopId)
     {
         try (InputStream input = new URL(tripUpdateUrl).openStream()) {
             FeedMessage feed = FeedMessage.parseFrom(input);
@@ -89,12 +89,14 @@ public class DynamicGTFS
                 String tempo = Instant.ofEpochSecond(prossimoArrivo)
                         .atZone(ZoneId.systemDefault())
                         .format(DateTimeFormatter.ofPattern("HH:mm"));
-                System.out.println(tempo);
-            } else System.out.println("niente :(");
+                return tempo;
+            } else return "";
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+
+        return "";
     }
 }
