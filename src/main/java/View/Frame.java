@@ -39,7 +39,7 @@ public class Frame {
         frame.setLocationRelativeTo(null);
 
         //Casella testo e pulsante per la ricerca delle fermate
-        JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 5));
+        JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
 
         testoFermata.setEditable(true);
         testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
@@ -87,6 +87,14 @@ public class Frame {
         profileButton.setBorder(null);
         profileButton.setPreferredSize(new Dimension(50, 50));
 
+        //tasto per accesso alle impostazioni
+        ImageIcon settingsIcon = new ImageIcon("assets/settings.png");
+        JButton settings = new JButton();
+        settings.setIcon(settingsIcon);
+        settings.setContentAreaFilled(false);
+        settings.setBorder(null);
+        settings.setPreferredSize(new Dimension(50, 50));
+
         //accesso alla pagina di login
         profileButton.addActionListener(new ActionListener()
         {public void actionPerformed(ActionEvent e)
@@ -95,9 +103,10 @@ public class Frame {
         }
         });
 
+        pannello_sup.add(profileButton);
         pannello_sup.add(testoLinea);
         pannello_sup.add(testoFermata);
-        pannello_sup.add(profileButton);
+        pannello_sup.add(settings);
         pannello_sup.setBackground(new Color(175, 62, 62));
 
         frame.add(pannello_sup, BorderLayout.PAGE_START);
@@ -129,12 +138,14 @@ public class Frame {
         {
             testoFermata.addItem(f);
         }
+        testoFermata.setEditable(false);
 
         testoLinea.addItem(new Route("null", "- Seleziona una linea -", -1, ""));
         for (Route l : ReaderStaticGTFS.routes)
         {
             testoLinea.addItem(l);
         }
+        testoLinea.setEditable(false);
     }
 
     //la ricerca delle fermate è gestita dal frame tramite questo metodo
