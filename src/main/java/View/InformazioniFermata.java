@@ -89,7 +89,7 @@ public class InformazioniFermata
             pulsanteLinea.setBorderPainted(false);
             pulsanteLinea.setBackground(rossoScuro);
             pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
-            pulsanteLinea.setAlignmentX(Component.CENTER_ALIGNMENT);
+            //pulsanteLinea.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             pulsanteLinea.addActionListener(e -> mostraInfoLinea(pulsanteLinea.getText()));
             pulsantiLinee.add(pulsanteLinea);
@@ -161,6 +161,11 @@ public class InformazioniFermata
     public void resetPannello()
     {
         if (task != null) task.cancel(true);
+        nome.setText("Seleziona una fermata.");
+        tipoMezzo.setText("");
+        lineeServite.setText("");
+        pulsantiLinee.removeAll();
+        pulsantiLinee.repaint();
         infoLinea.removeAll();
         infoLinea.repaint();
         System.out.println("reset pannello");

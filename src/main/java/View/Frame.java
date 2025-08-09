@@ -1,6 +1,8 @@
 package View;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,9 +76,11 @@ public class Frame {
         //Pannello informazioni laterale per le fermate
         pannelloInformazioni = new InformazioniFermata();
         JScrollPane pannello = new JScrollPane(pannelloInformazioni.getPannello());
+        pannello.setPreferredSize(new Dimension(200, Integer.MAX_VALUE));
         pannello.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         pannello.getVerticalScrollBar().setUnitIncrement(6);
-        pannello.setBorder(null);
+        pannello.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        pannello.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 0, new Color(143, 51, 51)));
         frame.add(pannello, BorderLayout.WEST);
         //forse?
 
