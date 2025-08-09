@@ -18,6 +18,8 @@ public class DatabaseManager
     private static final String USER = "sa";
     private static final String PASS = "password";
 
+    public static boolean logged = false;
+
     public DatabaseManager()
     {
         // Carica il driver JDBC

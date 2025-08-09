@@ -4,8 +4,6 @@ import Controller.DatabaseManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -30,6 +28,7 @@ public class LoginPage
         loginPage.add(panel);
 
 
+        //scritta di benvenuto
         JLabel benvenuto = new JLabel("benvenuto");
         benvenuto.setText("BENVENUTO NELLA PAGINA DI LOGIN");
         benvenuto.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -37,6 +36,7 @@ public class LoginPage
         panel.add(Box.createVerticalStrut(10));
 
 
+        //campo per l'username
         JTextField username = new JTextField("usare dai 5 ai 15 caratteri",3);
         username.addMouseListener(new MouseAdapter()
         {
@@ -57,6 +57,7 @@ public class LoginPage
         panel.add(Box.createVerticalStrut(10));
 
 
+        //campo per la password
         //si potrebbe usare JPasswordField invece di JTextField
         JTextField password = new JTextField("usare dai 6 ai 12 caratteri", 3);
         password.addMouseListener(new MouseAdapter()
@@ -64,7 +65,6 @@ public class LoginPage
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                // Quando il mouse viene cliccato sul campo di testo
                 password.selectAll(); // Seleziona tutto il contenuto
             }
         });
@@ -78,6 +78,7 @@ public class LoginPage
         panel.add(Box.createVerticalStrut(10));
 
 
+        //tasto di accesso o registrazione
         JButton acc_reg = new JButton("acc_reg");
         acc_reg.setText("Accedi");
         acc_reg.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -86,95 +87,80 @@ public class LoginPage
         JLabel avviso = new JLabel("testo deafault");
         avviso.setForeground(loginPage.getBackground());
         avviso.setAlignmentX(Component.CENTER_ALIGNMENT);
-        acc_reg.addActionListener(new ActionListener()
-        {public void actionPerformed(ActionEvent e)
+        acc_reg.addActionListener(e -> {
+            String username_input = username.getText();
+            String password_input = password.getText();
+
+            if (username_input.length() < 5)
             {
-                String username_input = username.getText();
-                String password_input = password.getText();
+                avviso.setText("username troppo corto!");
+                avviso.setForeground(Color.RED);
+            }
 
-                if (username_input.length() < 5)
+            else if (username_input.length() > 15)
+            {
+                avviso.setText("username troppo lungo!");
+                avviso.setForeground(Color.RED);
+            }
+
+            else if (password_input.length() < 6)
+            {
+                avviso.setText("password troppo corta!");
+                avviso.setForeground(Color.RED);
+            }
+
+            else if (password_input.length() > 12)
+            {
+                avviso.setText("password troppo lunga!");
+                avviso.setForeground(Color.RED);
+            }
+
+            else
+            {
+                int delay = 1200;
+
+                //se è in fase di registrazione
+                if (acc_reg.getText().equals("Registrati"))
                 {
-                    avviso.setText("username troppo corto!");
-                    avviso.setForeground(Color.RED);
+                    DatabaseManager.addUser(username_input, password_input);
+                    avviso.setText("Registrazione completata! Accesso eseguito!");
+                    avviso.setForeground(green);
+
+                    Timer timer = new Timer(delay, e1 -> {
+                        // Chiama il metodo dispose() per chiudere il JDialog
+                        loginPage.dispose();
+                        DatabaseManager.logged = true;
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
                 }
-
-                else if (username_input.length() > 15)
+                //se è in fase di accesso
+                else if (acc_reg.getText().equals("Accedi"))
                 {
-                    avviso.setText("username troppo lungo!");
-                    avviso.setForeground(Color.RED);
-                }
-
-                else if (password_input.length() < 6)
-                {
-                    avviso.setText("password troppo corta!");
-                    avviso.setForeground(Color.RED);
-                }
-
-                else if (password_input.length() > 12)
-                {
-                    avviso.setText("password troppo lunga!");
-                    avviso.setForeground(Color.RED);
-                }
-
-                else
-                {
-                    int delay = 1200;
-
-                    //se è in fase di registrazione
-                    if (acc_reg.getText().equals("Registrati"))
-                    {
-                        DatabaseManager.addUser(username_input, password_input);
-                        avviso.setText("Registrazione completata! Accesso eseguito!");
+                    String hashed_pswd = DatabaseManager.getUserPasswordHash(username_input);
+                    if (hashed_pswd != null && hashed_pswd.equals(password_input)) {
+                        avviso.setText("Accesso eseguito!");
                         avviso.setForeground(green);
 
-                        Timer timer = new Timer(delay, new ActionListener() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                // Chiama il metodo dispose() per chiudere il JDialog
-                                loginPage.dispose();
-                            }
+                        Timer timer = new Timer(delay, e2 -> {
+                            loginPage.dispose();
+                            DatabaseManager.logged = true;
                         });
                         timer.setRepeats(false);
                         timer.start();
                     }
-                    //se è in fase di accesso
-                    else if (acc_reg.getText().equals("Accedi"))
-                    {
-                        String hashed_pswd = DatabaseManager.getUserPasswordHash(username_input);
-                        if (hashed_pswd.equals(password_input))
-                        {
-                            avviso.setText("Accesso eseguito!");
-                            avviso.setForeground(green);
-
-                            Timer timer = new Timer(delay, new ActionListener() {
-                                @Override
-                                public void actionPerformed(ActionEvent e) {
-                                    // Chiama il metodo dispose() per chiudere il JDialog
-                                    loginPage.dispose();
-                                }
-                            });
-                            timer.setRepeats(false);
-                            timer.start();
-                        }
-                        else
-                            {
-                            avviso.setText("Utente o password errati");
-                            avviso.setForeground(Color.RED);
-                            }
-                    }
                 }
-                }
+            }
             });
 
 
+        //cambia tra modalità di accesso e registrazione
         JButton cambia_mod = new JButton("cambia_modalità");
         cambia_mod.setText("Non sei registrato? Registrati ora!");
         cambia_mod.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(cambia_mod);
         panel.add(Box.createVerticalStrut(10));
-        cambia_mod.addActionListener(new ActionListener()
-        {public void actionPerformed(ActionEvent e)
-        {
+        cambia_mod.addActionListener(e -> {
 
             if (acc_reg.getText().equals("Accedi"))
 
@@ -190,7 +176,6 @@ public class LoginPage
                 benvenuto.setText("BENVENUTO NELLA PAGINA DI LOGIN");
             }
 
-        }
         });
 
 
