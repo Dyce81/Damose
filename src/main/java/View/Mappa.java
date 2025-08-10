@@ -15,11 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 
 public class Mappa
 {
-    private int zoom = 3;
     public static JXMapViewer mappa;
     public Painter<JXMapViewer> painter = null;
     public boolean compound = false;
