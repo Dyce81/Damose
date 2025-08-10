@@ -4,6 +4,7 @@ import Controller.DynamicGTFS;
 import Controller.ReaderStaticGTFS;
 import Controller.Wifi;
 import Model.*;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,9 +27,12 @@ public class InformazioniFermata
     private final JLabel lineeServite;
     private final JPanel pulsantiLinee;
     private final JPanel infoLinea;
+    private final JButton mostraMezzi;
 
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture<?> task;
+
+    private boolean tracciamentoAttivo = false;
 
     private static final Color rossoScuro = new Color(143, 51, 51);
     private static final Color rosso = new Color(175, 62, 62);
@@ -52,6 +56,9 @@ public class InformazioniFermata
         infoLinea = new JPanel();
         infoLinea.setLayout(new BoxLayout(infoLinea, BoxLayout.Y_AXIS));
         infoLinea.setBackground(rosso);
+
+        mostraMezzi = new JButton("  Mostra mezzi sulla linea  ");
+        mostraMezzi.addActionListener(e -> tracciaMezzi());
 
         pannello.setLayout(new BoxLayout(pannello, BoxLayout.Y_AXIS));
         pannello.add(indicazioneFermata);
@@ -112,6 +119,7 @@ public class InformazioniFermata
         infoLinea.add(prossimoArrivo);
 
         pannello.scrollRectToVisible(new Rectangle(infoLinea.getBounds()));
+        pannello.add(mostraMezzi);
 
         if (Wifi.WiFi)
         {
@@ -119,21 +127,38 @@ public class InformazioniFermata
 
             task = scheduler.scheduleAtFixedRate(() ->
             {
+                System.out.print("ehi!:     ");
+                System.out.println(id);
                 if (!Wifi.WiFi) //non so se funziona
                 {
-                    task.cancel(true);
-                    mostraInfoLinea(id);
+                    /*task.cancel(true);*/
+                    /*mostraInfoLinea(id);*/
+                    // TODO: chiamare un metodo che calcola staticamente il prossimo arrivo
+                    // (e se è attivo, anche il tracciamento mezzi (statico) (prova a indovinare
+                    // in quale fermata si trova il mezzo))
                 }
 
                 String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
                 if (tempo.isEmpty()) tempo = "(Nessun orario previsto)";
                 // TODO: qui sopra magari predirlo staticamente - avvisando l'utente
 
+                if (tracciamentoAttivo)
+                {
+                    ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
+                    //Mappa.getMapViewer().zoomToBestFit(new HashSet<>(), 0.7);
+                    for (GeoPosition coords : lista)
+                    {
+                        System.out.println(coords);
+                    }
+                }
+
                 prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
-            }, 0, 15, TimeUnit.SECONDS);
+            }, 0, 5, TimeUnit.SECONDS);
         }
         else {
 
+            // TODO: questa parte di codice qui sotto deve essere messa in un metodo
+            // per calcolare i dati statici... - stesso metodo usato nell'if qui sopra
             List<Trip> viaggi = ReaderStaticGTFS.trips.stream()
                     .filter(trip -> trip.getRouteId().equals(id))
                     //.filter(trip -> trip.isServiceActiveToday
@@ -158,6 +183,21 @@ public class InformazioniFermata
         }
     }
 
+    public void tracciaMezzi()
+    {
+        if (tracciamentoAttivo)
+        {
+            tracciamentoAttivo = false;
+            mostraMezzi.setText("  Mostra mezzi sulla linea  ");
+        }
+        else
+        {
+            tracciamentoAttivo = true;
+            mostraMezzi.setText("Nascondi mezzi sulla linea");
+
+        }
+    }
+
     public void resetPannello()
     {
         if (task != null) task.cancel(true);
@@ -168,6 +208,7 @@ public class InformazioniFermata
         pulsantiLinee.repaint();
         infoLinea.removeAll();
         infoLinea.repaint();
-        System.out.println("reset pannello");
+        pannello.remove(mostraMezzi);
+        //System.out.println("reset pannello");
     }
 }

@@ -1,6 +1,7 @@
 package Controller;
 
 import com.google.transit.realtime.GtfsRealtime.*;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.InputStream;
 import java.lang.reflect.Array;
@@ -15,7 +16,7 @@ public class DynamicGTFS
     private static String tripUpdateUrl = "https://romamobilita.it/sites/default/files/rome_rtgtfs_trip_updates_feed.pb";
     private static String vehicleUrl = "https://romamobilita.it/sites/default/files/rome_rtgtfs_vehicle_positions_feed.pb";
 
-    public static ArrayList<String> getVehiclePosition()
+    /*public static ArrayList<String> getVehiclePosition()
     {
         try (InputStream input = new URL(vehicleUrl).openStream())
         {
@@ -42,6 +43,45 @@ public class DynamicGTFS
 
                 return lista;
             }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }*/
+
+    public static ArrayList<GeoPosition> getVehiclePosition(String routeId)
+    {
+        try (InputStream input = new URL(vehicleUrl).openStream())
+        {
+            FeedMessage feed = FeedMessage.parseFrom(input);
+            ArrayList<GeoPosition> lista = new ArrayList<>();
+
+            for (FeedEntity entita : feed.getEntityList())
+            {
+                if (!entita.hasVehicle()) continue;
+
+                String idTrovato = entita.getVehicle().getTrip().getRouteId();
+                if (!idTrovato.equals(routeId)) continue;
+
+                VehiclePosition posizione = entita.getVehicle();
+                //String tripId = posizione.getTrip().getTripId();
+                //String vehicleId = posizione.getVehicle().getId();
+                double latitudine = posizione.getPosition().getLatitude();
+                double longitudine = posizione.getPosition().getLongitude();
+                //long timestamp = posizione.getTimestamp();*/
+
+                lista.add(new GeoPosition(latitudine, longitudine));
+                /*lista.add(posizione.toString());
+                lista.add(tripId);
+                lista.add(vehicleId);
+                lista.add(Double.toString(latitudine));
+                lista.add(Double.toString(longitudine));
+                lista.add(Long.toString(timestamp));*/
+            }
+            return lista;
         }
         catch (Exception e)
         {
