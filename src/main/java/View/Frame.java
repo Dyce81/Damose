@@ -1,12 +1,9 @@
 package View;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,6 +89,14 @@ public class Frame {
         profileButton.setBorder(null);
         profileButton.setPreferredSize(new Dimension(50, 50));
 
+        //accesso alla pagina di login
+        profileButton.addActionListener(new ActionListener()
+        {public void actionPerformed(ActionEvent e)
+        {
+            LoginPage loginPage = new LoginPage();
+        }
+        });
+
         //tasto per accesso alle impostazioni
         ImageIcon settingsIcon = new ImageIcon("assets/settings.png");
         JButton settings = new JButton();
@@ -100,11 +105,11 @@ public class Frame {
         settings.setBorder(null);
         settings.setPreferredSize(new Dimension(50, 50));
 
-        //accesso alla pagina di login
-        profileButton.addActionListener(new ActionListener()
+        //accesso alla pagina delle impostazioni
+        settings.addActionListener(new ActionListener()
         {public void actionPerformed(ActionEvent e)
         {
-            LoginPage loginPage = new LoginPage();
+                SettingsPage settingsPage = new SettingsPage();
         }
         });
 
