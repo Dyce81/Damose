@@ -149,6 +149,7 @@ public class InformazioniFermata
                     for (GeoPosition coords : lista)
                     {
                         System.out.println(coords);
+                        Mappa.aggiungiMezzo(coords);
                     }
                 }
 

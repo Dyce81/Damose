@@ -1,11 +1,13 @@
 package Model;
 
 import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
 {
@@ -16,10 +18,20 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
 
     //Se l'icona si trova fuori dai confini della mappa oltre questo offset, non sarà disegnata
     private final int offsetVisibilita = 30;
+    private boolean tracciamentoAttivo = false;
+    private ArrayList<GeoPosition> posizioniMezzi = new ArrayList<>();
 
     @Override
     protected void doPaint(Graphics2D g, JXMapViewer map, int larghezza, int altezza)
     {
+        if (map.getZoom() < 6 && tracciamentoAttivo)
+        {
+            for (GeoPosition posizione : posizioniMezzi)
+            {
+
+            }
+        }
+
         if (map.getZoom() > 3)
         {
             for (CustomWaypoint wp : getWaypoints())
@@ -56,5 +68,15 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
             //JButton icona = wp.getIcona();
             //icona.setLocation(iconaX - icona.getWidth() / 2, iconaY - icona.getHeight() / 2);
         }
+    }
+
+    public void setTracciamentoAttivo(boolean tracciamentoAttivo)
+    {
+        this.tracciamentoAttivo = tracciamentoAttivo;
+    }
+
+    public void setPosizioniMezzi(ArrayList<GeoPosition> posizioniMezzi)
+    {
+        this.posizioniMezzi = posizioniMezzi;
     }
 }

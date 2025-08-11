@@ -2,6 +2,7 @@ package View;
 
 import Controller.Wifi;
 
+import org.jxmapviewer.JXMapKit;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;
@@ -11,11 +12,21 @@ import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
 import org.jxmapviewer.viewer.*;
 import org.jxmapviewer.painter.Painter;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
+import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ImageObserver;
+import java.awt.image.RenderedImage;
+import java.awt.image.renderable.RenderableImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.AttributedCharacterIterator;
+import java.util.Map;
 
 public class Mappa
 {
@@ -81,5 +92,16 @@ public class Mappa
     public static JXMapViewer getMapViewer()
     {
         return mappa;
+    }
+
+    //metodo usato per disegnare i mezzi (tracciamento realtime)
+    public static void aggiungiMezzo(GeoPosition coords)
+    {
+        /*ImageIcon icona = new ImageIcon("assets/settings.png");
+        JLabel thumb = new JLabel();
+        thumb.setIcon(icona);*/
+        Point2D punto = Mappa.getMapViewer().convertGeoPositionToPoint(coords);
+        /*Mappa.getMapViewer().setAddressLocation(coords);*/
+        System.out.println(punto);
     }
 }

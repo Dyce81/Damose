@@ -22,7 +22,7 @@ public class ElaboratoreFermate {
     //fermate
     public final static ArrayList<CustomWaypoint> listaFermate = new ArrayList<>();
     //public final static ArrayList<String> nomi_fermate = new ArrayList<>();
-    private final Set<CustomWaypoint> waypoints = new HashSet<>();
+    private final static Set<CustomWaypoint> waypoints = new HashSet<>();
     //questo era originariamente locale all'interno del metodo "elabora_fermate"; probabilmente
     //converebbe in locale, magari passandolo per riferimento come parametro quando si
     //richiama la funzione
@@ -95,6 +95,5 @@ public class ElaboratoreFermate {
                 }
             }
         });
-
     }
 }
