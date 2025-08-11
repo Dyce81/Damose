@@ -127,8 +127,6 @@ public class InformazioniFermata
 
             task = scheduler.scheduleAtFixedRate(() ->
             {
-                System.out.print("ehi!:     ");
-                System.out.println(id);
                 if (!Wifi.WiFi) //non so se funziona
                 {
                     /*task.cancel(true);*/
@@ -146,11 +144,20 @@ public class InformazioniFermata
                 {
                     ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
                     //Mappa.getMapViewer().zoomToBestFit(new HashSet<>(), 0.7);
-                    for (GeoPosition coords : lista)
+                    CustomWaypointPainter.setPosizioniMezzi(lista);
+                    /*for (GeoPosition coords : lista)
                     {
                         System.out.println(coords);
-                        Mappa.aggiungiMezzo(coords);
-                    }
+                        //Mappa.aggiungiMezzo(coords);
+                    }*/
+
+                    CustomWaypointPainter.setTracciamentoAttivo(true);
+
+                    List<GeoPosition> percorso = ReaderStaticGTFS.getPercorso(id);
+                    Mappa.disegnaLinea(percorso);
+
+                    Mappa.getMapViewer().repaint();
+                    //System.out.println("aaa");
                 }
 
                 prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);

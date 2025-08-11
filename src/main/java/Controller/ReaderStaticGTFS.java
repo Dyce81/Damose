@@ -4,6 +4,7 @@ import Model.PuntoShape;
 import Model.Route;
 import Model.Trip;
 import Model.StopTime;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,6 +12,9 @@ import java.lang.reflect.Array;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /*                                  IMPORTANTE
     Sarebbe meglio usare una libreria come OpenCSV per leggere i file .csv; per il momento
@@ -148,5 +152,23 @@ public class ReaderStaticGTFS
         ore %= 24;
 
         return LocalTime.of(ore, minuti, secondi);
+    }
+
+    public static List<GeoPosition> getPercorso(String routeId) {
+        ArrayList<Trip> viaggi = trips.stream()
+                .filter(trip -> trip.getRouteId().equals(routeId)).collect(Collectors.toCollection(ArrayList::new));
+
+        if (viaggi.isEmpty())
+        {
+            return new ArrayList<GeoPosition>();
+        }
+
+        Trip viaggioSelezionato = viaggi.getFirst();
+
+        return shapes.stream()
+                .filter(sp -> sp.getId().equals(viaggioSelezionato.getShapeId()))
+                .sorted(Comparator.comparingInt(PuntoShape::getSequenza))
+                .map(sp -> new GeoPosition(sp.getLatitudine(), sp.getLongitudine()))
+                .toList();
     }
 }

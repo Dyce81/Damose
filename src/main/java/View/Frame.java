@@ -188,13 +188,14 @@ public class Frame {
         //System.out.println(testoLinea.getSelectedItem());
         String nomeLinea = testoLinea.getSelectedItem().toString();
 
-        //provvisorio!!!!
+        //provvisorio!!!! (PARTE DA QUI)
+        /*
         ArrayList<Trip> viaggi = ReaderStaticGTFS.trips.stream()
                 .filter(trip -> trip.getRouteId().equals(nomeLinea)).collect(Collectors.toCollection(ArrayList::new));
 
         if (viaggi.isEmpty()) return;
 
-        Trip viaggioSelezionato = viaggi.getFirst();
+        Trip viaggioSelezionato = viaggi.getFirst();*/
 
         /*ArrayList<GeoPosition> percorso = ReaderStaticGTFS.stopTimes.stream()
                 .filter(st -> st.getTripId().equals(viaggioSelezionato.getId()))
@@ -208,13 +209,17 @@ public class Frame {
                 })
                 .filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));*/
 
-        List<GeoPosition> percorso = ReaderStaticGTFS.shapes.stream()
+        /*List<GeoPosition> percorso = ReaderStaticGTFS.shapes.stream()
                 .filter(sp -> sp.getId().equals(viaggioSelezionato.getShapeId()))
                 .sorted(Comparator.comparingInt(PuntoShape::getSequenza))
                 .map(sp -> new GeoPosition(sp.getLatitudine(), sp.getLongitudine()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
 
-        RoutePainter routePainter = new RoutePainter(percorso);
+        List<GeoPosition> percorso = ReaderStaticGTFS.getPercorso(nomeLinea);
+        Mappa.disegnaLinea(percorso);
+        Mappa.getMapViewer().zoomToBestFit(new HashSet<>(percorso), 0.7);
+
+        /*RoutePainter routePainter = new RoutePainter(percorso);
 
         List<Painter<JXMapViewer>> painters = new ArrayList<>();
         painters.add(mappa.painter);
@@ -224,7 +229,7 @@ public class Frame {
         mappa.set_painter(painter);
         mappa.compound = true;
 
-        mappa.mappa.zoomToBestFit(new HashSet<>(percorso), 0.7);
+        mappa.mappa.zoomToBestFit(new HashSet<>(percorso), 0.7);*/
     }
 
     //Questo metodo mostra le informazioni della fermata selezionata (al lato della finestra?)

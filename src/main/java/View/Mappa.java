@@ -2,12 +2,14 @@ package View;
 
 import Controller.Wifi;
 
+import Model.RoutePainter;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;
 import org.jxmapviewer.input.PanKeyListener;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCursor;
+import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.*;
 import org.jxmapviewer.painter.Painter;
 
@@ -15,12 +17,15 @@ import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class Mappa
 {
     public static JXMapViewer mappa;
-    public Painter<JXMapViewer> painter = null;
-    public boolean compound = false;
+    public static Painter<JXMapViewer> painter = null;
+    public static boolean compound = false;
 
     //costruttore
     Mappa(JFrame frame)
@@ -68,7 +73,7 @@ public class Mappa
         mappa.setZoom(2);
     }
 
-    public void set_painter(Painter<JXMapViewer> p)
+    public static void set_painter(Painter<JXMapViewer> p)
     {
         if (compound) return;
         if (painter == null) painter = p; //se painter non è già stato definito, impostalo correttamente
@@ -79,5 +84,19 @@ public class Mappa
     public static JXMapViewer getMapViewer()
     {
         return mappa;
+    }
+
+    public static void disegnaLinea(List<GeoPosition> percorso)
+    {
+        RoutePainter rPainter = new RoutePainter(percorso);
+        List<Painter<JXMapViewer>> painters = new ArrayList<>();
+        painters.add(painter);
+        painters.add(rPainter);
+        CompoundPainter<JXMapViewer> painter = new CompoundPainter<>(painters);
+        compound = false;
+        set_painter(painter);
+        compound = true;
+
+        //mappa.zoomToBestFit(new HashSet<>(percorso), 0.7);
     }
 }

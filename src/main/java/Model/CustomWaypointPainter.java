@@ -1,6 +1,10 @@
 package Model;
 
+import Controller.ReaderStaticGTFS;
+import View.Mappa;
 import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.painter.CompoundPainter;
+import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
@@ -8,6 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
 {
@@ -18,17 +24,24 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
 
     //Se l'icona si trova fuori dai confini della mappa oltre questo offset, non sarà disegnata
     private final int offsetVisibilita = 30;
-    private boolean tracciamentoAttivo = false;
-    private ArrayList<GeoPosition> posizioniMezzi = new ArrayList<>();
+    private static boolean tracciamentoAttivo = false;
+    private static ArrayList<GeoPosition> posizioniMezzi = new ArrayList<>();
+    private static String lineaTracciata;
+
+    private static final Image iconaAutobus = new ImageIcon("assets/autobus_icona.png").getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);;
 
     @Override
     protected void doPaint(Graphics2D g, JXMapViewer map, int larghezza, int altezza)
     {
-        if (map.getZoom() < 6 && tracciamentoAttivo)
+        if (tracciamentoAttivo)
         {
             for (GeoPosition posizione : posizioniMezzi)
             {
+                Point2D punto = map.convertGeoPositionToPoint(posizione);
+                int x = (int) (punto.getX()) - 12; //12 = la metà (circa) della dimensione dell'icona
+                int y = (int) (punto.getY()) - 12; //idem
 
+                g.drawImage(iconaAutobus, x, y, null);
             }
         }
 
@@ -70,13 +83,18 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
         }
     }
 
-    public void setTracciamentoAttivo(boolean tracciamentoAttivo)
+    public static void setTracciamentoAttivo(boolean attivo)
     {
-        this.tracciamentoAttivo = tracciamentoAttivo;
+        tracciamentoAttivo = attivo;
     }
 
-    public void setPosizioniMezzi(ArrayList<GeoPosition> posizioniMezzi)
+    public static void setPosizioniMezzi(ArrayList<GeoPosition> pos)
     {
-        this.posizioniMezzi = posizioniMezzi;
+        posizioniMezzi = pos;
+    }
+
+    public static void setLineaTracciata(String linea)
+    {
+        lineaTracciata = linea;
     }
 }
