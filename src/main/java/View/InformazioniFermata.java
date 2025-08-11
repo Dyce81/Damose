@@ -212,6 +212,11 @@ public class InformazioniFermata
     public void resetPannello()
     {
         if (task != null) task.cancel(true);
+        CustomWaypointPainter.setTracciamentoAttivo(false);
+        Mappa.getMapViewer().setOverlayPainter(ElaboratoreFermate.getWaypointPainter());
+        Mappa.getMapViewer().repaint();
+        tracciamentoAttivo = false;
+        mostraMezzi.setText("  Mostra mezzi sulla linea  ");
         nome.setText("Seleziona una fermata.");
         tipoMezzo.setText("");
         lineeServite.setText("");
