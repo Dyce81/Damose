@@ -144,7 +144,6 @@ public class InformazioniFermata
 
                 if (tracciamentoAttivo)
                 {
-                    System.out.println(id);
                     ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
                     //Mappa.getMapViewer().zoomToBestFit(new HashSet<>(), 0.7);
                     CustomWaypointPainter.setPosizioniMezzi(lista);
@@ -160,7 +159,6 @@ public class InformazioniFermata
                     Mappa.disegnaLinea(percorso);
 
                     Mappa.getMapViewer().repaint();
-                    //System.out.println("aaa");
                 }
 
                 prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
@@ -200,12 +198,14 @@ public class InformazioniFermata
         {
             tracciamentoAttivo = false;
             mostraMezzi.setText("  Mostra mezzi sulla linea  ");
+            CustomWaypointPainter.setTracciamentoAttivo(false);
+            Mappa.getMapViewer().setOverlayPainter(ElaboratoreFermate.getWaypointPainter());
+            Mappa.getMapViewer().repaint();
         }
         else
         {
             tracciamentoAttivo = true;
             mostraMezzi.setText("Nascondi mezzi sulla linea");
-
         }
     }
 

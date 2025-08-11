@@ -96,4 +96,9 @@ public class ElaboratoreFermate {
             }
         });
     }
+
+    public static WaypointPainter<CustomWaypoint> getWaypointPainter()
+    {
+        return waypoint_painter;
+    }
 }

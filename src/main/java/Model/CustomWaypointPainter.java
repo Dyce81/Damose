@@ -92,9 +92,4 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
     {
         posizioniMezzi = pos;
     }
-
-    public static void setLineaTracciata(String linea)
-    {
-        lineaTracciata = linea;
-    }
 }
