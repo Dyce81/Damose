@@ -121,6 +121,8 @@ public class InformazioniFermata
         pannello.scrollRectToVisible(new Rectangle(infoLinea.getBounds()));
         pannello.add(mostraMezzi);
 
+        if (task != null) task.cancel(true);
+
         if (Wifi.WiFi)
         {
             //DynamicGTFS.getVehiclePosition();
@@ -142,6 +144,7 @@ public class InformazioniFermata
 
                 if (tracciamentoAttivo)
                 {
+                    System.out.println(id);
                     ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
                     //Mappa.getMapViewer().zoomToBestFit(new HashSet<>(), 0.7);
                     CustomWaypointPainter.setPosizioniMezzi(lista);
