@@ -10,7 +10,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CustomWaypoint extends DefaultWaypoint
 {
@@ -89,7 +91,7 @@ public class CustomWaypoint extends DefaultWaypoint
         ////pannelloInformazioni.setNome(this.nome);
         //pannelloInformazioni.setTipoMezzo();
 
-        pannelloInformazioni.impostaInfo(this);
+        //pannelloInformazioni.impostaInfo(this);
         Mappa.getMapViewer().repaint();
     }
 
@@ -111,8 +113,27 @@ public class CustomWaypoint extends DefaultWaypoint
 
     //Questo metodo trova le linee che passano per questa fermata
     //per adesso restituisce un array di routes che passano per quella fermata
-    public ArrayList<Route> trovaLinee()
+    public void trovaLinee()
     {
+        /*if (id.startsWith("ITO"))
+        {
+            //se è una metropolitana fai queste cose
+
+            /*ArrayList<Route> lineeMetro = ReaderStaticGTFS.routes.stream()
+                    .filter(route -> route.getTipo() == 1)
+                    .collect(Collectors.toCollection(ArrayList::new));*/
+
+            /*List<Route> lineeMetro = ReaderStaticGTFS.routes.stream()
+                    .filter(route -> route.getTipo() == 1)
+                    .toList();
+
+
+
+            //System.out.println(lineeMetro);
+            pannelloInformazioni.setLineeServite(lineeMetro);
+            return;
+        }*/
+
         ArrayList<Route> lineeTrovate = new ArrayList<>();
 
         Set<String> tripIds = new HashSet<>();
@@ -125,13 +146,23 @@ public class CustomWaypoint extends DefaultWaypoint
             if (tripIds.contains(t.getId()))
                 routeIds.add(t.getRouteId());
 
-        for (Route r : ReaderStaticGTFS.routes)
-            if (routeIds.contains(r.getId()))
-                lineeTrovate.add(r);
-        //System.out.println("- " + r.getNome() + " (" + r.getUrl() +")");
+        if (id.startsWith("ITO"))
+        {
+            //TODO: ogni fermata della metro imposta come linee servite tutte quelle della metro
+            //(MA, MB, MB1, MC). bisogna restituire SOLO le linee che passano per la fermata voluta.
+            for (Route r : ReaderStaticGTFS.routes)
+                if (r.getTipo() == 1)
+                    lineeTrovate.add(r);
+        }
+        else {
+            for (Route r : ReaderStaticGTFS.routes)
+                if (routeIds.contains(r.getId()))
+                    lineeTrovate.add(r);
+            //System.out.println("- " + r.getNome() + " (" + r.getUrl() +")");
+        }
 
         pannelloInformazioni.setLineeServite(lineeTrovate);
-        return lineeTrovate;
+        //return lineeTrovate;
     }
 
     @Override
