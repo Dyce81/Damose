@@ -34,6 +34,6 @@ public class Main
         DatabaseManager dbManager = new DatabaseManager();
         dbManager.createUsersTable();
 
-        Wifi.impostaFrame(frame);
+        Wifi.impostaFrame(frame, frame.getMappa());
     }
 }

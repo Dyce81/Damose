@@ -123,7 +123,7 @@ public class InformazioniFermata
 
         if (task != null) task.cancel(true);
 
-        if (Wifi.WiFi)
+        if (Wifi.WiFi || !Wifi.WiFi)
         {
             //DynamicGTFS.getVehiclePosition();
 
@@ -143,6 +143,7 @@ public class InformazioniFermata
                     if (tracciamentoAttivo)
                     {
                         //TODO: tracciamento statico
+                        System.out.println("tracciamento statico");
                     }
                 }
                 else
@@ -172,9 +173,8 @@ public class InformazioniFermata
                     prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
                 }
             }, 0, 5, TimeUnit.SECONDS);
-
         }
-        else {
+        /*else {
             // TODO: questa parte di codice qui sotto deve essere messa in un metodo
             // per calcolare i dati statici... - stesso metodo usato nell'if qui sopra
             List<Trip> viaggi = ReaderStaticGTFS.trips.stream()
@@ -198,7 +198,7 @@ public class InformazioniFermata
                 System.out.print("OFFLINE!!!: ");
                 System.out.println(st);
             }
-        }
+        }*/
     }
 
     public void tracciaMezzi()

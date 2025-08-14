@@ -12,10 +12,12 @@ public class Wifi
 {
     public static boolean WiFi = false;
     public static View.Frame riferimentoFrame;
+    public static View.Mappa riferimentoMappa;
 
-    public static void impostaFrame(View.Frame frame)
+    public static void impostaFrame(View.Frame frame, View.Mappa mappa)
     {
         riferimentoFrame = frame;
+        riferimentoMappa = mappa;
     }
 
     public static void wifi_controller()
@@ -32,13 +34,18 @@ public class Wifi
                 {
                     WiFi = true;
                     if (riferimentoFrame != null)
+                    {
                         riferimentoFrame.cambiaStatoWiFi();
+                        //riferimentoMappa.cambiaStatoMappa();
+                    }
                 }
-                else if (!wifi_connesso())
-                {
+                else if (!wifi_connesso()) {
                     WiFi = false;
                     if (riferimentoFrame != null)
+                    {
                         riferimentoFrame.cambiaStatoWiFi();
+                        //riferimentoMappa.cambiaStatoMappa();
+                    }
                 }
             }
         };

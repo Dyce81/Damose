@@ -27,6 +27,12 @@ public class Mappa
     public static Painter<JXMapViewer> painter = null;
     public static boolean compound = false;
 
+    private static final TileFactoryInfo info = new OSMTileFactoryInfo();
+    private static final DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+
+    private static final TileFactoryInfo offlineInfo = new OSMTileFactoryInfo("offline", System.getProperty("user.home").replace('\\', '/') + "/.jxmapviewer2/tile.openstreetmap");
+    private static final TileFactory offlineTileFactory = new DefaultTileFactory(offlineInfo);
+
     //costruttore
     Mappa(JFrame frame)
     {
@@ -34,26 +40,26 @@ public class Mappa
 
         if (Wifi.WiFi)
         {
-            TileFactoryInfo info = new OSMTileFactoryInfo();
-            DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+            //TileFactoryInfo info = new OSMTileFactoryInfo();
+            //DefaultTileFactory tileFactory = new DefaultTileFactory(info);
             mappa.setTileFactory(tileFactory);
 
             tileFactory.setThreadPoolSize(8);
 
             //Imposta una cache per le tiles
-            File cacheDir = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
+            File cacheDir = new File(System.getProperty("user.home").replace('\\', '/') + "/.jxmapviewer2");
             tileFactory.setLocalCache(new FileBasedLocalCache(cacheDir, false));
         }
         else
         {
-            TileFactoryInfo info = new OSMTileFactoryInfo("offline", System.getProperty("user.home") + File.separator + ".jxmapviewer2/tile.openstreetmap");
-            TileFactory tileFactory = new DefaultTileFactory(info);
-            mappa.setTileFactory(tileFactory);
+            //TileFactoryInfo info = new OSMTileFactoryInfo("offline", System.getProperty("user.home") + File.separator + ".jxmapviewer2/tile.openstreetmap");
+            //TileFactory tileFactory = new DefaultTileFactory(info);
+            mappa.setTileFactory(offlineTileFactory);
         }
 
         //Metti Roma al centro della mappa
-        GeoPosition posizione_roma = new GeoPosition(41.90, 12.48);
-        mappa.setAddressLocation(posizione_roma);
+        GeoPosition posizioneRoma = new GeoPosition(41.90, 12.48);
+        mappa.setAddressLocation(posizioneRoma);
         mappa.setZoom(3);
 
         frame.add(mappa, BorderLayout.CENTER);
@@ -84,6 +90,18 @@ public class Mappa
     public static JXMapViewer getMapViewer()
     {
         return mappa;
+    }
+
+    public void cambiaStatoMappa()
+    {
+        if (Wifi.wifi_connesso())
+        {
+            mappa.setTileFactory(tileFactory);
+        }
+        else
+        {
+            mappa.setTileFactory(offlineTileFactory);
+        }
     }
 
     public static void disegnaLinea(List<GeoPosition> percorso)

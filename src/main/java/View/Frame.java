@@ -275,6 +275,11 @@ public class Frame {
         return frame;
     }
 
+    public Mappa getMappa()
+    {
+        return mappa;
+    }
+
     public InformazioniFermata getPannelloInformazioni()
     {
         return this.pannelloInformazioni;
