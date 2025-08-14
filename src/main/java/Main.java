@@ -19,7 +19,6 @@ public class Main
 
         Frame frame = new Frame(600, 800, "Damose");
         ReaderStaticGTFS.iniziaPROVVISORIO();
-        System.out.println(ReaderStaticGTFS.getPosizioneVeicolo("70293", "71"));
         ElaboratoreFermate elab_fermate = new ElaboratoreFermate();
         //frame.imposta_painter_mappa(elab_fermate.posiziona_fermate());
         //elab_fermate.posiziona_fermate(frame.mappa);
