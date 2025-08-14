@@ -1,5 +1,7 @@
 package Controller;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -8,9 +10,15 @@ import java.util.TimerTask;
 
 public class Wifi
 {
-    public static boolean WiFi;
+    public static boolean WiFi = false;
+    public static View.Frame riferimentoFrame;
 
-    public void wifi_controller()
+    public static void impostaFrame(View.Frame frame)
+    {
+        riferimentoFrame = frame;
+    }
+
+    public static void wifi_controller()
     {
         //questa cosa non mi convice al 100% - probabilmente da rivedere
         Timer timer_controllo_wifi = new Timer();
@@ -21,16 +29,16 @@ public class Wifi
             {
                 //TODO: fare cose effettivamente
                 if (wifi_connesso())
-                    {
-                        System.out.println("WiFi connesso");
-                        WiFi = true;
-                    }
-
+                {
+                    WiFi = true;
+                    if (riferimentoFrame != null)
+                        riferimentoFrame.cambiaStatoWiFi();
+                }
                 else if (!wifi_connesso())
                 {
-                    System.out.println("WiFi non connesso :(");
                     WiFi = false;
-                    //return;
+                    if (riferimentoFrame != null)
+                        riferimentoFrame.cambiaStatoWiFi();
                 }
             }
         };
@@ -48,5 +56,23 @@ public class Wifi
         }
 
         return true;
+    }
+
+    //Usa una finestra modale per avvertire l'utente dello stato della connessione
+    public static void mostraStatoConnessione(JFrame frame)
+    {
+        JDialog dialogStatoWiFi = new JDialog(frame, "Messaggio", false);
+        dialogStatoWiFi.setSize(new Dimension(200, 100));
+
+        JLabel testoStato = new JLabel();
+
+        if (WiFi)
+            testoStato.setText("Connessione tornata (?)");
+        else
+            testoStato.setText("Connessione assente");
+
+        dialogStatoWiFi.add(testoStato);
+
+        dialogStatoWiFi.setVisible(true);
     }
 }

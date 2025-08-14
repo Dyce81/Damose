@@ -1,6 +1,8 @@
 package View;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import Controller.ReaderStaticGTFS;
+import Controller.Wifi;
 import Model.*;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.CompoundPainter;
@@ -26,8 +29,12 @@ public class Frame {
     private final JComboBox<Route> testoLinea = new JComboBox<>();
     //private final JComboBox<String> testoLinea = new JComboBox<>();
     private final InformazioniFermata pannelloInformazioni;
+    private final JLabel testoWiFi;
 
     private CustomWaypoint ultimaFermata;
+
+    private static final Color verde = new Color(22, 189, 88);
+    private static final Color rosso = new Color(191, 63, 24);
 
     public Frame(int height, int width, String title)
     {
@@ -80,6 +87,11 @@ public class Frame {
         pannello.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 0, new Color(143, 51, 51)));
         frame.add(pannello, BorderLayout.WEST);
         //forse?
+
+        testoWiFi = new JLabel("WiFi", SwingConstants.CENTER);
+        testoWiFi.setBorder(new EmptyBorder(5, 5, 5, 5));
+        testoWiFi.setOpaque(true);
+        frame.add(testoWiFi, BorderLayout.SOUTH);
 
         //tasto per l'accesso alla pagina di login
         ImageIcon profileIcon = new ImageIcon("assets/profile-logo.png");
@@ -244,6 +256,24 @@ public class Frame {
             if (orario.get(""));
         }
     }*/
+
+    public void cambiaStatoWiFi()
+    {
+        if (Wifi.wifi_connesso()) {
+            testoWiFi.setText("WiFi connesso");
+            testoWiFi.setBackground(verde);
+        } else {
+            testoWiFi.setText("WiFi non connesso");
+            testoWiFi.setBackground(rosso);
+        }
+
+        testoWiFi.repaint();
+    }
+
+    public JFrame getFrame()
+    {
+        return frame;
+    }
 
     public InformazioniFermata getPannelloInformazioni()
     {

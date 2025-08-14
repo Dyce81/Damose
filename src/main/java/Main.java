@@ -14,8 +14,9 @@ public class Main
 {
     public static void main(String[] args)
     {
-        Wifi wifi = new Wifi();
-        wifi.wifi_controller();
+        //Wifi wifi = new Wifi();
+        //wifi.wifi_controller();
+        Wifi.wifi_controller();
 
         Frame frame = new Frame(600, 800, "Damose");
         ReaderStaticGTFS.iniziaPROVVISORIO();
@@ -32,5 +33,7 @@ public class Main
         //quindi più tardi questa cosa è da aggiustare perché è indecente :(
         DatabaseManager dbManager = new DatabaseManager();
         dbManager.createUsersTable();
+
+        Wifi.impostaFrame(frame);
     }
 }
