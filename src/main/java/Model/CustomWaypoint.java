@@ -91,7 +91,7 @@ public class CustomWaypoint extends DefaultWaypoint
         ////pannelloInformazioni.setNome(this.nome);
         //pannelloInformazioni.setTipoMezzo();
 
-        //pannelloInformazioni.impostaInfo(this);
+        pannelloInformazioni.impostaInfo(this);
         Mappa.getMapViewer().repaint();
     }
 

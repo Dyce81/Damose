@@ -74,15 +74,15 @@ public class InformazioniFermata
         return this.pannello;
     }
 
-    /*public void impostaInfo(CustomWaypoint fermata)
+    public void impostaInfo(CustomWaypoint fermata)
     {
         nome.setText(fermata.getNome());
 
-        if (fermata.getId().startsWith("ITO"))
+        /*if (fermata.getId().startsWith("ITO"))
             tipoMezzo.setText("Tipo mezzo: Metropolitana");
         else
-            tipoMezzo.setText("Tipo mezzo: Autobus");
-    }*/
+            tipoMezzo.setText("Tipo mezzo: Autobus");*/
+    }
 
     public void setLineeServite(ArrayList<Route> linee)
     {
@@ -133,14 +133,17 @@ public class InformazioniFermata
                 {
                     /*task.cancel(true);*/
                     /*mostraInfoLinea(id);*/
-                    // TODO: chiamare un metodo che calcola staticamente il prossimo arrivo
-                    // (e se è attivo, anche il tracciamento mezzi (statico) (prova a indovinare
-                    // in quale fermata si trova il mezzo))
 
                     System.out.println("DEBUG: Offline [orario calcolato staticamente]");
                     //TODO: avvertire l'utente che l'orario calcolato è previsto "staticamente"
+
                     prossimoArrivo.setText("Prossimo arrivo previsto: " +
                             ReaderStaticGTFS.getPosizioneVeicolo(fermata.getId(), id));
+
+                    if (tracciamentoAttivo)
+                    {
+                        //TODO: tracciamento statico
+                    }
                 }
                 else
                 {
