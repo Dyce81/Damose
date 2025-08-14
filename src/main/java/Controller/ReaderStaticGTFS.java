@@ -9,11 +9,9 @@ import org.jxmapviewer.viewer.GeoPosition;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.lang.reflect.Array;
+import java.time.Instant;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*                                  IMPORTANTE
@@ -87,6 +85,33 @@ public class ReaderStaticGTFS
 
             shapes.add(new PuntoShape(lista[0], latitudine, longitudine, sequenza));
         }
+    }
+
+    public static String getPosizioneVeicolo(String stopId, String routeId)
+    {
+        //long adesso = Instant.now().getEpochSecond();
+        //System.out.println(adesso);
+
+        List<Trip> viaggiTrovati = trips.stream()
+                .filter(t -> t.getRouteId().equals(routeId))
+                .toList();
+
+        //questo qui sotto è temporaneo
+        List<StopTime> orariFermate = stopTimes.stream()
+                .filter(st -> st.getStopId().equals(stopId))
+                .filter(st -> viaggiTrovati.stream().anyMatch(t -> t.getId().equals(st.getTripId())))
+                .toList();
+
+        LocalTime adesso = LocalTime.now();
+
+        Optional<StopTime> prossimoArrivo = orariFermate.stream()
+                .filter(st -> parseTimeCorretto(st.getOrarioArrivo().toString()).isAfter(adesso))
+                .min(Comparator.comparing(st -> parseTimeCorretto(st.getOrarioArrivo().toString())));
+
+        if (prossimoArrivo.isPresent())
+            return prossimoArrivo.get().getOrarioArrivo().toString();
+        else
+            return null;
     }
 
     //Questo metodo restituisce un'arraylist di array, dove ciascuna lista interna

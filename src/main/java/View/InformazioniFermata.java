@@ -136,36 +136,42 @@ public class InformazioniFermata
                     // TODO: chiamare un metodo che calcola staticamente il prossimo arrivo
                     // (e se è attivo, anche il tracciamento mezzi (statico) (prova a indovinare
                     // in quale fermata si trova il mezzo))
+
+                    System.out.println("DEBUG: Offline [orario calcolato staticamente]");
+                    //TODO: avvertire l'utente che l'orario calcolato è previsto "staticamente"
+                    prossimoArrivo.setText("Prossimo arrivo previsto: " +
+                            ReaderStaticGTFS.getPosizioneVeicolo(fermata.getId(), id));
                 }
-
-                String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
-                if (tempo.isEmpty()) tempo = "(Nessun orario previsto)";
-                // TODO: qui sopra magari predirlo staticamente - avvisando l'utente
-
-                if (tracciamentoAttivo)
+                else
                 {
-                    ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
-                    //Mappa.getMapViewer().zoomToBestFit(new HashSet<>(), 0.7);
-                    CustomWaypointPainter.setPosizioniMezzi(lista);
+                    String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
+                    if (tempo.isEmpty()) tempo = "(Nessun orario previsto)";
+                    // TODO: qui sopra magari predirlo staticamente - avvisando l'utente
+
+                    if (tracciamentoAttivo) {
+                        ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
+                        //Mappa.getMapViewer().zoomToBestFit(new HashSet<>(), 0.7);
+                        CustomWaypointPainter.setPosizioniMezzi(lista);
                     /*for (GeoPosition coords : lista)
                     {
                         System.out.println(coords);
                         //Mappa.aggiungiMezzo(coords);
                     }*/
 
-                    CustomWaypointPainter.setTracciamentoAttivo(true);
+                        CustomWaypointPainter.setTracciamentoAttivo(true);
 
-                    List<GeoPosition> percorso = ReaderStaticGTFS.getPercorso(id);
-                    Mappa.disegnaLinea(percorso);
+                        List<GeoPosition> percorso = ReaderStaticGTFS.getPercorso(id);
+                        Mappa.disegnaLinea(percorso);
 
-                    Mappa.getMapViewer().repaint();
+                        Mappa.getMapViewer().repaint();
+                    }
+
+                    prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
                 }
-
-                prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
             }, 0, 5, TimeUnit.SECONDS);
+
         }
         else {
-
             // TODO: questa parte di codice qui sotto deve essere messa in un metodo
             // per calcolare i dati statici... - stesso metodo usato nell'if qui sopra
             List<Trip> viaggi = ReaderStaticGTFS.trips.stream()
