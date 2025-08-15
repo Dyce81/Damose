@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.lang.reflect.Array;
 import java.time.Instant;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -109,7 +110,7 @@ public class ReaderStaticGTFS
                 .min(Comparator.comparing(st -> parseTimeCorretto(st.getOrarioArrivo().toString())));
 
         if (prossimoArrivo.isPresent())
-            return prossimoArrivo.get().getOrarioArrivo().toString();
+            return prossimoArrivo.get().getOrarioArrivo().format(DateTimeFormatter.ofPattern("HH:mm"));
         else
             return null;
     }

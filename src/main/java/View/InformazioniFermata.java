@@ -149,8 +149,13 @@ public class InformazioniFermata
                 else
                 {
                     String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
-                    if (tempo.isEmpty()) tempo = "(Nessun orario previsto)";
-                    // TODO: qui sopra magari predirlo staticamente - avvisando l'utente
+                    if (tempo.isEmpty())
+                    {
+                        //tempo = "(Nessun orario previsto)";
+                        System.out.println("DEBUG: Connesso a internet ma orario vuoto - orario previsto staticamente");
+                        tempo = ReaderStaticGTFS.getPosizioneVeicolo(fermata.getId(), id);
+                        // TODO: qui sopra magari predirlo staticamente - avvisando l'utente
+                    }
 
                     if (tracciamentoAttivo) {
                         ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);

@@ -284,4 +284,9 @@ public class Frame {
     {
         return this.pannelloInformazioni;
     }
+
+    public void mostraAvviso(String testo)
+    {
+        JDialog avviso = new JDialog(frame, testo, true);
+    }
 }
