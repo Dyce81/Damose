@@ -27,6 +27,7 @@ public class InformazioniFermata
     private final JLabel lineeServite;
     private final JPanel pulsantiLinee;
     private final JPanel infoLinea;
+    private final JLabel avvisoPrevisione;
     private final JButton mostraMezzi;
 
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -56,6 +57,8 @@ public class InformazioniFermata
         infoLinea = new JPanel();
         infoLinea.setLayout(new BoxLayout(infoLinea, BoxLayout.Y_AXIS));
         infoLinea.setBackground(rosso);
+
+        avvisoPrevisione = new JLabel("");
 
         mostraMezzi = new JButton("  Mostra mezzi sulla linea  ");
         mostraMezzi.addActionListener(e -> tracciaMezzi());
@@ -151,10 +154,10 @@ public class InformazioniFermata
                     String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
                     if (tempo.isEmpty())
                     {
-                        //tempo = "(Nessun orario previsto)";
                         System.out.println("DEBUG: Connesso a internet ma orario vuoto - orario previsto staticamente");
                         tempo = ReaderStaticGTFS.getPosizioneVeicolo(fermata.getId(), id);
-                        // TODO: qui sopra magari predirlo staticamente - avvisando l'utente
+                        avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
+                        infoLinea.add(avvisoPrevisione);
                     }
 
                     if (tracciamentoAttivo) {
