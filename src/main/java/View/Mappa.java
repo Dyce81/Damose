@@ -3,6 +3,7 @@ package View;
 import Controller.Wifi;
 
 import Model.RoutePainter;
+import com.sun.tools.javac.Main;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;
@@ -30,7 +31,7 @@ public class Mappa
     private static final TileFactoryInfo info = new OSMTileFactoryInfo();
     private static final DefaultTileFactory tileFactory = new DefaultTileFactory(info);
 
-    private static final TileFactoryInfo offlineInfo = new OSMTileFactoryInfo("offline", System.getProperty("user.home").replace('\\', '/') + "/.jxmapviewer2/tile.openstreetmap");
+    private static final TileFactoryInfo offlineInfo = new OSMTileFactoryInfo("offline", "file:///" + System.getProperty("user.home").replace('\\', '/') + "/.jxmapviewer2/tile.openstreetmap.org");
     private static final TileFactory offlineTileFactory = new DefaultTileFactory(offlineInfo);
 
     //costruttore
@@ -47,7 +48,7 @@ public class Mappa
             tileFactory.setThreadPoolSize(8);
 
             //Imposta una cache per le tiles
-            File cacheDir = new File(System.getProperty("user.home").replace('\\', '/') + "/.jxmapviewer2");
+            File cacheDir = new File(System.getProperty("user.home").replace('\\', '/') + "/.jxmapviewer2/tile.openstreetmap");
             tileFactory.setLocalCache(new FileBasedLocalCache(cacheDir, false));
         }
         else
@@ -96,11 +97,15 @@ public class Mappa
     {
         if (Wifi.wifi_connesso())
         {
-            mappa.setTileFactory(tileFactory);
+            System.out.println("Online");
+            if (mappa.getTileFactory() != tileFactory)
+                mappa.setTileFactory(tileFactory);
         }
         else
         {
-            mappa.setTileFactory(offlineTileFactory);
+            System.out.println("Offline");
+            if (mappa.getTileFactory() != offlineTileFactory)
+                mappa.setTileFactory(offlineTileFactory);
         }
     }
 

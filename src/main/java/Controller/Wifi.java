@@ -36,7 +36,7 @@ public class Wifi
                     if (riferimentoFrame != null)
                     {
                         riferimentoFrame.cambiaStatoWiFi();
-                        //riferimentoMappa.cambiaStatoMappa();
+                        riferimentoMappa.cambiaStatoMappa();
                     }
                 }
                 else if (!wifi_connesso()) {
@@ -44,7 +44,7 @@ public class Wifi
                     if (riferimentoFrame != null)
                     {
                         riferimentoFrame.cambiaStatoWiFi();
-                        //riferimentoMappa.cambiaStatoMappa();
+                        riferimentoMappa.cambiaStatoMappa();
                     }
                 }
             }
