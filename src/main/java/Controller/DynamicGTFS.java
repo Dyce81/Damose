@@ -119,9 +119,6 @@ public class DynamicGTFS
                         tripIdCercato = viaggio.getTripId();
                     }
                 }
-
-                /*System.out.println(entita.getTripUpdate().getTrip());
-                System.out.println(entita.getTripUpdate().getStopTimeUpdate());*/
             }
 
             if (tripIdCercato != null)

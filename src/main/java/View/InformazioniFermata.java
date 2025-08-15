@@ -164,11 +164,6 @@ public class InformazioniFermata
                         ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
                         //Mappa.getMapViewer().zoomToBestFit(new HashSet<>(), 0.7);
                         CustomWaypointPainter.setPosizioniMezzi(lista);
-                    /*for (GeoPosition coords : lista)
-                    {
-                        System.out.println(coords);
-                        //Mappa.aggiungiMezzo(coords);
-                    }*/
 
                         CustomWaypointPainter.setTracciamentoAttivo(true);
 
@@ -242,6 +237,5 @@ public class InformazioniFermata
         infoLinea.removeAll();
         infoLinea.repaint();
         pannello.remove(mostraMezzi);
-        //System.out.println("reset pannello");
     }
 }
