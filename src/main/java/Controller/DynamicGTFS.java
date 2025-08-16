@@ -52,6 +52,8 @@ public class DynamicGTFS
         return null;
     }*/
 
+    //Ottiene le coordinate dei mezzi in movimento, le mette in un arraylist e lo restituisce
+    //alla funzione chiamante, che si occuperà poi di disegnare i mezzi
     public static ArrayList<GeoPosition> getVehiclePosition(String routeId)
     {
         try (InputStream input = new URL(vehicleUrl).openStream())
@@ -93,6 +95,8 @@ public class DynamicGTFS
 
     public static String getTripUpdate(String routeId, String stopId)
     {
+        if (!Wifi.wifi_connesso()) return "";
+
         try (InputStream input = new URL(tripUpdateUrl).openStream()) {
             FeedMessage feed = FeedMessage.parseFrom(input);
 

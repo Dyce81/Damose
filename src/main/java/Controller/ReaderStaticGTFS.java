@@ -1,17 +1,14 @@
 package Controller;
 
-import Model.PuntoShape;
-import Model.Route;
-import Model.Trip;
-import Model.StopTime;
+import Model.*;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.lang.reflect.Array;
-import java.time.Instant;
+import java.net.StandardSocketOptions;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,6 +19,7 @@ import java.util.stream.Collectors;
 
 //SOLO PER ADESSO questa classe contiene anche il riferimento (statico) alle liste di routes, trips,
 //(shapes) e stopTimes
+// - no forse conviene che rimangano qui (magari più tardi insieme a stops)
 
 public class ReaderStaticGTFS
 {
@@ -88,7 +86,38 @@ public class ReaderStaticGTFS
         }
     }
 
-    public static String getPosizioneVeicolo(String stopId, String routeId)
+    //Tracciamento statico dei mezzi
+    //Non so se questo metodo va bene: è molto rigido, mostra molti mezzi in circolazione (ignora
+    //eventuali disservizi, corse cancellate, festività eccetera) e mostra i mezzi solo in fermata
+    //ignorando il percorso tra le fermate. quindi probabilmente questo metodo è da rifare completamente
+    public static ArrayList<GeoPosition> getPosizioneVeicolo(String routeId)
+    {
+        LocalTime adesso = LocalTime.now();
+        System.out.println(adesso.truncatedTo(ChronoUnit.MINUTES));
+
+        List<Trip> viaggiTrovati = trips.stream()
+                .filter(t -> t.getRouteId().equals(routeId))
+                .toList();
+
+        List<StopTime> orariFermate = stopTimes.stream()
+                .filter(st -> st.getOrarioArrivo().truncatedTo(ChronoUnit.MINUTES).equals(adesso.truncatedTo(ChronoUnit.MINUTES)))
+                .filter(st -> viaggiTrovati.stream().anyMatch(t -> t.getId().equals(st.getTripId())))
+                .toList();
+
+        List<CustomWaypoint> fermate = ElaboratoreFermate.listaFermate.stream()
+                .filter(f -> orariFermate.stream().anyMatch(st -> st.getStopId().equals(f.getId())))
+                .toList();
+
+        ArrayList<GeoPosition> coordinateMezzi = new ArrayList<>();
+
+        for (CustomWaypoint f : fermate)
+            coordinateMezzi.add(new GeoPosition(f.getLatitudine(), f.getLongitudine()));
+
+        return coordinateMezzi;
+
+    }
+
+    public static String getTripUpdate(String stopId, String routeId)
     {
         //long adesso = Instant.now().getEpochSecond();
         //System.out.println(adesso);

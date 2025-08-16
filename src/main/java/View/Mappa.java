@@ -97,13 +97,11 @@ public class Mappa
     {
         if (Wifi.wifi_connesso())
         {
-            System.out.println("Online");
             if (mappa.getTileFactory() != tileFactory)
                 mappa.setTileFactory(tileFactory);
         }
         else
         {
-            System.out.println("Offline");
             if (mappa.getTileFactory() != offlineTileFactory)
                 mappa.setTileFactory(offlineTileFactory);
         }

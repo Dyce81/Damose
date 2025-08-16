@@ -8,11 +8,9 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalTime;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -141,12 +139,22 @@ public class InformazioniFermata
                     //TODO: avvertire l'utente che l'orario calcolato è previsto "staticamente"
 
                     prossimoArrivo.setText("Prossimo arrivo previsto: " +
-                            ReaderStaticGTFS.getPosizioneVeicolo(fermata.getId(), id));
+                            ReaderStaticGTFS.getTripUpdate(fermata.getId(), id));
+                    avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
+                    infoLinea.add(avvisoPrevisione);
 
                     if (tracciamentoAttivo)
                     {
                         //TODO: tracciamento statico
-                        System.out.println("tracciamento statico");
+                        System.out.println("DEBUG: Offline [tracciamento statico]");
+                        ArrayList<GeoPosition> lista = ReaderStaticGTFS.getPosizioneVeicolo(id);
+                        CustomWaypointPainter.setPosizioniMezzi(lista);
+
+                        CustomWaypointPainter.setTracciamentoAttivo(true);
+
+                        List<GeoPosition> percorso = ReaderStaticGTFS.getPercorso(id);
+                        Mappa.disegnaLinea(percorso);
+                        Mappa.getMapViewer().repaint();
                     }
                 }
                 else
@@ -155,7 +163,7 @@ public class InformazioniFermata
                     if (tempo.isEmpty())
                     {
                         System.out.println("DEBUG: Connesso a internet ma orario vuoto - orario previsto staticamente");
-                        tempo = ReaderStaticGTFS.getPosizioneVeicolo(fermata.getId(), id);
+                        tempo = ReaderStaticGTFS.getTripUpdate(fermata.getId(), id);
                         avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
                         infoLinea.add(avvisoPrevisione);
                     }
