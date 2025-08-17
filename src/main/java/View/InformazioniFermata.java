@@ -114,6 +114,7 @@ public class InformazioniFermata
         infoLinea.removeAll();
         CustomWaypoint fermata = ElaboratoreFermate.ultimaFermata;
 
+
         JLabel testoLinea = new JLabel("Linea selezionata: " + id);
         JLabel tipoMezzo = new JLabel("Tipo mezzo: " + tipoMezzoSelezionato);
         JLabel prossimoArrivo = new JLabel("Prossimo arrivo: ");
@@ -138,7 +139,6 @@ public class InformazioniFermata
                     /*mostraInfoLinea(id);*/
 
                     System.out.println("DEBUG: Offline [orario calcolato staticamente]");
-                    //TODO: avvertire l'utente che l'orario calcolato è previsto "staticamente"
 
                     prossimoArrivo.setText("Prossimo arrivo previsto: " +
                             ReaderStaticGTFS.getTripUpdate(fermata.getId(), id));
@@ -147,7 +147,6 @@ public class InformazioniFermata
 
                     if (tracciamentoAttivo)
                     {
-                        //TODO: tracciamento statico
                         System.out.println("DEBUG: Offline [tracciamento statico]");
                         ArrayList<GeoPosition> lista = ReaderStaticGTFS.getPosizioneVeicolo(id);
                         CustomWaypointPainter.setPosizioniMezzi(lista);

@@ -208,6 +208,15 @@ public class ReaderStaticGTFS
         return LocalTime.of(ore, minuti, secondi);
     }
 
+    public static Route getLinea(String routeId)
+    {
+        for (Route r : routes)
+            if (r.getId().equals(routeId))
+                return r;
+
+        return null; //alquanto improbabile che venga restituito null
+    }
+
     public static List<GeoPosition> getPercorso(String routeId)
     {
         ArrayList<Trip> viaggi = trips.stream()
