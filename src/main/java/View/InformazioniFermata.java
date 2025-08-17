@@ -80,10 +80,10 @@ public class InformazioniFermata
     {
         nome.setText(fermata.getNome());
 
-        if (fermata.getId().startsWith("ITO"))
+        /*if (fermata.getId().startsWith("ITO"))
             tipoMezzoSelezionato = "Metropolitana";
         else
-            tipoMezzoSelezionato = "Autobus";
+            tipoMezzoSelezionato = "Autobus";*/
     }
 
     public void setLineeServite(ArrayList<Route> linee)
@@ -113,7 +113,11 @@ public class InformazioniFermata
     {
         infoLinea.removeAll();
         CustomWaypoint fermata = ElaboratoreFermate.ultimaFermata;
+        Route linea = ReaderStaticGTFS.getLinea(id);
 
+        if (linea.getTipo() == 0) tipoMezzoSelezionato = "Tram";
+        else if (linea.getTipo() == 1) tipoMezzoSelezionato = "Metropolitana";
+        else if (linea.getTipo() == 3) tipoMezzoSelezionato = "Autobus";
 
         JLabel testoLinea = new JLabel("Linea selezionata: " + id);
         JLabel tipoMezzo = new JLabel("Tipo mezzo: " + tipoMezzoSelezionato);
