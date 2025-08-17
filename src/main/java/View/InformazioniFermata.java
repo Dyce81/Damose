@@ -21,7 +21,7 @@ public class InformazioniFermata
     private final JPanel pannello;
     private final JLabel indicazioneFermata;
     private final JLabel nome;
-    private final JLabel tipoMezzo;
+    //private final JLabel tipoMezzo;
     private final JLabel lineeServite;
     private final JPanel pulsantiLinee;
     private final JPanel infoLinea;
@@ -32,6 +32,7 @@ public class InformazioniFermata
     private static ScheduledFuture<?> task;
 
     private boolean tracciamentoAttivo = false;
+    private String tipoMezzoSelezionato = "";
 
     private static final Color rossoScuro = new Color(143, 51, 51);
     private static final Color rosso = new Color(175, 62, 62);
@@ -44,7 +45,7 @@ public class InformazioniFermata
 
         indicazioneFermata = new JLabel("Fermata selezionata:");
         nome = new JLabel("Seleziona una fermata.");
-        tipoMezzo = new JLabel("");
+        //tipoMezzo = new JLabel("");
         lineeServite = new JLabel("");
         lineeServite.setBackground(rossoScuro);
 
@@ -64,10 +65,10 @@ public class InformazioniFermata
         pannello.setLayout(new BoxLayout(pannello, BoxLayout.Y_AXIS));
         pannello.add(indicazioneFermata);
         pannello.add(nome);
-        pannello.add(tipoMezzo);
         pannello.add(lineeServite);
         pannello.add(pulsantiLinee);
         pannello.add(infoLinea);
+        //pannello.add(tipoMezzo);
     }
 
     public JPanel getPannello()
@@ -79,10 +80,10 @@ public class InformazioniFermata
     {
         nome.setText(fermata.getNome());
 
-        /*if (fermata.getId().startsWith("ITO"))
-            tipoMezzo.setText("Tipo mezzo: Metropolitana");
+        if (fermata.getId().startsWith("ITO"))
+            tipoMezzoSelezionato = "Metropolitana";
         else
-            tipoMezzo.setText("Tipo mezzo: Autobus");*/
+            tipoMezzoSelezionato = "Autobus";
     }
 
     public void setLineeServite(ArrayList<Route> linee)
@@ -114,9 +115,11 @@ public class InformazioniFermata
         CustomWaypoint fermata = ElaboratoreFermate.ultimaFermata;
 
         JLabel testoLinea = new JLabel("Linea selezionata: " + id);
+        JLabel tipoMezzo = new JLabel("Tipo mezzo: " + tipoMezzoSelezionato);
         JLabel prossimoArrivo = new JLabel("Prossimo arrivo: ");
 
         infoLinea.add(testoLinea);
+        infoLinea.add(tipoMezzo);
         infoLinea.add(prossimoArrivo);
 
         pannello.scrollRectToVisible(new Rectangle(infoLinea.getBounds()));
@@ -126,7 +129,6 @@ public class InformazioniFermata
 
         if (Wifi.WiFi || !Wifi.WiFi)
         {
-            //DynamicGTFS.getVehiclePosition();
 
             task = scheduler.scheduleAtFixedRate(() ->
             {
@@ -238,7 +240,7 @@ public class InformazioniFermata
         tracciamentoAttivo = false;
         mostraMezzi.setText("  Mostra mezzi sulla linea  ");
         nome.setText("Seleziona una fermata.");
-        tipoMezzo.setText("");
+        //tipoMezzo.setText("");
         lineeServite.setText("");
         pulsantiLinee.removeAll();
         pulsantiLinee.repaint();

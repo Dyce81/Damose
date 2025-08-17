@@ -114,7 +114,6 @@ public class ReaderStaticGTFS
             coordinateMezzi.add(new GeoPosition(f.getLatitudine(), f.getLongitudine()));
 
         return coordinateMezzi;
-
     }
 
     public static String getTripUpdate(String stopId, String routeId)
@@ -209,13 +208,14 @@ public class ReaderStaticGTFS
         return LocalTime.of(ore, minuti, secondi);
     }
 
-    public static List<GeoPosition> getPercorso(String routeId) {
+    public static List<GeoPosition> getPercorso(String routeId)
+    {
         ArrayList<Trip> viaggi = trips.stream()
                 .filter(trip -> trip.getRouteId().equals(routeId)).collect(Collectors.toCollection(ArrayList::new));
 
         if (viaggi.isEmpty())
         {
-            return new ArrayList<GeoPosition>();
+            return new ArrayList<>();
         }
 
         Trip viaggioSelezionato = viaggi.getFirst();

@@ -153,6 +153,31 @@ public class CustomWaypoint extends DefaultWaypoint
             for (Route r : ReaderStaticGTFS.routes)
                 if (r.getTipo() == 1)
                     lineeTrovate.add(r);
+
+            System.out.println(lineeTrovate);
+
+            //TODO: attualmente c'è un file fatto da noi per verificare quali linee della metro
+            //corrispondono ad una certa fermata;
+            //nel file stoptimes.txt mancano gli orari di arrivo delle metropolitane, quindi non
+            //è possibile mettere in correlazione le routes e le stops correttamente.
+            //forse c'è un modo, ma meglio verificarlo alla fine
+
+            //TODO: adesso non mi va di fare quel file quindi lo farò dopo
+
+            /*List<Trip> viaggi = ReaderStaticGTFS.trips.stream()
+                    .filter(t -> lineeTrovate.stream().anyMatch(l -> l.getId().equals(t.getRouteId())))
+                    .toList();
+
+            List<StopTime> orari = ReaderStaticGTFS.stopTimes.stream()
+                    .filter(st -> st.getStopId().equals(id))
+                    //.filter(st -> viaggi.stream().anyMatch(t -> t.getId().equals(st.getTripId())))
+                    .toList();*/
+
+            /*for (Route r : lineeTrovate)
+            {
+
+            }*/
+            //System.out.println(orari);
         }
         else {
             for (Route r : ReaderStaticGTFS.routes)
