@@ -27,6 +27,7 @@ public class InformazioniFermata
     private final JPanel infoLinea;
     private final JLabel avvisoPrevisione;
     private final JButton mostraMezzi;
+    private final JLabel avvisoTracciamento;
 
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture<?> task;
@@ -61,6 +62,8 @@ public class InformazioniFermata
 
         mostraMezzi = new JButton("  Mostra mezzi sulla linea  ");
         mostraMezzi.addActionListener(e -> tracciaMezzi());
+
+        avvisoTracciamento = new JLabel("");
 
         pannello.setLayout(new BoxLayout(pannello, BoxLayout.Y_AXIS));
         pannello.add(indicazioneFermata);
@@ -115,6 +118,7 @@ public class InformazioniFermata
         CustomWaypoint fermata = ElaboratoreFermate.ultimaFermata;
         Route linea = ReaderStaticGTFS.getLinea(id);
 
+        assert linea != null;
         if (linea.getTipo() == 0) tipoMezzoSelezionato = "Tram";
         else if (linea.getTipo() == 1) tipoMezzoSelezionato = "Metropolitana";
         else if (linea.getTipo() == 3) tipoMezzoSelezionato = "Autobus";
@@ -175,6 +179,12 @@ public class InformazioniFermata
 
                     if (tracciamentoAttivo) {
                         ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
+                        if (lista == null) //forse meglio evitare di restituire null e usare isEmpty()?
+                        {
+                            avvisoTracciamento.setText("<html><u><i>Attenzione: non è stato possibile<br> tracciare alcun mezzo.</i></u></html>");
+                            infoLinea.add(avvisoTracciamento);
+                        }
+
                         //Mappa.getMapViewer().zoomToBestFit(new HashSet<>(), 0.7);
                         CustomWaypointPainter.setPosizioniMezzi(lista);
 

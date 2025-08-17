@@ -83,6 +83,9 @@ public class DynamicGTFS
                 lista.add(Double.toString(longitudine));
                 lista.add(Long.toString(timestamp));*/
             }
+            if (lista.isEmpty())
+                return null;
+
             return lista;
         }
         catch (Exception e)
