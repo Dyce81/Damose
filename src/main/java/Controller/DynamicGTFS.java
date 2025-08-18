@@ -1,5 +1,6 @@
 package Controller;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.transit.realtime.GtfsRealtime.*;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -136,9 +137,13 @@ public class DynamicGTFS
                 return tempo;
             } else return "";
         }
+        catch (InvalidProtocolBufferException e)
+        {
+            System.out.println("DEBUG: Il messaggio del protocollo non è valido.");
+        }
         catch (Exception e)
         {
-            e.printStackTrace();
+            System.out.println("DEBUG: Errore generico nella ricezione del messaggio (Dati GTFS dinamici)");
         }
 
         return "";
