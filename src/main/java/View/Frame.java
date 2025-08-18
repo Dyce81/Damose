@@ -230,18 +230,12 @@ public class Frame {
         List<GeoPosition> percorso = ReaderStaticGTFS.getPercorso(nomeLinea);
         Mappa.disegnaLinea(percorso);
         Mappa.getMapViewer().zoomToBestFit(new HashSet<>(percorso), 0.7);
-
-        /*RoutePainter routePainter = new RoutePainter(percorso);
-
-        List<Painter<JXMapViewer>> painters = new ArrayList<>();
-        painters.add(mappa.painter);
-        painters.add(routePainter);
-        CompoundPainter<JXMapViewer> painter = new CompoundPainter<>(painters);
-        mappa.compound = false;
-        mappa.set_painter(painter);
-        mappa.compound = true;
-
-        mappa.mappa.zoomToBestFit(new HashSet<>(percorso), 0.7);*/
+        //Questo controllo è molto sbarazzino
+        if (!nomeLinea.equals("- Seleziona una linea -"))
+        {
+            //TODO: invocare altri metodi (non so quali) [CONTINUA DA QUI!!!]
+            pannelloInformazioni.mostraInfoLinea(nomeLinea, true);
+        }
     }
 
     //Questo metodo mostra le informazioni della fermata selezionata (al lato della finestra?)

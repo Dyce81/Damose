@@ -103,7 +103,7 @@ public class InformazioniFermata
             pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
             //pulsanteLinea.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            pulsanteLinea.addActionListener(e -> mostraInfoLinea(pulsanteLinea.getText()));
+            pulsanteLinea.addActionListener(e -> mostraInfoLinea(pulsanteLinea.getText(), false));
             pulsantiLinee.add(pulsanteLinea);
         }
 
@@ -112,7 +112,11 @@ public class InformazioniFermata
         pannello.repaint();
     }
 
-    public void mostraInfoLinea(String id)
+    // Il parametro "f" serve solo per capire se inserire o meno il label "prossimo arrivo";
+    // infatti questo label non è necessario se il metodo viene richiamato dal frame (tramite combo
+    // box per cercare una linea - quindi nessuna fermata è selezionata direttamente, e non si può
+    // prevedere un prossimo arrivo)
+    public void mostraInfoLinea(String id, boolean f)
     {
         infoLinea.removeAll();
         CustomWaypoint fermata = ElaboratoreFermate.ultimaFermata;
@@ -129,7 +133,7 @@ public class InformazioniFermata
 
         infoLinea.add(testoLinea);
         infoLinea.add(tipoMezzo);
-        infoLinea.add(prossimoArrivo);
+        if (!f) infoLinea.add(prossimoArrivo);
 
         pannello.scrollRectToVisible(new Rectangle(infoLinea.getBounds()));
         pannello.add(mostraMezzi);
