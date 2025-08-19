@@ -6,6 +6,7 @@ public class Trip
     private String routeId;
     private String headsign;
     private String shapeId;
+    private String serviceId;
 
     public Trip(String id, String routeId, String headsign, String shapeId)
     {
@@ -46,6 +47,10 @@ public class Trip
     public void setShapeId(String shapeId) {
         this.shapeId = shapeId;
     }
+
+    public String getServiceId() { return serviceId; }
+
+    public void setServiceId(String serviceId) { this.serviceId = serviceId; }
 
     @Override
     public String toString()

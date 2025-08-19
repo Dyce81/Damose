@@ -1,4 +1,5 @@
 import Controller.DatabaseManager;
+import Controller.DynamicGTFS;
 import Controller.ReaderStaticGTFS;
 import Controller.Wifi;
 import Model.CustomWaypoint;

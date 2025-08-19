@@ -8,7 +8,6 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -28,6 +27,8 @@ public class InformazioniFermata
     private final JLabel avvisoPrevisione;
     private final JButton mostraMezzi;
     private final JLabel avvisoTracciamento;
+    private final JLabel statoCorsa;
+    private final JLabel ritardoCorsa;
 
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture<?> task;
@@ -62,6 +63,9 @@ public class InformazioniFermata
 
         mostraMezzi = new JButton("  Mostra mezzi sulla linea  ");
         mostraMezzi.addActionListener(e -> tracciaMezzi());
+
+        statoCorsa = new JLabel("");
+        ritardoCorsa = new JLabel("");
 
         avvisoTracciamento = new JLabel("");
 
@@ -129,7 +133,7 @@ public class InformazioniFermata
 
         JLabel testoLinea = new JLabel("Linea selezionata: " + id);
         JLabel tipoMezzo = new JLabel("Tipo mezzo: " + tipoMezzoSelezionato);
-        JLabel prossimoArrivo = new JLabel("Prossimo arrivo: ");
+        JLabel prossimoArrivo = new JLabel("<html>Calcolo del prossimo arrivo<br> in corso...</html>"); //new JLabel("Prossimo arrivo: ");
 
         infoLinea.add(testoLinea);
         infoLinea.add(tipoMezzo);
@@ -145,7 +149,7 @@ public class InformazioniFermata
 
             task = scheduler.scheduleAtFixedRate(() ->
             {
-                if (!Wifi.WiFi) //non so se funziona
+                if (!Wifi.wifi_connesso())
                 {
                     /*task.cancel(true);*/
                     /*mostraInfoLinea(id);*/
@@ -180,6 +184,17 @@ public class InformazioniFermata
                         avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
                         infoLinea.add(avvisoPrevisione);
                     }
+
+                    statoCorsa.setText("Stato corsa: " + DynamicGTFS.getStato(DynamicGTFS.getUltimoTripDescriptor()));
+
+                    int ritardo = DynamicGTFS.getRitardo(DynamicGTFS.getUltimoTripUpdate());
+                    if (ritardo < 0) // In anticipo
+                        ritardoCorsa.setText("Anticipo calcolato: " + ritardo * -1 + " minuti.");
+                    else             // In ritardo
+                        ritardoCorsa.setText("Ritardo calcolato: " + ritardo + " minuti.");
+
+                    infoLinea.add(statoCorsa);
+                    infoLinea.add(ritardoCorsa);
 
                     if (tracciamentoAttivo) {
                         ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);

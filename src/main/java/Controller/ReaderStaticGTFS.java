@@ -5,7 +5,6 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.net.StandardSocketOptions;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -27,6 +26,8 @@ public class ReaderStaticGTFS
     public static ArrayList<Trip> trips = new ArrayList<>();
     public static ArrayList<StopTime> stopTimes = new ArrayList<>();
     public static ArrayList<PuntoShape> shapes = new ArrayList<>();
+
+    //public static ArrayList<Calendar> calendars = new ArrayList<>();
 
     public static void iniziaPROVVISORIO()
     {
@@ -54,6 +55,7 @@ public class ReaderStaticGTFS
             aggiungi.setId(lista[2]);
             aggiungi.setRouteId(lista[0]);
             aggiungi.setHeadsign(lista[3]);
+            aggiungi.setServiceId(lista[1]);
             //System.out.println(aggiungi);
 
             trips.add(aggiungi);

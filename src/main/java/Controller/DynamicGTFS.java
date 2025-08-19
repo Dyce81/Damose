@@ -14,8 +14,11 @@ import java.util.ArrayList;
 
 public class DynamicGTFS
 {
-    private static String tripUpdateUrl = "https://romamobilita.it/sites/default/files/rome_rtgtfs_trip_updates_feed.pb";
-    private static String vehicleUrl = "https://romamobilita.it/sites/default/files/rome_rtgtfs_vehicle_positions_feed.pb";
+    private final static String tripUpdateUrl = "https://romamobilita.it/sites/default/files/rome_rtgtfs_trip_updates_feed.pb";
+    private final static String vehicleUrl = "https://romamobilita.it/sites/default/files/rome_rtgtfs_vehicle_positions_feed.pb";
+
+    private static TripUpdate ultimoTripUpdate;
+    private static TripDescriptor ultimoTripDescriptor;
 
     /*public static ArrayList<String> getVehiclePosition()
     {
@@ -125,7 +128,11 @@ public class DynamicGTFS
                     if (tempoArrivo > adesso && tempoArrivo < prossimoArrivo) {
                         prossimoArrivo = tempoArrivo;
                         tripIdCercato = viaggio.getTripId();
+                        ultimoTripDescriptor = viaggio;
+                        ultimoTripUpdate = aggiornamento;
                     }
+
+                    break; //TODO: non so se questa cosa va bene, se rompe in qualche modo il codice, se cambia qualcosa...? pare di no?
                 }
             }
 
@@ -134,6 +141,7 @@ public class DynamicGTFS
                 String tempo = Instant.ofEpochSecond(prossimoArrivo)
                         .atZone(ZoneId.systemDefault())
                         .format(DateTimeFormatter.ofPattern("HH:mm"));
+
                 return tempo;
             } else return "";
         }
@@ -143,9 +151,38 @@ public class DynamicGTFS
         }
         catch (Exception e)
         {
-            System.out.println("DEBUG: Errore generico nella ricezione del messaggio (Dati GTFS dinamici)");
+            System.out.println("DEBUG: Errore nella ricezione del messaggio (Dati GTFS dinamici)");
         }
 
         return "";
+    }
+
+    public static TripUpdate getUltimoTripUpdate() { return ultimoTripUpdate; }
+
+    public static TripDescriptor getUltimoTripDescriptor() { return ultimoTripDescriptor; }
+
+    public static int getRitardo(TripUpdate trip)
+    {
+        if (!Wifi.wifi_connesso() || !trip.isInitialized()) return 0;
+
+        // Ottiene il ritardo della corsa tramite trip.getDelay() e lo converte in secondi
+        return (trip.getDelay() % 3600) / 60;
+    }
+
+    public static String getStato(TripDescriptor trip)
+    {
+        if (!Wifi.wifi_connesso() || !trip.isInitialized()) return "";
+
+        String stato = trip.getScheduleRelationship().toString();
+
+        return switch (stato)
+        {
+            case "SCHEDULED" -> "IN ORARIO";
+            case "CANCELED" -> "CANCELLATA";
+            case "DUPLICATED" -> "DUPLICATA";
+            case "NEW" -> "AGGIUNTIVA";
+            default -> "PROGRAMMATA"; //forse?
+        };
+
     }
 }
