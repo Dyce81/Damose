@@ -1,10 +1,6 @@
 package Model;
 
-import Controller.ReaderStaticGTFS;
-import View.Mappa;
 import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.painter.CompoundPainter;
-import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
 
@@ -12,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
 {

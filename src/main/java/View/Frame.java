@@ -1,21 +1,16 @@
 package View;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import Controller.ReaderStaticGTFS;
+import Controller.StaticGTFS;
 import Controller.Wifi;
 import Model.*;
-import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.painter.CompoundPainter;
-import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
 
 //TODO: la classe inizia ad essere un po' troppo lunga, quindi più tardi sarebbe meglio scomporre in varie classi il frame
@@ -163,7 +158,7 @@ public class Frame {
         testoFermata.setEditable(false);
 
         testoLinea.addItem(new Route("null", "- Seleziona una linea -", -1, ""));
-        for (Route l : ReaderStaticGTFS.routes)
+        for (Route l : StaticGTFS.routes)
         {
             testoLinea.addItem(l);
         }
@@ -202,14 +197,14 @@ public class Frame {
 
         //provvisorio!!!! (PARTE DA QUI)
         /*
-        ArrayList<Trip> viaggi = ReaderStaticGTFS.trips.stream()
+        ArrayList<Trip> viaggi = StaticGTFS.trips.stream()
                 .filter(trip -> trip.getRouteId().equals(nomeLinea)).collect(Collectors.toCollection(ArrayList::new));
 
         if (viaggi.isEmpty()) return;
 
         Trip viaggioSelezionato = viaggi.getFirst();*/
 
-        /*ArrayList<GeoPosition> percorso = ReaderStaticGTFS.stopTimes.stream()
+        /*ArrayList<GeoPosition> percorso = StaticGTFS.stopTimes.stream()
                 .filter(st -> st.getTripId().equals(viaggioSelezionato.getId()))
                 .sorted(Comparator.comparingInt(StopTime::getStopSequenza))
                 .map(st -> {
@@ -221,13 +216,13 @@ public class Frame {
                 })
                 .filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));*/
 
-        /*List<GeoPosition> percorso = ReaderStaticGTFS.shapes.stream()
+        /*List<GeoPosition> percorso = StaticGTFS.shapes.stream()
                 .filter(sp -> sp.getId().equals(viaggioSelezionato.getShapeId()))
                 .sorted(Comparator.comparingInt(PuntoShape::getSequenza))
                 .map(sp -> new GeoPosition(sp.getLatitudine(), sp.getLongitudine()))
                 .collect(Collectors.toList());*/
 
-        List<GeoPosition> percorso = ReaderStaticGTFS.getPercorso(nomeLinea);
+        List<GeoPosition> percorso = StaticGTFS.getPercorso(nomeLinea);
         Mappa.disegnaLinea(percorso);
         Mappa.getMapViewer().zoomToBestFit(new HashSet<>(percorso), 0.7);
         //Questo controllo è molto sbarazzino

@@ -1,6 +1,6 @@
 package Model;
 
-import Controller.ReaderStaticGTFS;
+import Controller.StaticGTFS;
 import View.Mappa;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.*;
@@ -34,7 +34,7 @@ public class ElaboratoreFermate {
 
     public void posizionaFermate(Mappa mappa) {
         ArrayList<String[]> listaValoriFermate;
-        listaValoriFermate = ReaderStaticGTFS.leggi_csv("data/rome_static_gtfs/stops.txt");
+        listaValoriFermate = StaticGTFS.leggi_csv("data/rome_static_gtfs/stops.txt");
 
         //nomi_fermate.add("-- Seleziona una fermata --");
 

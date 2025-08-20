@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 //(shapes) e stopTimes
 // - no forse conviene che rimangano qui (magari più tardi insieme a stops)
 
-public class ReaderStaticGTFS
+public class StaticGTFS
 {
     public static ArrayList<Route> routes = new ArrayList<>();
     public static ArrayList<Trip> trips = new ArrayList<>();

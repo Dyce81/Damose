@@ -1,7 +1,7 @@
 package View;
 
 import Controller.DynamicGTFS;
-import Controller.ReaderStaticGTFS;
+import Controller.StaticGTFS;
 import Controller.Wifi;
 import Model.*;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -124,7 +124,7 @@ public class InformazioniFermata
     {
         infoLinea.removeAll();
         CustomWaypoint fermata = ElaboratoreFermate.ultimaFermata;
-        Route linea = ReaderStaticGTFS.getLinea(id);
+        Route linea = StaticGTFS.getLinea(id);
 
         assert linea != null;
         if (linea.getTipo() == 0) tipoMezzoSelezionato = "Tram";
@@ -157,19 +157,19 @@ public class InformazioniFermata
                     System.out.println("DEBUG: Offline [orario calcolato staticamente]");
 
                     prossimoArrivo.setText("Prossimo arrivo previsto: " +
-                            ReaderStaticGTFS.getTripUpdate(fermata.getId(), id));
+                            StaticGTFS.getTripUpdate(fermata.getId(), id));
                     avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
                     infoLinea.add(avvisoPrevisione);
 
                     if (tracciamentoAttivo)
                     {
                         System.out.println("DEBUG: Offline [tracciamento statico]");
-                        ArrayList<GeoPosition> lista = ReaderStaticGTFS.getPosizioneVeicolo(id);
+                        ArrayList<GeoPosition> lista = StaticGTFS.getPosizioneVeicolo(id);
                         CustomWaypointPainter.setPosizioniMezzi(lista);
 
                         CustomWaypointPainter.setTracciamentoAttivo(true);
 
-                        List<GeoPosition> percorso = ReaderStaticGTFS.getPercorso(id);
+                        List<GeoPosition> percorso = StaticGTFS.getPercorso(id);
                         Mappa.disegnaLinea(percorso);
                         Mappa.getMapViewer().repaint();
                     }
@@ -180,7 +180,7 @@ public class InformazioniFermata
                     if (tempo.isEmpty())
                     {
                         System.out.println("DEBUG: Connesso a internet ma orario vuoto - orario previsto staticamente");
-                        tempo = ReaderStaticGTFS.getTripUpdate(fermata.getId(), id);
+                        tempo = StaticGTFS.getTripUpdate(fermata.getId(), id);
                         avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
                         infoLinea.add(avvisoPrevisione);
                     }
@@ -209,7 +209,7 @@ public class InformazioniFermata
 
                         CustomWaypointPainter.setTracciamentoAttivo(true);
 
-                        List<GeoPosition> percorso = ReaderStaticGTFS.getPercorso(id);
+                        List<GeoPosition> percorso = StaticGTFS.getPercorso(id);
                         Mappa.disegnaLinea(percorso);
 
                         Mappa.getMapViewer().repaint();
@@ -222,7 +222,7 @@ public class InformazioniFermata
         /*else {
             // TODO: questa parte di codice qui sotto deve essere messa in un metodo
             // per calcolare i dati statici... - stesso metodo usato nell'if qui sopra
-            List<Trip> viaggi = ReaderStaticGTFS.trips.stream()
+            List<Trip> viaggi = StaticGTFS.trips.stream()
                     .filter(trip -> trip.getRouteId().equals(id))
                     //.filter(trip -> trip.isServiceActiveToday
                     .toList();
@@ -232,7 +232,7 @@ public class InformazioniFermata
 
             LocalTime adesso = LocalTime.now();
 
-            Optional<StopTime> prossimoStopTime = ReaderStaticGTFS.stopTimes.stream()
+            Optional<StopTime> prossimoStopTime = StaticGTFS.stopTimes.stream()
                     .filter(st -> viaggiValidi.contains(st.getTripId()))
                     .filter(st -> st.getStopId().equals(fermata.getId()))
                     .filter(st -> st.getOrarioArrivo().isAfter(adesso))

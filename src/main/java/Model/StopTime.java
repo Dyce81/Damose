@@ -1,6 +1,6 @@
 package Model;
 
-import Controller.ReaderStaticGTFS;
+import Controller.StaticGTFS;
 
 import java.time.LocalTime;
 
@@ -16,8 +16,8 @@ public class StopTime
     {
         this.tripId = tripId;
         this.stopId = stopId;
-        this.orarioArrivo = ReaderStaticGTFS.parseTimeCorretto(orarioArrivo);
-        this.orarioPartenza = ReaderStaticGTFS.parseTimeCorretto(orarioPartenza);
+        this.orarioArrivo = StaticGTFS.parseTimeCorretto(orarioArrivo);
+        this.orarioPartenza = StaticGTFS.parseTimeCorretto(orarioPartenza);
     }
 
     public String getTripId() {
@@ -41,7 +41,7 @@ public class StopTime
     }
 
     public void setOrarioArrivo(String orarioArrivo) {
-        this.orarioArrivo = ReaderStaticGTFS.parseTimeCorretto(orarioArrivo);
+        this.orarioArrivo = StaticGTFS.parseTimeCorretto(orarioArrivo);
     }
 
     public LocalTime getOrarioPartenza() {
@@ -49,7 +49,7 @@ public class StopTime
     }
 
     public void setOrarioPartenza(String orarioPartenza) {
-        this.orarioPartenza = ReaderStaticGTFS.parseTimeCorretto(orarioPartenza);
+        this.orarioPartenza = StaticGTFS.parseTimeCorretto(orarioPartenza);
     }
 
     public int getStopSequenza()
