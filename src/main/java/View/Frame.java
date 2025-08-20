@@ -172,8 +172,8 @@ public class Frame {
         String nomeFermata = testoFermata.getSelectedItem().toString();
 
         //la fermata precedentemente selezionata (se è presente) non serve più
-        if (ElaboratoreFermate.ultimaFermata != null)
-            ElaboratoreFermate.ultimaFermata.deseleziona();
+        if (GestoreWaypoint.ultimaFermata != null)
+            GestoreWaypoint.ultimaFermata.deseleziona();
 
         //cerca la fermata dentro la lista fermate;
         for (CustomWaypoint f : this.listaFermate)
@@ -181,7 +181,7 @@ public class Frame {
             if (f.getNome().equals(nomeFermata)) //fermata trovata
             {
                 mappa.cambia_posizione(f.getLatitudine(), f.getLongitudine());
-                ElaboratoreFermate.ultimaFermata = f;
+                GestoreWaypoint.ultimaFermata = f;
                 f.seleziona();
                 //mostraInformazioni(f);
                 break;

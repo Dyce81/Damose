@@ -17,7 +17,7 @@ import java.util.HashSet;
 //comunque questa classe gestisce le fermate - tranne nel caso siano cercate tramite comboBox; in quel
 //caso vengono gestite dal frame stesso
 
-public class ElaboratoreFermate {
+public class GestoreWaypoint {
     //Come suggerisce il nome, contiene tutti gli oggetti (derivati dalla classe "Model.Fermata") delle
     //fermate
     public final static ArrayList<CustomWaypoint> listaFermate = new ArrayList<>();

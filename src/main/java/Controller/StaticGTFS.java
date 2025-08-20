@@ -106,7 +106,7 @@ public class StaticGTFS
                 .filter(st -> viaggiTrovati.stream().anyMatch(t -> t.getId().equals(st.getTripId())))
                 .toList();
 
-        List<CustomWaypoint> fermate = ElaboratoreFermate.listaFermate.stream()
+        List<CustomWaypoint> fermate = GestoreWaypoint.listaFermate.stream()
                 .filter(f -> orariFermate.stream().anyMatch(st -> st.getStopId().equals(f.getId())))
                 .toList();
 

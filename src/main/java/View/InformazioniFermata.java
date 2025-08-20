@@ -123,7 +123,7 @@ public class InformazioniFermata
     public void mostraInfoLinea(String id, boolean f)
     {
         infoLinea.removeAll();
-        CustomWaypoint fermata = ElaboratoreFermate.ultimaFermata;
+        CustomWaypoint fermata = GestoreWaypoint.ultimaFermata;
         Route linea = StaticGTFS.getLinea(id);
 
         assert linea != null;
@@ -253,7 +253,7 @@ public class InformazioniFermata
             tracciamentoAttivo = false;
             mostraMezzi.setText("  Mostra mezzi sulla linea  ");
             CustomWaypointPainter.setTracciamentoAttivo(false);
-            Mappa.getMapViewer().setOverlayPainter(ElaboratoreFermate.getWaypointPainter());
+            Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
             Mappa.getMapViewer().repaint();
         }
         else
@@ -267,7 +267,7 @@ public class InformazioniFermata
     {
         if (task != null) task.cancel(true);
         CustomWaypointPainter.setTracciamentoAttivo(false);
-        Mappa.getMapViewer().setOverlayPainter(ElaboratoreFermate.getWaypointPainter());
+        Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
         Mappa.getMapViewer().repaint();
         tracciamentoAttivo = false;
         mostraMezzi.setText("  Mostra mezzi sulla linea  ");
