@@ -20,42 +20,6 @@ public class DynamicGTFS
     private static TripUpdate ultimoTripUpdate;
     private static TripDescriptor ultimoTripDescriptor;
 
-    /*public static ArrayList<String> getVehiclePosition()
-    {
-        try (InputStream input = new URL(vehicleUrl).openStream())
-        {
-            FeedMessage feed = FeedMessage.parseFrom(input);
-
-            for (FeedEntity entita : feed.getEntityList())
-            {
-                if (!entita.hasVehicle()) continue;
-
-                VehiclePosition posizione = entita.getVehicle();
-                String tripId = posizione.getTrip().getTripId();
-                String vehicleId = posizione.getVehicle().getId();
-                double latitudine = posizione.getPosition().getLatitude();
-                double longitudine = posizione.getPosition().getLongitude();
-                long timestamp = posizione.getTimestamp();
-
-                ArrayList<String> lista = new ArrayList<>();
-                lista.add(posizione.toString());
-                lista.add(tripId);
-                lista.add(vehicleId);
-                lista.add(Double.toString(latitudine));
-                lista.add(Double.toString(longitudine));
-                lista.add(Long.toString(timestamp));
-
-                return lista;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return null;
-    }*/
-
     //Ottiene le coordinate dei mezzi in movimento, le mette in un arraylist e lo restituisce
     //alla funzione chiamante, che si occuperà poi di disegnare i mezzi
     public static ArrayList<GeoPosition> getVehiclePosition(String routeId)
