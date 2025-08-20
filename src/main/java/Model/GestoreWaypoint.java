@@ -13,13 +13,11 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 
-//TODO: (forse) cambiare il nome di questo file in "ManagerWaypoint" o "GestoreFermate" o qualcosa così?
-//comunque questa classe gestisce le fermate - tranne nel caso siano cercate tramite comboBox; in quel
-//caso vengono gestite dal frame stesso
+// Questa classe gestisce le fermate - tranne nel caso siano cercate tramite comboBox; in quel
+// caso vengono gestite dal frame stesso
 
 public class GestoreWaypoint {
-    //Come suggerisce il nome, contiene tutti gli oggetti (derivati dalla classe "Model.Fermata") delle
-    //fermate
+    //Come suggerisce il nome, contiene tutti gli oggetti delle fermate
     public final static ArrayList<CustomWaypoint> listaFermate = new ArrayList<>();
     //public final static ArrayList<String> nomi_fermate = new ArrayList<>();
     private final static Set<CustomWaypoint> waypoints = new HashSet<>();
