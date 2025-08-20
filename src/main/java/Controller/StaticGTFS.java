@@ -156,7 +156,7 @@ public class StaticGTFS
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path));
 
-            ArrayList<String[]> lista_fermate = new ArrayList<String[]>();
+            ArrayList<String[]> lista_fermate = new ArrayList<>();
 
             String linea;
             //linea = reader.readLine(); //Ignora la prima riga (contiene i nomi dei campi)
@@ -170,7 +170,7 @@ public class StaticGTFS
             return lista_fermate;
         } catch (Exception e) {
             System.out.println("Impossibile leggere il file indicato. \n " + path);
-            return new ArrayList<String[]>();
+            return new ArrayList<>();
         }
     }
 
@@ -179,22 +179,23 @@ public class StaticGTFS
     //comunque restituisce un valore vuoto
     public static ArrayList<String> dividi_stringa(String valore, char separatore)
     {
-        String buffer = "";
-        ArrayList<String> lista = new ArrayList<String>();
+        //String buffer = "";
+        StringBuilder buffer = new StringBuilder();
+        ArrayList<String> lista = new ArrayList<>();
         for (int c = 0; c < valore.length(); c++)
         {
             if (valore.charAt(c) == separatore)
             {
-                lista.add(buffer);
-                buffer = "";
+                lista.add(buffer.toString());
+                buffer.delete(0, buffer.length());
                 continue;
             }
-
-            buffer += valore.charAt(c);
+            buffer.append(valore.charAt(c));
+            //buffer += valore.charAt(c);
         }
 
-        lista.add(buffer);
-        //System.out.println(lista); // da rimuovere
+        lista.add(buffer.toString());
+        //lista.add(buffer);
         return lista;
     }
 
