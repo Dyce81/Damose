@@ -1,6 +1,6 @@
 import Controller.DatabaseManager;
 import Controller.StaticGTFS;
-import Controller.Wifi;
+import Controller.WiFi;
 import Model.CustomWaypoint;
 import Model.GestoreWaypoint;
 import View.Frame;
@@ -14,10 +14,10 @@ public class Main
 {
     public static void main(String[] args)
     {
-        Wifi.wifi_controller();
+        WiFi.wifi_controller();
 
         Frame frame = new Frame(600, 800, "Damose");
-        StaticGTFS.iniziaPROVVISORIO();
+        StaticGTFS.inizializzaDati();
         GestoreWaypoint elab_fermate = new GestoreWaypoint();
         //frame.imposta_painter_mappa(elab_fermate.posiziona_fermate());
         //elab_fermate.posiziona_fermate(frame.mappa);
@@ -32,6 +32,6 @@ public class Main
         DatabaseManager dbManager = new DatabaseManager();
         dbManager.createUsersTable();
 
-        Wifi.impostaFrame(frame, frame.getMappa());
+        WiFi.impostaFrame(frame, frame.getMappa());
     }
 }

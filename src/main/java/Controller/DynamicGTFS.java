@@ -5,7 +5,6 @@ import com.google.transit.realtime.GtfsRealtime.*;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -66,7 +65,7 @@ public class DynamicGTFS
 
     public static String getTripUpdate(String routeId, String stopId)
     {
-        if (!Wifi.wifi_connesso()) return "";
+        if (!WiFi.wifi_connesso()) return "";
 
         try (InputStream input = new URL(tripUpdateUrl).openStream()) {
             FeedMessage feed = FeedMessage.parseFrom(input);
@@ -127,7 +126,7 @@ public class DynamicGTFS
 
     public static int getRitardo(TripUpdate trip)
     {
-        if (!Wifi.wifi_connesso() || !trip.isInitialized()) return 0;
+        if (!WiFi.wifi_connesso() || !trip.isInitialized()) return 0;
 
         // Ottiene il ritardo della corsa tramite trip.getDelay() e lo converte in secondi
         return (trip.getDelay() % 3600) / 60;
@@ -135,7 +134,7 @@ public class DynamicGTFS
 
     public static String getStato(TripDescriptor trip)
     {
-        if (!Wifi.wifi_connesso() || !trip.isInitialized()) return "";
+        if (!WiFi.wifi_connesso() || !trip.isInitialized()) return "";
 
         String stato = trip.getScheduleRelationship().toString();
 

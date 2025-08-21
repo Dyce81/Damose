@@ -45,29 +45,28 @@ public class DatabaseManager {
         }
     }
 
-    // Metodo per hashare la password in chiaro
-    public static String hashPassword(String plainTextPassword) {
-        // BCrypt.hashpw genera un hash della password. Il primo argomento è la password,
-        // il secondo è il salt generato automaticamente.
+    // Metodo per hashare la password
+    public static String hashPassword(String plainTextPassword)
+    {
         return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
     }
 
-    // Metodo per verificare una password in chiaro con l'hash esistente
-    public static boolean checkPassword(String plainTextPassword, String hashedPassword) {
-        // BCrypt.checkpw confronta la password in chiaro con l'hash esistente.
-        // Gestisce internamente l'estrazione del salt dall'hash.
+    // Metodo per controllare una password e l'hash esistente
+    public static boolean checkPassword(String plainTextPassword, String hashedPassword)
+    {
         System.out.println(plainTextPassword + " " + hashedPassword);
         return BCrypt.checkpw(plainTextPassword, hashedPassword);
     }
 
     // Aggiunge un utente al database (ora riceve la password in chiaro)
-    public static void addUser(String username, String plainTextPassword) {
-        if (userExists(username)) {
+    public static void addUser(String username, String plainTextPassword)
+    {
+        if (userExists(username))
+        {
             System.out.println("Errore: L'utente '" + username + "' esiste già. Non verrà aggiunto.");
             return;
         }
 
-        // Hashiamo la password prima di salvarla
         String hashedPassword = hashPassword(plainTextPassword);
 
         String insertSQL = "INSERT INTO users (username, password_hash) VALUES (?, ?)";
@@ -83,7 +82,8 @@ public class DatabaseManager {
     }
 
     // Controlla se un utente esiste già
-    public static boolean userExists(String username) {
+    public static boolean userExists(String username)
+    {
         String checkSql = "SELECT COUNT(*) FROM users WHERE username = ?";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(checkSql)) {
@@ -99,7 +99,8 @@ public class DatabaseManager {
     }
 
     // Rimuove un utente
-    public boolean removeUser(String username) {
+    public boolean removeUser(String username)
+    {
         String deleteSQL = "DELETE FROM users WHERE username = ?";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(deleteSQL)) {
@@ -119,7 +120,8 @@ public class DatabaseManager {
     }
 
     // Recupera l'hash della password di un utente
-    public static String getUserPasswordHash(String username) {
+    public static String getUserPasswordHash(String username)
+    {
         String selectSQL = "SELECT password_hash FROM users WHERE username = ?";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
@@ -147,7 +149,8 @@ public class DatabaseManager {
     }
 
     // Recupera e stampa tutti gli utenti
-    public void printAllUsers() {
+    public void printAllUsers()
+    {
         String selectSQL = "SELECT id, username, password_hash FROM users";
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
