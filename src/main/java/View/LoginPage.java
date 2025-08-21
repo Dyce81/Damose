@@ -1,6 +1,7 @@
 package View;
 
 import Controller.DatabaseManager;
+import Controller.LoginManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,14 +20,41 @@ public class LoginPage
         loginPage.setModal(true);
         loginPage.setLayout(null);
 
-        Color green = new Color(4, 175, 27);
-
         //pannello in cui inserire i componenti
         JPanel panel = new JPanel();
         panel.setBounds(68, 20, 300, 210);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         loginPage.add(panel);
 
+        if (LoginManager.logged)
+        {
+            creaPaginaLogout(panel, loginPage);
+        }
+        else {creaPaginaLogin(panel, loginPage);}
+
+
+        loginPage.add(panel);
+        loginPage.setVisible(true);
+    }
+
+    public void chiudiPagina(JDialog pagina, boolean riapri)
+    {
+        int delay = 1200;
+        Timer timer = new Timer(delay, e2 -> {
+            pagina.dispose();
+            if (riapri)
+            {
+                LoginPage loginPage = new LoginPage();
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+
+    public void creaPaginaLogin(JPanel panel, JDialog dialog)
+    {
+        Color green = new Color(4, 175, 27);
 
         //scritta di benvenuto
         JLabel benvenuto = new JLabel("benvenuto");
@@ -85,73 +113,58 @@ public class LoginPage
         panel.add(acc_reg);
         panel.add(Box.createVerticalStrut(10));
         JLabel avviso = new JLabel("testo deafault");
-        avviso.setForeground(loginPage.getBackground());
+        avviso.setForeground(dialog.getBackground());
         avviso.setAlignmentX(Component.CENTER_ALIGNMENT);
         acc_reg.addActionListener(e -> {
             String username_input = username.getText();
             String password_input = password.getText();
 
-            if (username_input.length() < 5)
+            switch (LoginManager.controllaCredenziali(username_input, password_input))
             {
-                avviso.setText("username troppo corto!");
-                avviso.setForeground(Color.RED);
+                case 0:
+                    avviso.setText("username troppo corto!");
+                    avviso.setForeground(Color.RED);
+                case 1:
+                    avviso.setText("username troppo lungo!");
+                    avviso.setForeground(Color.RED);
+                case 2:
+                    avviso.setText("password troppo corta!");
+                    avviso.setForeground(Color.RED);
+                case 3:
+                    avviso.setText("password troppo lunga!");
+                    avviso.setForeground(Color.RED);
+                case 4:
+
             }
-
-            else if (username_input.length() > 15)
             {
-                avviso.setText("username troppo lungo!");
-                avviso.setForeground(Color.RED);
-            }
-
-            else if (password_input.length() < 6)
-            {
-                avviso.setText("password troppo corta!");
-                avviso.setForeground(Color.RED);
-            }
-
-            else if (password_input.length() > 12)
-            {
-                avviso.setText("password troppo lunga!");
-                avviso.setForeground(Color.RED);
-            }
-
-            else
-            {
-                int delay = 1200;
-
                 //se è in fase di registrazione
                 if (acc_reg.getText().equals("Registrati"))
                 {
-                    DatabaseManager.addUser(username_input, password_input);
-                    avviso.setText("Registrazione completata! Accesso eseguito!");
-                    avviso.setForeground(green);
+                    if (LoginManager.registra(username_input, password_input))
+                    {
+                        avviso.setText("Registrazione completata! Accesso eseguito!");
+                        avviso.setForeground(green);
 
-                    Timer timer = new Timer(delay, e1 -> {
-                        // Chiama il metodo dispose() per chiudere il JDialog
-                        loginPage.dispose();
-                        DatabaseManager.logged = true;
-                    });
-                    timer.setRepeats(false);
-                    timer.start();
+                        chiudiPagina(dialog, false);
+                    }
+
+                    else {System.out.println("Registrazione fallita, utente già registrato.");}
                 }
+
                 //se è in fase di accesso
                 else if (acc_reg.getText().equals("Accedi"))
                 {
-                    String hashed_pswd = DatabaseManager.getUserPasswordHash(username_input);
-                    if (hashed_pswd != null && hashed_pswd.equals(password_input)) {
+                    if (LoginManager.accedi(username_input, password_input))
+                    {
                         avviso.setText("Accesso eseguito!");
                         avviso.setForeground(green);
 
-                        Timer timer = new Timer(delay, e2 -> {
-                            loginPage.dispose();
-                            DatabaseManager.logged = true;
-                        });
-                        timer.setRepeats(false);
-                        timer.start();
+                        chiudiPagina(dialog, false);
                     }
+                    else {System.out.println("Accesso fallito, password o username errato.");}
                 }
             }
-            });
+        });
 
 
         //cambia tra modalità di accesso e registrazione
@@ -180,8 +193,26 @@ public class LoginPage
 
 
         panel.add(avviso);
+    }
 
-        loginPage.add(panel);
-        loginPage.setVisible(true);
+    public void creaPaginaLogout(JPanel panel, JDialog dialog)
+    {
+        panel.add(Box.createVerticalStrut(30));
+        JLabel benvenuto = new JLabel("HAI GIA EFFETTUATO IL LOGIN");
+        benvenuto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(benvenuto);
+        panel.add(Box.createVerticalStrut(10));
+
+        JButton disconnetti = new JButton("Disconnetti");
+        disconnetti.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(disconnetti);
+        disconnetti.addActionListener(e -> {
+            LoginManager.disconnetti();
+            chiudiPagina(dialog, true);
+
+        });
+
+
+
     }
 }
