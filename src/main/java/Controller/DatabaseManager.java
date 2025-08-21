@@ -1,5 +1,7 @@
 package Controller;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,22 +9,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DatabaseManager
-{
+public class DatabaseManager {
     private static final String JDBC_DRIVER = "org.h2.Driver";
-    // URL per database H2 in-memory (per test, si resetta ad ogni avvio)
-    // private static final String DB_URL = "jdbc:h2:mem:testdb;
-
-    // URL per database H2 persistente (salvato su file)
     private static final String DB_URL = "jdbc:h2:./data/mydb";
     private static final String USER = "sa";
     private static final String PASS = "password";
 
     public static boolean logged = false;
 
-    public DatabaseManager()
-    {
-        // Carica il driver JDBC
+    public DatabaseManager() {
         try {
             Class.forName(JDBC_DRIVER);
         } catch (ClassNotFoundException e) {
@@ -30,18 +25,16 @@ public class DatabaseManager
         }
     }
 
-    public static Connection getConnection() throws SQLException
-    {
+    public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
-    //crea il database per gli utenti
-    public void createUsersTable()
-    {
+    // Crea la tabella per gli utenti
+    public void createUsersTable() {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS users (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY," +
                 "username VARCHAR(255) NOT NULL UNIQUE," +
-                "password_hash VARCHAR(255) NOT NULL)"; // Per le password hashate
+                "password_hash VARCHAR(255) NOT NULL)";
 
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement()) {
@@ -52,17 +45,36 @@ public class DatabaseManager
         }
     }
 
-    //aggiunge un utente al database
-    public static void addUser(String username, String passwordHash) {
+    // Metodo per hashare la password in chiaro
+    public static String hashPassword(String plainTextPassword) {
+        // BCrypt.hashpw genera un hash della password. Il primo argomento è la password,
+        // il secondo è il salt generato automaticamente.
+        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
+    }
+
+    // Metodo per verificare una password in chiaro con l'hash esistente
+    public static boolean checkPassword(String plainTextPassword, String hashedPassword) {
+        // BCrypt.checkpw confronta la password in chiaro con l'hash esistente.
+        // Gestisce internamente l'estrazione del salt dall'hash.
+        System.out.println(plainTextPassword + " " + hashedPassword);
+        return BCrypt.checkpw(plainTextPassword, hashedPassword);
+    }
+
+    // Aggiunge un utente al database (ora riceve la password in chiaro)
+    public static void addUser(String username, String plainTextPassword) {
         if (userExists(username)) {
             System.out.println("Errore: L'utente '" + username + "' esiste già. Non verrà aggiunto.");
             return;
         }
+
+        // Hashiamo la password prima di salvarla
+        String hashedPassword = hashPassword(plainTextPassword);
+
         String insertSQL = "INSERT INTO users (username, password_hash) VALUES (?, ?)";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
             pstmt.setString(1, username);
-            pstmt.setString(2, passwordHash);
+            pstmt.setString(2, hashedPassword);
             pstmt.executeUpdate();
             System.out.println("Utente '" + username + "' aggiunto con successo.");
         } catch (SQLException e) {
@@ -70,7 +82,7 @@ public class DatabaseManager
         }
     }
 
-    //controlla se un utente esiste già nel database
+    // Controlla se un utente esiste già
     public static boolean userExists(String username) {
         String checkSql = "SELECT COUNT(*) FROM users WHERE username = ?";
         try (Connection conn = getConnection();
@@ -86,15 +98,13 @@ public class DatabaseManager
         return false;
     }
 
-    //rimuove un utente dal database
+    // Rimuove un utente
     public boolean removeUser(String username) {
         String deleteSQL = "DELETE FROM users WHERE username = ?";
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(deleteSQL)) {
-
             pstmt.setString(1, username);
             int rowsAffected = pstmt.executeUpdate();
-
             if (rowsAffected > 0) {
                 System.out.println("Utente '" + username + "' rimosso con successo.");
                 return true;
@@ -108,7 +118,7 @@ public class DatabaseManager
         }
     }
 
-    //recupera la password hashata prendendo in input l'username
+    // Recupera l'hash della password di un utente
     public static String getUserPasswordHash(String username) {
         String selectSQL = "SELECT password_hash FROM users WHERE username = ?";
         try (Connection conn = getConnection();
@@ -124,52 +134,41 @@ public class DatabaseManager
         return null; // Utente non trovato o errore
     }
 
-    //svuota completamente il database degli utenti
+    // Svuota completamente la tabella degli utenti
     public void deleteUsersTable() {
         String truncateSQL = "TRUNCATE TABLE users";
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement()) {
-
             stmt.execute(truncateSQL);
             System.out.println("La tabella 'users' è stata svuotata con successo.");
-
         } catch (SQLException e) {
             System.err.println("Errore durante lo svuotamento della tabella: " + e.getMessage());
         }
     }
 
-    //Recupera e stampa nella console i dati di tutti gli utenti presenti nella tabella.
+    // Recupera e stampa tutti gli utenti
     public void printAllUsers() {
         String selectSQL = "SELECT id, username, password_hash FROM users";
-
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(selectSQL)) {
-
             System.out.println("------------------------------------------");
             System.out.println("Elenco di tutti gli utenti nel database:");
             System.out.println("------------------------------------------");
-
             boolean foundUsers = false;
             while (rs.next()) {
                 foundUsers = true;
                 int id = rs.getInt("id");
                 String username = rs.getString("username");
                 String passwordHash = rs.getString("password_hash");
-
                 System.out.println("ID: " + id + ", Username: " + username + ", Password Hash: " + passwordHash);
             }
-
             if (!foundUsers) {
                 System.out.println("Nessun utente trovato nel database.");
             }
-
             System.out.println("------------------------------------------");
-
         } catch (SQLException e) {
             System.err.println("Errore durante il recupero degli utenti: " + e.getMessage());
         }
     }
 }
-
-
