@@ -15,7 +15,7 @@ import org.jxmapviewer.viewer.GeoPosition;
 
 //TODO: la classe inizia ad essere un po' troppo lunga, quindi più tardi sarebbe meglio scomporre in varie classi il frame
 
-public class Frame {
+public class Frame extends JFrame{
     public final JFrame frame;
     public final Mappa mappa;
     public ArrayList<CustomWaypoint> listaFermate;
