@@ -181,7 +181,6 @@ public class CustomWaypoint extends DefaultWaypoint
             for (Route r : StaticGTFS.routes)
                 if (routeIds.contains(r.getId()))
                     lineeTrovate.add(r);
-            //System.out.println("- " + r.getNome() + " (" + r.getUrl() +")");
         }
 
         pannelloInformazioni.setLineeServite(lineeTrovate);

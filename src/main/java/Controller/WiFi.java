@@ -62,22 +62,4 @@ public class WiFi
 
         return true;
     }
-
-    //Usa una finestra modale per avvertire l'utente dello stato della connessione
-    public static void mostraStatoConnessione(JFrame frame)
-    {
-        JDialog dialogStatoWiFi = new JDialog(frame, "Messaggio", false);
-        dialogStatoWiFi.setSize(new Dimension(200, 100));
-
-        JLabel testoStato = new JLabel();
-
-        if (WiFi)
-            testoStato.setText("Connessione tornata (?)");
-        else
-            testoStato.setText("Connessione assente");
-
-        dialogStatoWiFi.add(testoStato);
-
-        dialogStatoWiFi.setVisible(true);
-    }
 }
