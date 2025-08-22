@@ -1,9 +1,10 @@
 import Controller.DatabaseManager;
 import Controller.StaticGTFS;
-import Controller.Wifi;
+import Controller.WiFi;
 import Model.CustomWaypoint;
 import Model.GestoreWaypoint;
 import View.Frame;
+import View.LoadingScreen;
 import View.Mappa;
 
 //disclaimer: il progetto potrebbe essere organizzato meglio - magari separando ulteriormente la logica
@@ -14,24 +15,29 @@ public class Main
 {
     public static void main(String[] args)
     {
-        Wifi.wifi_controller();
+        LoadingScreen loadingScreen = new LoadingScreen();
+        loadingScreen.setVisible(true);
 
-        Frame frame = new Frame(600, 800, "Damose");
-        StaticGTFS.iniziaPROVVISORIO();
-        GestoreWaypoint elab_fermate = new GestoreWaypoint();
-        //frame.imposta_painter_mappa(elab_fermate.posiziona_fermate());
-        //elab_fermate.posiziona_fermate(frame.mappa);
-        elab_fermate.posizionaFermate(frame.mappa);
-        //elab_fermate.CustomMouseListener(frame.mappa.mappa); //da rivedere -- vedere disclaimer sopra
-        elab_fermate.CustomMouseListener(Mappa.getMapViewer());
-        frame.listaFermate = GestoreWaypoint.listaFermate;
-        //frame.imposta_combo_box(GestoreWaypoint.nomi_fermate);
-        CustomWaypoint.setPannello(frame.getPannelloInformazioni());
-        frame.imposta_combo_box(); //se questa riga viene spostata sopra, la combobox NON funziona,
-        //quindi più tardi questa cosa è da aggiustare perché è indecente :(
         DatabaseManager dbManager = new DatabaseManager();
         dbManager.createUsersTable();
 
-        Wifi.impostaFrame(frame, frame.getMappa());
+        StaticGTFS.inizializzaDati();
+
+        WiFi.wifi_controller();
+
+        loadingScreen.dispose();
+
+        Frame frame = new Frame(600, 800, "Damose");
+        GestoreWaypoint elabFermate = new GestoreWaypoint();;
+        elabFermate.posizionaFermate(frame.mappa);
+        elabFermate.CustomMouseListener(Mappa.getMapViewer());
+        frame.listaFermate = GestoreWaypoint.listaFermate;
+        CustomWaypoint.setPannello(frame.getPannelloInformazioni());
+        frame.imposta_combo_box(); //se questa riga viene spostata sopra, la combobox NON funziona,
+        //quindi più tardi questa cosa è da aggiustare perché è indecente :(
+
+        WiFi.impostaFrame(frame, frame.getMappa());
+
+
     }
 }

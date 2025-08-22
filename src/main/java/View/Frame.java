@@ -9,13 +9,13 @@ import java.util.*;
 import java.util.List;
 
 import Controller.StaticGTFS;
-import Controller.Wifi;
+import Controller.WiFi;
 import Model.*;
 import org.jxmapviewer.viewer.GeoPosition;
 
 //TODO: la classe inizia ad essere un po' troppo lunga, quindi più tardi sarebbe meglio scomporre in varie classi il frame
 
-public class Frame {
+public class Frame extends JFrame{
     public final JFrame frame;
     public final Mappa mappa;
     public ArrayList<CustomWaypoint> listaFermate;
@@ -45,7 +45,7 @@ public class Frame {
 
         testoFermata.setEditable(true);
         testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
-        testoFermata.setRenderer(new ComboBoxRenderer());
+        testoFermata.setRenderer(new StopsComboBoxRenderer());
         testoFermata.setMaximumRowCount(5);
 
         testoLinea.setEditable(true);
@@ -248,7 +248,7 @@ public class Frame {
 
     public void cambiaStatoWiFi()
     {
-        if (Wifi.wifi_connesso()) {
+        if (WiFi.wifi_connesso()) {
             testoWiFi.setText("WiFi connesso");
             testoWiFi.setBackground(verde);
         } else {

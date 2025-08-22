@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.*;
+import View.LoadingScreen;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.BufferedReader;
@@ -29,54 +30,45 @@ public class StaticGTFS
 
     //public static ArrayList<Calendar> calendars = new ArrayList<>();
 
-    public static void iniziaPROVVISORIO()
+    public static void inizializzaDati()
     {
         ArrayList<String[]> provvisorio = leggi_csv("data/rome_static_gtfs/routes.txt");
+        //questi pezzi di codice aggiornano la progressBar della LoadingScreen
+        LoadingScreen.updateProgress(0, 5, LoadingScreen.progressBar);
 
         for (String[] lista : provvisorio)
         {
-            Route aggiungi = new Route("", "", 0, "");
 
-            aggiungi.setId(lista[0]);
-            aggiungi.setNome(lista[2]);
-            aggiungi.setTipo(Integer.parseInt(lista[4]));
-            aggiungi.setUrl(lista[5]);
-            //System.out.println(aggiungi);
-
+            Route aggiungi = new Route(lista[0], lista[2], Integer.parseInt(lista[4]), lista[5]);
             routes.add(aggiungi);
         }
+        LoadingScreen.updateProgress(6, 25, LoadingScreen.progressBar);
+
 
         provvisorio = leggi_csv("data/rome_static_gtfs/trips.txt");
+        LoadingScreen.updateProgress(26, 30, LoadingScreen.progressBar);
 
         for (String[] lista : provvisorio)
         {
-            Trip aggiungi = new Trip("", "", "", lista[7]);
+            Trip aggiungi = new Trip(lista[2], lista[0], lista[3], lista[7]);
 
-            aggiungi.setId(lista[2]);
-            aggiungi.setRouteId(lista[0]);
-            aggiungi.setHeadsign(lista[3]);
             aggiungi.setServiceId(lista[1]);
-            //System.out.println(aggiungi);
-
             trips.add(aggiungi);
         }
+        LoadingScreen.updateProgress(31, 44, LoadingScreen.progressBar);
 
         provvisorio = leggi_csv("data/rome_static_gtfs/stop_times.txt");
+        LoadingScreen.updateProgress(45, 55, LoadingScreen.progressBar);
 
         for (String[] lista : provvisorio)
         {
-            StopTime aggiungi = new StopTime("", "", lista[1], lista[2]);
-
-            aggiungi.setTripId(lista[0]);
-            aggiungi.setStopId(lista[3]);
-            aggiungi.setOrarioArrivo(lista[1]);
-            aggiungi.setOrarioPartenza(lista[2]);
-            //System.out.println(aggiungi);
-
+            StopTime aggiungi = new StopTime(lista[0], lista[3], lista[1], lista[2]);
             stopTimes.add(aggiungi);
         }
+        LoadingScreen.updateProgress(56, 75, LoadingScreen.progressBar);
 
         provvisorio = leggi_csv("data/rome_static_gtfs/shapes.txt");
+        LoadingScreen.updateProgress(76, 80, LoadingScreen.progressBar);
 
         for (String[] lista : provvisorio)
         {
@@ -86,6 +78,7 @@ public class StaticGTFS
 
             shapes.add(new PuntoShape(lista[0], latitudine, longitudine, sequenza));
         }
+        LoadingScreen.updateProgress(81, 100, LoadingScreen.progressBar);
     }
 
     //Tracciamento statico dei mezzi

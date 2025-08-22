@@ -2,13 +2,11 @@ package Controller;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Wifi
+public class WiFi
 {
     public static boolean WiFi = false;
     public static View.Frame riferimentoFrame;

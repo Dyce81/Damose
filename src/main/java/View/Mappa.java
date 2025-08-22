@@ -1,9 +1,8 @@
 package View;
 
-import Controller.Wifi;
+import Controller.WiFi;
 
 import Model.RoutePainter;
-import com.sun.tools.javac.Main;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;
@@ -19,7 +18,6 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class Mappa
@@ -39,7 +37,7 @@ public class Mappa
     {
         mappa = new JXMapViewer();
 
-        if (Wifi.WiFi)
+        if (WiFi.WiFi)
         {
             //TileFactoryInfo info = new OSMTileFactoryInfo();
             //DefaultTileFactory tileFactory = new DefaultTileFactory(info);
@@ -95,7 +93,7 @@ public class Mappa
 
     public void cambiaStatoMappa()
     {
-        if (Wifi.wifi_connesso())
+        if (WiFi.wifi_connesso())
         {
             if (mappa.getTileFactory() != tileFactory)
                 mappa.setTileFactory(tileFactory);

@@ -2,7 +2,7 @@ package View;
 
 import Controller.DynamicGTFS;
 import Controller.StaticGTFS;
-import Controller.Wifi;
+import Controller.WiFi;
 import Model.*;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -144,12 +144,12 @@ public class InformazioniFermata
 
         if (task != null) task.cancel(true);
 
-        if (Wifi.WiFi || !Wifi.WiFi)
+        if (WiFi.WiFi || !WiFi.WiFi)
         {
 
             task = scheduler.scheduleAtFixedRate(() ->
             {
-                if (!Wifi.wifi_connesso())
+                if (!WiFi.wifi_connesso())
                 {
                     /*task.cancel(true);*/
                     /*mostraInfoLinea(id);*/
