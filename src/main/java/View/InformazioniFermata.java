@@ -189,9 +189,9 @@ public class InformazioniFermata
 
                     int ritardo = DynamicGTFS.getRitardo(DynamicGTFS.getUltimoTripUpdate());
                     if (ritardo < 0) // In anticipo
-                        ritardoCorsa.setText("Anticipo calcolato: " + ritardo * -1 + " minuti.");
+                        ritardoCorsa.setText("Anticipo stimato: " + ritardo * -1 + " minuti.");
                     else             // In ritardo
-                        ritardoCorsa.setText("Ritardo calcolato: " + ritardo + " minuti.");
+                        ritardoCorsa.setText("Ritardo stimato: " + ritardo + " minuti.");
 
                     infoLinea.add(statoCorsa);
                     infoLinea.add(ritardoCorsa);
