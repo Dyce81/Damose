@@ -9,8 +9,8 @@ import java.util.TimerTask;
 public class WiFi
 {
     public static boolean WiFi = false;
-    public static View.Frame riferimentoFrame;
-    public static View.Mappa riferimentoMappa;
+    private static View.Frame riferimentoFrame;
+    private static View.Mappa riferimentoMappa;
 
     public static void impostaFrame(View.Frame frame, View.Mappa mappa)
     {
