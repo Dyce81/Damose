@@ -118,18 +118,6 @@ public class CustomWaypoint extends DefaultWaypoint
         ArrayList<Route> lineeTrovate = new ArrayList<>();
         //TODO: (forse) cambiare questo in List<Route> ? (andrebbe cambiato anche nel pannello informazioni)
 
-        /*ArrayList<Route> lineeTrovate = new ArrayList<>();
-
-        Set<String> tripIds = new HashSet<>();
-        for (StopTime st : StaticGTFS.stopTimes)
-            if (st.getStopId().equals(this.id))
-                tripIds.add(st.getTripId());
-
-        Set<String> routeIds = new HashSet<>();
-        for (Trip t : StaticGTFS.trips)
-            if (tripIds.contains(t.getId()))
-                routeIds.add(t.getRouteId());*/
-
         if (id.startsWith("ITO"))
         {
             List<CollegamentoMetro> collegamentiTrovati = StaticGTFS.collegamentiMetro.stream()
@@ -149,23 +137,6 @@ public class CustomWaypoint extends DefaultWaypoint
             //nel file stoptimes.txt mancano gli orari di arrivo delle metropolitane, quindi non
             //è possibile mettere in correlazione le routes e le stops correttamente.
             //forse c'è un modo, ma meglio verificarlo alla fine
-
-            //TODO: adesso non mi va di fare quel file quindi lo farò dopo
-
-            /*List<Trip> viaggi = StaticGTFS.trips.stream()
-                    .filter(t -> lineeTrovate.stream().anyMatch(l -> l.getId().equals(t.getRouteId())))
-                    .toList();
-
-            List<StopTime> orari = StaticGTFS.stopTimes.stream()
-                    .filter(st -> st.getStopId().equals(id))
-                    //.filter(st -> viaggi.stream().anyMatch(t -> t.getId().equals(st.getTripId())))
-                    .toList();*/
-
-            /*for (Route r : lineeTrovate)
-            {
-
-            }*/
-            //System.out.println(orari);
         }
         else {
             Set<String> tripIds = new HashSet<>();
@@ -193,4 +164,3 @@ public class CustomWaypoint extends DefaultWaypoint
         return nome;
     }
 }
-
