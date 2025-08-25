@@ -29,6 +29,9 @@ public class GestoreWaypoint {
     public static CustomWaypoint ultimaFermata;
 
     //DATI GTFS Statici
+    //TODO: spostare questo metodo qui sotto in StaticGTFS (in realtà è un po' da ripensare tutto,
+    // visto che adesso ci sono due liste (waypoints e listaFermate), mentre se ne potrebbe fare solo
+    // una (stops) (forse?)
 
     public void posizionaFermate(Mappa mappa) {
         ArrayList<String[]> listaValoriFermate;
@@ -39,6 +42,24 @@ public class GestoreWaypoint {
         for (String[] valori : listaValoriFermate) {
             double longit = Double.parseDouble(valori[4]);
             double latit = Double.parseDouble(valori[5]);
+
+            // Se la stazione/fermata analizzata è della metro, ignorare quelle con campo
+            // location_type != 1 (1 è la stazione fisica, altri valori rappresentano
+            // "sottocomponenti" della stazione stessa)
+            if (valori[0].startsWith("ITO"))
+                if (!valori[9].equals("1")) continue;
+            else
+            {
+                // Sposta leggermente la fermata, perché qui geni di Roma Capitale hanno messo
+                // (per OGNI stazione della metro) una fermata dell'autobus ESATTAMENTE alle
+                // stesse identiche coordinate, rendendo di fatto impossibile cliccare
+                // una delle due (solitamente la fermata dell'autobus, perché in stops.txt
+                // le fermate della metro sono le ultime ad essere specificate)
+                longit += 0.0002;
+            }
+
+            //double longit = Double.parseDouble(valori[4]);
+            //double latit = Double.parseDouble(valori[5]);
             GeoPosition coords = new GeoPosition(longit, latit);
             CustomWaypoint cwp = new CustomWaypoint(valori[0], valori[2], coords);
             waypoints.add(cwp);
