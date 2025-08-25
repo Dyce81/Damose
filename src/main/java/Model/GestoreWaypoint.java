@@ -71,7 +71,8 @@ public class GestoreWaypoint {
         waypoint_painter.setWaypoints(waypoints);
 
         //forse
-        mappa.set_painter(waypoint_painter);
+        //mappa.set_painter(waypoint_painter);
+        Mappa.set_painter(waypoint_painter);
     }
 
     //Collega alla mappa un mouse listener per poter interagire con i singoli waypoint (che sono immagini)

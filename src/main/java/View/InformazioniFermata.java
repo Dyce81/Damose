@@ -156,10 +156,15 @@ public class InformazioniFermata
 
                     System.out.println("DEBUG: Offline [orario calcolato staticamente]");
 
-                    prossimoArrivo.setText("Prossimo arrivo previsto: " +
-                            StaticGTFS.getTripUpdate(fermata.getId(), id));
-                    avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
-                    infoLinea.add(avvisoPrevisione);
+                    if (!StaticGTFS.lineaDellaMetro(id))
+                    {
+                        //TODO: racchiudere queste righe in un metodo? (visto che anche sotto viene
+                        // usata la stessa sequenza di istruzioni [per lap parte connessa al wifi])
+                        prossimoArrivo.setText("Prossimo arrivo previsto: " +
+                                StaticGTFS.getTripUpdate(fermata.getId(), id));
+                        avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
+                        infoLinea.add(avvisoPrevisione);
+                    }
 
                     if (tracciamentoAttivo)
                     {
@@ -176,31 +181,32 @@ public class InformazioniFermata
                 }
                 else
                 {
-                    String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
-                    if (tempo.isEmpty())
+                    if (!StaticGTFS.lineaDellaMetro(id))
                     {
-                        System.out.println("DEBUG: Connesso a internet ma orario vuoto - orario previsto staticamente");
-                        tempo = StaticGTFS.getTripUpdate(fermata.getId(), id);
-                        avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
-                        infoLinea.add(avvisoPrevisione);
+                        String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
+                        if (tempo.isEmpty()) {
+                            System.out.println("DEBUG: Connesso a internet ma orario vuoto - orario previsto staticamente");
+                            tempo = StaticGTFS.getTripUpdate(fermata.getId(), id);
+                            avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
+                            infoLinea.add(avvisoPrevisione);
+                            prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
+                        }
+
+                        statoCorsa.setText("Stato corsa: " + DynamicGTFS.getStato(DynamicGTFS.getUltimoTripDescriptor()));
+
+                        int ritardo = DynamicGTFS.getRitardo(DynamicGTFS.getUltimoTripUpdate());
+                        if (ritardo < 0) // In anticipo
+                            ritardoCorsa.setText("Anticipo stimato: " + ritardo * -1 + " minuti.");
+                        else             // In ritardo
+                            ritardoCorsa.setText("Ritardo stimato: " + ritardo + " minuti.");
+
+                        infoLinea.add(statoCorsa);
+                        infoLinea.add(ritardoCorsa);
                     }
-
-                    statoCorsa.setText("Stato corsa: " + DynamicGTFS.getStato(DynamicGTFS.getUltimoTripDescriptor()));
-
-                    int ritardo = DynamicGTFS.getRitardo(DynamicGTFS.getUltimoTripUpdate());
-                    if (ritardo < 0) // In anticipo
-                        ritardoCorsa.setText("Anticipo stimato: " + ritardo * -1 + " minuti.");
-                    else             // In ritardo
-                        ritardoCorsa.setText("Ritardo stimato: " + ritardo + " minuti.");
-
-                    infoLinea.add(statoCorsa);
-                    infoLinea.add(ritardoCorsa);
 
                     if (tracciamentoAttivo) {
                         ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
-                        System.out.println(lista);
-                        //TODO: sostituire questo if qui sotto con qualcosa di più adatto
-                        if (lista.isEmpty()) //forse meglio evitare di restituire null e usare isEmpty()?
+                        if (lista.isEmpty())
                         {
                             avvisoTracciamento.setText("<html><u><i>Attenzione: non è stato possibile<br> tracciare alcun mezzo.</i></u></html>");
                             infoLinea.add(avvisoTracciamento);
@@ -217,7 +223,7 @@ public class InformazioniFermata
                         Mappa.getMapViewer().repaint();
                     }
 
-                    prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
+                    //prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
                 }
             }, 0, 5, TimeUnit.SECONDS);
         }

@@ -148,6 +148,21 @@ public class StaticGTFS
             return null;
     }
 
+    public static boolean lineaDellaMetro(String routeId)
+    {
+        //TODO: (forse) fare una funzione che popola in automatico una lista di linee della metro
+        // per poi vedere se routeId è uno di quegli elementi; risparmierebbe anche il fatto di
+        // dover aggiungere a mano le linee a questo metodo
+        return switch (routeId)
+        {
+            case "248" -> true;
+            case "249" -> true;
+            case "305" -> true;
+            case "342" -> true;
+            default -> false;
+        };
+    }
+
     //Questo metodo restituisce un'arraylist di array, dove ciascuna lista interna
     //indica i valori di una singola fermata; quindi l'array esterno racchiude tutte le fermate.
     //Da lì si può poi generare ogni singola fermata (oggetto) sulla mappa
