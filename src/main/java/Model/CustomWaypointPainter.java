@@ -27,7 +27,7 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
     @Override
     protected void doPaint(Graphics2D g, JXMapViewer map, int larghezza, int altezza)
     {
-        if (tracciamentoAttivo)
+        if (tracciamentoAttivo && !posizioniMezzi.isEmpty())
         {
             for (GeoPosition posizione : posizioniMezzi)
             {

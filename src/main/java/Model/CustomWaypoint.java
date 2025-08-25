@@ -10,7 +10,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CustomWaypoint extends DefaultWaypoint
 {
@@ -113,26 +115,10 @@ public class CustomWaypoint extends DefaultWaypoint
     //per adesso restituisce un array di routes che passano per quella fermata
     public void trovaLinee()
     {
-        /*if (id.startsWith("ITO"))
-        {
-            //se è una metropolitana fai queste cose
-
-            /*ArrayList<Route> lineeMetro = StaticGTFS.routes.stream()
-                    .filter(route -> route.getTipo() == 1)
-                    .collect(Collectors.toCollection(ArrayList::new));*/
-
-            /*List<Route> lineeMetro = StaticGTFS.routes.stream()
-                    .filter(route -> route.getTipo() == 1)
-                    .toList();
-
-
-
-            //System.out.println(lineeMetro);
-            pannelloInformazioni.setLineeServite(lineeMetro);
-            return;
-        }*/
-
         ArrayList<Route> lineeTrovate = new ArrayList<>();
+        //TODO: (forse) cambiare questo in List<Route> ? (andrebbe cambiato anche nel pannello informazioni)
+
+        /*ArrayList<Route> lineeTrovate = new ArrayList<>();
 
         Set<String> tripIds = new HashSet<>();
         for (StopTime st : StaticGTFS.stopTimes)
@@ -142,17 +128,21 @@ public class CustomWaypoint extends DefaultWaypoint
         Set<String> routeIds = new HashSet<>();
         for (Trip t : StaticGTFS.trips)
             if (tripIds.contains(t.getId()))
-                routeIds.add(t.getRouteId());
+                routeIds.add(t.getRouteId());*/
 
         if (id.startsWith("ITO"))
         {
-            //TODO: ogni fermata della metro imposta come linee servite tutte quelle della metro
-            //(MA, MB, MB1, MC). bisogna restituire SOLO le linee che passano per la fermata voluta.
+            List<CollegamentoMetro> collegamentiTrovati = StaticGTFS.collegamentiMetro.stream()
+                    .filter(c -> c.getStopId().equals(id))
+                    .toList();
+
             for (Route r : StaticGTFS.routes)
                 if (r.getTipo() == 1)
-                    lineeTrovate.add(r);
+                    for (CollegamentoMetro c : collegamentiTrovati)
+                        if (c.getRouteId().equals(r.getId()))
+                            lineeTrovate.add(r);
 
-            System.out.println(lineeTrovate);
+            System.out.println(id);
 
             //TODO: attualmente c'è un file fatto da noi per verificare quali linee della metro
             //corrispondono ad una certa fermata;
@@ -178,6 +168,16 @@ public class CustomWaypoint extends DefaultWaypoint
             //System.out.println(orari);
         }
         else {
+            Set<String> tripIds = new HashSet<>();
+            for (StopTime st : StaticGTFS.stopTimes)
+                if (st.getStopId().equals(this.id))
+                    tripIds.add(st.getTripId());
+
+            Set<String> routeIds = new HashSet<>();
+            for (Trip t : StaticGTFS.trips)
+                if (tripIds.contains(t.getId()))
+                    routeIds.add(t.getRouteId());
+
             for (Route r : StaticGTFS.routes)
                 if (routeIds.contains(r.getId()))
                     lineeTrovate.add(r);

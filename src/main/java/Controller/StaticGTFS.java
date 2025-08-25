@@ -27,6 +27,7 @@ public class StaticGTFS
     public static ArrayList<Trip> trips = new ArrayList<>();
     public static ArrayList<StopTime> stopTimes = new ArrayList<>();
     public static ArrayList<PuntoShape> shapes = new ArrayList<>();
+    public static ArrayList<CollegamentoMetro> collegamentiMetro = new ArrayList<>();
 
     //public static ArrayList<Calendar> calendars = new ArrayList<>();
 
@@ -36,9 +37,11 @@ public class StaticGTFS
         //questi pezzi di codice aggiornano la progressBar della LoadingScreen
         LoadingScreen.updateProgress(0, 5, LoadingScreen.progressBar);
 
+        //TODO: (forse) creare un metodo unico che prenda in input il percorso del file da leggere e
+        //sia in grado di capire in automatica quale lista popolare (magari un solo for con dentro uno
+        //switch?)
         for (String[] lista : provvisorio)
         {
-
             Route aggiungi = new Route(lista[0], lista[2], Integer.parseInt(lista[4]), lista[5]);
             routes.add(aggiungi);
         }
@@ -79,6 +82,14 @@ public class StaticGTFS
             shapes.add(new PuntoShape(lista[0], latitudine, longitudine, sequenza));
         }
         LoadingScreen.updateProgress(81, 100, LoadingScreen.progressBar);
+
+        provvisorio = leggi_csv("data/collegamenti_metro.txt");
+        for (String[] lista : provvisorio)
+        {
+            for (String s : lista) System.out.println(s);
+            CollegamentoMetro aggiungi = new CollegamentoMetro(lista[0], lista[2]);
+            collegamentiMetro.add(aggiungi);
+        }
     }
 
     //Tracciamento statico dei mezzi

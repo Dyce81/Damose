@@ -198,7 +198,9 @@ public class InformazioniFermata
 
                     if (tracciamentoAttivo) {
                         ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
-                        if (lista == null) //forse meglio evitare di restituire null e usare isEmpty()?
+                        System.out.println(lista);
+                        //TODO: sostituire questo if qui sotto con qualcosa di più adatto
+                        if (lista.isEmpty()) //forse meglio evitare di restituire null e usare isEmpty()?
                         {
                             avvisoTracciamento.setText("<html><u><i>Attenzione: non è stato possibile<br> tracciare alcun mezzo.</i></u></html>");
                             infoLinea.add(avvisoTracciamento);
