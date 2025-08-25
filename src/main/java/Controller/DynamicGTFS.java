@@ -90,9 +90,8 @@ public class DynamicGTFS
                         tripIdCercato = viaggio.getTripId();
                         ultimoTripDescriptor = viaggio;
                         ultimoTripUpdate = aggiornamento;
+                        break; //TODO: non so se questa cosa va bene, se rompe in qualche modo il codice, se cambia qualcosa...? pare di no?
                     }
-
-                    break; //TODO: non so se questa cosa va bene, se rompe in qualche modo il codice, se cambia qualcosa...? pare di no?
                 }
             }
 
@@ -102,6 +101,7 @@ public class DynamicGTFS
                         .atZone(ZoneId.systemDefault())
                         .format(DateTimeFormatter.ofPattern("HH:mm"));
 
+                System.out.println("da metodo");
                 return tempo;
             } else return "";
         }

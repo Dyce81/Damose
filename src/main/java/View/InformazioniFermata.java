@@ -189,7 +189,6 @@ public class InformazioniFermata
                             tempo = StaticGTFS.getTripUpdate(fermata.getId(), id);
                             avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
                             infoLinea.add(avvisoPrevisione);
-                            prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
                         }
 
                         statoCorsa.setText("Stato corsa: " + DynamicGTFS.getStato(DynamicGTFS.getUltimoTripDescriptor()));
@@ -202,6 +201,8 @@ public class InformazioniFermata
 
                         infoLinea.add(statoCorsa);
                         infoLinea.add(ritardoCorsa);
+
+                        prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
                     }
 
                     if (tracciamentoAttivo) {
