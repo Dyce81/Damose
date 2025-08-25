@@ -86,7 +86,6 @@ public class StaticGTFS
         provvisorio = leggi_csv("data/collegamenti_metro.txt");
         for (String[] lista : provvisorio)
         {
-            for (String s : lista) System.out.println(s);
             CollegamentoMetro aggiungi = new CollegamentoMetro(lista[0], lista[2]);
             collegamentiMetro.add(aggiungi);
         }

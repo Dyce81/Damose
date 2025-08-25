@@ -28,7 +28,7 @@ public class Main
         loadingScreen.dispose();
 
         Frame frame = new Frame(600, 800, "Damose");
-        GestoreWaypoint elabFermate = new GestoreWaypoint();;
+        GestoreWaypoint elabFermate = new GestoreWaypoint();
         elabFermate.posizionaFermate(frame.mappa);
         elabFermate.CustomMouseListener(Mappa.getMapViewer());
         frame.listaFermate = GestoreWaypoint.listaFermate;
