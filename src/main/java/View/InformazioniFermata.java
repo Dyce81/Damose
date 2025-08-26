@@ -126,10 +126,13 @@ public class InformazioniFermata
         CustomWaypoint fermata = GestoreWaypoint.ultimaFermata;
         Route linea = StaticGTFS.getLinea(id);
 
-        assert linea != null;
-        if (linea.getTipo() == 0) tipoMezzoSelezionato = "Tram";
-        else if (linea.getTipo() == 1) tipoMezzoSelezionato = "Metropolitana";
-        else if (linea.getTipo() == 3) tipoMezzoSelezionato = "Autobus";
+        //assert linea != null;
+        if (linea != null)
+        {
+            if (linea.getTipo() == 0) tipoMezzoSelezionato = "Tram";
+            else if (linea.getTipo() == 1) tipoMezzoSelezionato = "Metropolitana";
+            else if (linea.getTipo() == 3) tipoMezzoSelezionato = "Autobus";
+        }
 
         JLabel testoLinea = new JLabel("Linea selezionata: " + id);
         JLabel tipoMezzo = new JLabel("Tipo mezzo: " + tipoMezzoSelezionato);
@@ -143,6 +146,8 @@ public class InformazioniFermata
         pannello.add(mostraMezzi);
 
         if (task != null) task.cancel(true);
+
+        if (StaticGTFS.lineaDellaMetro(id)) prossimoArrivo.setText("");
 
         if (WiFi.WiFi || !WiFi.WiFi)
         {
@@ -209,7 +214,7 @@ public class InformazioniFermata
                         ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
                         if (lista.isEmpty())
                         {
-                            avvisoTracciamento.setText("<html><u><i>Attenzione: non è stato possibile<br> tracciare alcun mezzo.</i></u></html>");
+                            avvisoTracciamento.setText("<html><u><i>Attenzione: non è stato<br> possibile tracciare alcun mezzo.</i></u></html>");
                             infoLinea.add(avvisoTracciamento);
                         }
 

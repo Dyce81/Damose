@@ -20,9 +20,12 @@ public class Frame extends JFrame{
     public final Mappa mappa;
     public ArrayList<CustomWaypoint> listaFermate;
 
-    private final JComboBox<CustomWaypoint> testoFermata = new JComboBox<>();
-    private final JComboBox<Route> testoLinea = new JComboBox<>();
-    //private final JComboBox<String> testoLinea = new JComboBox<>();
+    //private final JComboBox<CustomWaypoint> testoFermata = new JComboBox<>();
+    private final FilteredComboBox<CustomWaypoint> testoFermata = new FilteredComboBox<>();
+
+    //private final JComboBox<Route> testoLinea = new JComboBox<>();
+    private final FilteredComboBox<Route> testoLinea = new FilteredComboBox<>();
+
     private final InformazioniFermata pannelloInformazioni;
     private final JLabel testoWiFi;
 
@@ -43,8 +46,14 @@ public class Frame extends JFrame{
         //Casella testo e pulsante per la ricerca delle fermate
         JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
 
-        testoFermata.setEditable(true);
+        ////testoFermata.setEditable(true);
         testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
+        /*testoFermata.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(e);
+            }
+        });*/
         testoFermata.setRenderer(new StopsComboBoxRenderer());
         testoFermata.setMaximumRowCount(5);
 
@@ -155,20 +164,24 @@ public class Frame extends JFrame{
         {
             testoFermata.addItem(f);
         }
-        testoFermata.setEditable(false);
+        testoFermata.filtra("");
+        testoFermata.setSelectedItem("- Seleziona una fermata -");
+        testoFermata.hidePopup();
 
         testoLinea.addItem(new Route("null", "- Seleziona una linea -", -1, ""));
         for (Route l : StaticGTFS.routes)
         {
             testoLinea.addItem(l);
         }
-        testoLinea.setEditable(false);
+        testoLinea.filtra("");
+        testoLinea.setSelectedItem("- Seleziona una linea -");
+        testoLinea.hidePopup();
     }
 
     //la ricerca delle fermate è gestita dal frame tramite questo metodo
     private void cercaFermata(ActionEvent e)
     {
-        if (testoFermata.getSelectedItem() == null) return; //magari con codice di errore
+        if (testoFermata.getSelectedItem() == null || testoFermata.getSelectedIndex() == -1) return; //magari con codice di errore
         String nomeFermata = testoFermata.getSelectedItem().toString();
 
         //la fermata precedentemente selezionata (se è presente) non serve più
@@ -191,7 +204,7 @@ public class Frame extends JFrame{
 
     private void cercaLinea(ActionEvent e)
     {
-        if (testoLinea.getSelectedItem() == null) return;
+        if (testoLinea.getSelectedItem() == null || testoLinea.getSelectedIndex() == -1) return;
         //System.out.println(testoLinea.getSelectedItem());
         String nomeLinea = testoLinea.getSelectedItem().toString();
 
