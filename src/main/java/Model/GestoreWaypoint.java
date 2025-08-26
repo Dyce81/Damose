@@ -50,11 +50,12 @@ public class GestoreWaypoint {
                 if (!valori[9].equals("1")) continue;
             else
             {
-                // Sposta leggermente la fermata, perché qui geni di Roma Capitale hanno messo
+                // Sposta leggermente la fermata, perché quei geni di Roma Capitale hanno messo
                 // (per OGNI stazione della metro) una fermata dell'autobus ESATTAMENTE alle
                 // stesse identiche coordinate, rendendo di fatto impossibile cliccare
                 // una delle due (solitamente la fermata dell'autobus, perché in stops.txt
-                // le fermate della metro sono le ultime ad essere specificate)
+                // le fermate della metro sono le ultime ad essere specificate, ergo le ultime
+                // ad essere piazzate sulla mappa)
                 longit += 0.0002;
             }
 

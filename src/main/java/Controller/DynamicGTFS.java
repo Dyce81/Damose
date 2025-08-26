@@ -101,7 +101,6 @@ public class DynamicGTFS
                         .atZone(ZoneId.systemDefault())
                         .format(DateTimeFormatter.ofPattern("HH:mm"));
 
-                System.out.println("da metodo");
                 return tempo;
             } else return "";
         }

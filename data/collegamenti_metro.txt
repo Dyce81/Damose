@@ -1,329 +1,27 @@
 stop_id,stop_name,route_id
-ITO166,Alessandrino,""
-ITO167,,Alessandrino Lift,"",41.871159,12.578094,,,,2,ITO67
-ITO168,Vittorio Emanuele,248
-ITO169,Vittorio Emanuele,248
-ITO170,Anagnina,248
-ITO171,,Pizza Vittorio Emanuele Secondo,"",41.894066,12.503568,,,,2,ITO69
-ITO172,Arco di Travertino,248
-ITO173,,Pizza Vittorio Emanuele Secondo,"",41.893875,12.503869,,,,2,ITO69
-ITO174,Arco di Travertino,248
-ITO175,Valle Aurelia,248
-ITO176,Valle Aurelia,248
-ITO177,Baldo degli Ubaldi,248
-ITO178,Baldo degli Ubaldi,248
-ITO179,Baldo degli Ubaldi,248
-ITO180,,Torrenova,"",41.863205,12.617243,,,,2,ITO71
-ITO181,Baldo degli Ubaldi,248
-ITO182,,Torrenova,"",41.863194,12.617041,,,,2,ITO71
-ITO183,Baldo degli Ubaldi,248
-ITO184,Baldo degli Ubaldi Lift,248
-ITO185,Baldo degli Ubaldi,248
-ITO186,,Torre Spaccata,"",41.868713,12.587142,,,,2,ITO72
-ITO187,Baldo degli Ubaldi,248
-ITO188,Baldo degli Ubaldi Lift,248
-ITO189,,Torre Spaccata,"",41.868919,12.587239,,,,2,ITO72
-ITO190,Baldo degli Ubaldi,248
-ITO191,Baldo degli Ubaldi,248
-ITO192,Baldo degli Ubaldi,248
-ITO193,Barberini,248
-ITO194,Barberini,248
-ITO195,Barberini,248
-ITO196,Barberini,248
-ITO197,Barberini,248
-ITO198,Barberini,248
-ITO199,,Basilica San Paolo,"",41.856503,12.478112,,,,2,ITO91
-ITO200,,Basilica San Paolo,"",41.856483,12.478455,,,,2,ITO91
-ITO201,,Basilica San Paolo,"",41.856182,12.478482,,,,2,ITO91
-ITO202,,Torre Maura,"",41.866512,12.597251,,,,2,ITO73
-ITO203,,Torre Maura,"",41.866886,12.597612,,,,2,ITO73
-ITO204,Battistini,248
-ITO206,,Torre Maura,"",41.866177,12.597236,,,,2,ITO73
-ITO207,Battistini Lift,248
-ITO208,Battistini Lift,248
-ITO209,Battistini Lift,248
-ITO210,,Bologna,"",41.913639,12.520228,,,,2,ITO107
-ITO211,,Bologna,"",41.913837,12.520347,,,,2,ITO107
-ITO212,,Bologna,"",41.914291,12.520652,,,,2,ITO107
-ITO213,,Bologna,"",41.914120,12.520827,,,,2,ITO107
-ITO214,,Bologna,"",41.913242,12.520200,,,,2,ITO107
-ITO215,,Bologna,"",41.913151,12.520480,,,,2,ITO107
-ITO216,,Bologna,"",41.913307,12.521142,,,,2,ITO107
-ITO232,,Bologna Lift,"",41.913368,12.520795,,,,2,ITO107
-ITO233,,Bolognetta,"",41.865341,12.681406,,,,2,ITO120
-ITO234,,Torre Gaia,"",41.863930,12.635911,,,,2,ITO74
-ITO235,,Torre Angela,"",41.864246,12.625876,,,,2,ITO75
-ITO236,,Torre Angela,"",41.864258,12.626437,,,,2,ITO75
-ITO237,,Borghesiana,"",41.864689,12.667529,,,,2,ITO123
-ITO239,,Parco di Centocelle,"",41.874622,12.567951,,,,2,ITO101
-ITO240,,Castro Pretorio,"",41.906158,12.505723,,,,2,ITO127
-ITO241,,Parco di Centocelle,"",41.874481,12.568177,,,,2,ITO101
-ITO242,,Castro Pretorio,"",41.906322,12.505204,,,,2,ITO127
-ITO243,,Castro Pretorio,"",41.905865,12.505470,,,,2,ITO127
-ITO244,,Castro Pretorio Lift,"",41.906368,12.505643,,,,2,ITO127
-ITO246,,Tiburtina,"",41.910778,12.529495,,,,2,ITO77
-ITO247,,Pietralata,"",41.914688,12.554803,,,,2,ITO100
-ITO248,,Pietralata,"",41.914921,12.554936,,,,2,ITO100
-ITO249,,Pigneto,"",41.888691,12.527846,,,,2,ITO99
-ITO250,,Pigneto,"",41.888500,12.528655,,,,2,ITO99
-ITO251,,Piramide,"",41.875645,12.482544,,,,2,ITO98
-ITO252,,Piramide,"",41.875710,12.482047,,,,2,ITO98
-ITO253,,Cavour,"",41.894951,12.493746,,,,2,ITO130
-ITO254,,Cavour,"",41.894932,12.493098,,,,2,ITO130
-ITO255,,Policlinico,"",41.908428,12.512431,,,,2,ITO96
-ITO256,,Policlinico,"",41.908298,12.512239,,,,2,ITO96
-ITO257,,Policlinico,"",41.909103,12.511255,,,,2,ITO96
-ITO258,,Policlinico,"",41.909176,12.511525,,,,2,ITO96
-ITO259,Cinecittà,248
-ITO260,Cinecittà,248
-ITO261,Cinecittà Lift,248
-ITO262,Cinecittà,248
-ITO263,,Ponte Lungo,"",41.877941,12.519471,,,,2,ITO95
-ITO264,Cinecittà,248
-ITO265,,Ponte Lungo,"",41.878056,12.519307,,,,2,ITO95
-ITO267,,Ponte Lungo,"",41.877934,12.519136,,,,2,ITO95
-ITO268,,Ponte Lungo,"",41.877823,12.519296,,,,2,ITO95
-ITO269,,Piazza dei Cinquecento,"",41.901215,12.499537,,,,2,ITO78
-ITO270,,Ponte Lungo,"",41.877960,12.518480,,,,2,ITO95
-ITO271,,Ponte Lungo,"",41.877831,12.518297,,,,2,ITO95
-ITO272,Termini,248
-ITO273,,Ponte Lungo Lift,"",41.877892,12.518447,,,,2,ITO95
-ITO274,,Piazza dei Cinquecento,"",41.901924,12.500307,,,,2,ITO78
-ITO275,,Ponte Lungo,"",41.877640,12.518484,,,,2,ITO95
-ITO276,,Ponte Lungo,"",41.877541,12.518708,,,,2,ITO95
-ITO277,,Piazza dei Cinquecento,"",41.901840,12.501123,,,,2,ITO78
-ITO278,,Parco di Centocelle Lift,"",41.874859,12.567829,,,,2,ITO101
-ITO279,,Teano Escalators,"",41.889885,12.551104,,,,2,ITO79
-ITO280,,Teano,"",41.889736,12.551094,,,,2,ITO79
-ITO281,,Ponte Mammolo,"",41.920467,12.565071,,,,2,ITO94
-ITO282,,Porta Furba - Quadraro,"",41.863613,12.548051,,,,2,ITO93
-ITO283,,Via Cipro,"",41.907722,12.447482,,,,2,ITO135
-ITO284,,Porta Furba - Quadraro,"",41.863667,12.547943,,,,2,ITO93
-ITO285,,Porta Furba - Quadraro,"",41.863983,12.548172,,,,2,ITO93
-ITO286,,Quintiliani,"",41.915497,12.538691,,,,2,ITO92
-ITO287,,Teano,"",41.889328,12.551536,,,,2,ITO79
-ITO288,Cipro Lift,248
-ITO289,,Re di Roma,"",41.882164,12.515145,,,,2,ITO90
-ITO290,,Re di Roma,"",41.882095,12.514977,,,,2,ITO90
-ITO291,,Re di Roma,"",41.881859,12.515253,,,,2,ITO90
-ITO292,Cipro,248
-ITO293,Re di Roma,248
-ITO294,Re di Roma Lift,248
-ITO295,Re di Roma,248
-ITO296,,Circo Massimo,"",41.883621,12.487470,,,,2,ITO137
-ITO297,Re di Roma,248
-ITO298,Subaugusta,248
-ITO299,Re di Roma,248
-ITO300,Re di Roma,248
-ITO301,Subaugusta Lift,248
-ITO302,Subaugusta,248
-ITO303,Subaugusta,248
-ITO304,,Circo Massimo,"",41.883442,12.488363,,,,2,ITO137
-ITO305,,Rebibbia,"",41.925850,12.573022,,,,2,ITO89
-ITO306,Subaugusta,248
-ITO307,,Malatesta,"",41.887627,12.540078,,,,2,ITO110
-ITO308,,Malatesta,"",41.887592,12.540927,,,,2,ITO110
-ITO309,Colli Albani,248
-ITO310,,Malatesta,"",41.887291,12.541448,,,,2,ITO110
-ITO311,Colli Albani,248
-ITO312,,Viale Manzoni,"",41.890511,12.507270,,,,2,ITO109
-ITO313,Colli Albani,248
-ITO314,,Via San Quintino,"",41.890320,12.507228,,,,2,ITO109
-ITO315,Spagna,248
-ITO316,Manzoni Lift,248
-ITO317,,Via Emanuele Filiberto,"",41.890167,12.506669,,,,2,ITO109
-ITO318,Colli Albani,248
-ITO319,,Viale Manzoni,"",41.890259,12.506463,,,,2,ITO109
-ITO320,Colli Albani,248
-ITO321,Colli Albani,248
-ITO322,Spagna,248
-ITO323,,Marconi,"",41.849316,12.475120,,,,2,ITO108
-ITO324,,Mirti,"",41.881344,12.566389,,,,2,ITO106
-ITO325,,Mirti,"",41.881329,12.566878,,,,2,ITO106
-ITO326,,Mirti Lift,"",41.881199,12.566464,,,,2,ITO106
-ITO327,,Monti Tiburtini,"",41.915657,12.547886,,,,2,ITO105
-ITO328,Numidio Quadrato,248
-ITO329,Numidio Quadrato,248
-ITO330,Numidio Quadrato,248
-ITO331,San Giovanni,248
-ITO333,Numidio Quadrato,248
-ITO334,,Colosseo,"",41.891644,12.491415,,,,2,ITO140
-ITO335,Numidio Quadrato,248
-ITO336,Numidio Quadrato,248
-ITO337,,Colosseo,"",41.891384,12.491526,,,,2,ITO140
-ITO338,Numidio Quadrato,248
-ITO339,Numidio Quadrato,248
-ITO340,,Santa Maria del Soccorso,"",41.915501,12.560528,,,,2,ITO83
-ITO341,Ottaviano,248
-ITO342,Ottaviano,248
-ITO343,Ottaviano,248
-ITO344,Ottaviano,248
-ITO345,Ottaviano,248
-ITO346,Ottaviano,248
-ITO347,,S. Agnese/Annibaliano,"",41.923553,12.516060,,,,2,ITO85
-ITO348,Ottaviano,248
-ITO349,Ottaviano,248
-ITO350,,S. Agnese/Annibaliano,"",41.923756,12.515516,,,,2,ITO85
-ITO351,,Conca d'Oro,"",41.940437,12.528535,,,,2,ITO138
-ITO352,,Via Appia Nuova,"",41.885262,12.510245,,,,2,ITO86
-ITO353,,Conca d'Oro,"",41.939644,12.528095,,,,2,ITO138
-ITO354,,S. Giovanni,"",41.885090,12.509900,,,,2,ITO86
-ITO355,,Monte Compatri/Pantano,"",41.865566,12.707728,,,,2,ITO102
-ITO356,,Conca d'Oro Lift,"",41.939899,12.528252,,,,2,ITO138
-ITO357,,Conca d'Oro,"",41.939293,12.527438,,,,2,ITO138
-ITO358,,S. Giovanni,"",41.885029,12.509697,,,,2,ITO86
-ITO359,,Conca d'Oro,"",41.938820,12.527661,,,,2,ITO138
-ITO360,,S. Giovanni,"",41.885212,12.509480,,,,2,ITO86
-ITO361,,S. Giovanni,"",41.885056,12.509410,,,,2,ITO86
-ITO362,,Malatesta Lift,"",41.887184,12.540728,,,,2,ITO110
-ITO363,,Lucio Sestio,"",41.859669,12.556905,,,,2,ITO111
-ITO364,,Lucio Sestio,"",41.859589,12.557056,,,,2,ITO111
-ITO365,,Lucio Sestio,"",41.859962,12.557188,,,,2,ITO111
-ITO366,,Lucio Sestio,"",41.859867,12.557365,,,,2,ITO111
-ITO367,,Lodi,"",41.886929,12.518601,,,,2,ITO112
-ITO368,,Lodi Lift,"",41.886879,12.518248,,,,2,ITO112
-ITO369,,Lodi,"",41.886967,12.518816,,,,2,ITO112
-ITO370,,Lodi,"",41.886799,12.518857,,,,2,ITO112
-ITO371,,Lodi,"",41.886761,12.518653,,,,2,ITO112
-ITO372,Cornelia,248
-ITO373,Cornelia,248
-ITO374,Cornelia,248
-ITO375,Cornelia Lift,248
-ITO376,Cornelia,248
-ITO377,Cornelia,248
-ITO378,Repubblica,248
-ITO379,Repubblica,248
-ITO380,Repubblica,248
-ITO381,,EUR Fermi,"",41.828781,12.470620,,,,2,ITO134
-ITO382,Repubblica,248
-ITO383,,EUR Fermi,"",41.829041,12.470885,,,,2,ITO134
-ITO384,,Due Leoni/Fontana Candida,"",41.864670,12.659342,,,,2,ITO126
-ITO385,,EUR Fermi,"",41.829193,12.470351,,,,2,ITO134
-ITO386,,EUR Fermi,"",41.829559,12.469247,,,,2,ITO134
-ITO387,,Due Leoni/Fontana Candida Parking,"",41.864975,12.657910,,,,2,ITO126
-ITO388,,EUR Magliana,"",41.839474,12.463822,,,,2,ITO132
-ITO389,,EUR Magliana,"",41.838882,12.464356,,,,2,ITO132
-ITO390,,EUR Magliana,"",41.840008,12.463481,,,,2,ITO132
-ITO397,,EUR Palasport,"",41.829800,12.468404,,,,2,ITO131
-ITO398,Furio Camillo,248
-ITO399,,EUR Palasport,"",41.830025,12.467483,,,,2,ITO131
-ITO400,,EUR Palasport,"",41.830181,12.466953,,,,2,ITO131
-ITO401,,EUR Palasport,"",41.829960,12.466594,,,,2,ITO131
-ITO402,Furio Camillo Lift,2485
-ITO403,Furio Camillo,248
-ITO404,,EUR Palasport,"",41.830070,12.465424,,,,2,ITO131
-ITO405,Furio Camillo,248
-ITO406,,EUR Palasport,"",41.829803,12.466350,,,,2,ITO131
-ITO407,Furio Camillo,248
-ITO408,Furio Camillo,248
-ITO409,,Finocchio,"",41.865459,12.687961,,,,2,ITO129
-ITO410,,Garbatella Parking,"",41.866497,12.483687,,,,2,ITO124
-ITO411,,Garbatella,"",41.866707,12.483665,,,,2,ITO124
-ITO412,Flaminio,248
-ITO413,Flaminio,248
-ITO414,,Gardenie,"",41.886108,12.560942,,,,2,ITO122
-ITO415,,Gardenie Lift,"",41.886353,12.560917,,,,2,ITO122
-ITO416,Flaminio,248
-ITO417,Flaminio,248
-ITO418,,Gardenie,"",41.886276,12.561583,,,,2,ITO122
-ITO419,Flaminio,248
-ITO420,,Giardinetti,"",41.864265,12.610024,,,,2,ITO121
-ITO421,,Giardinetti,"",41.864349,12.610072,,,,2,ITO121
-ITO422,Giulio Agricola,248
-ITO423,Giulio Agricola,248
-ITO424,,Libia,"",41.931686,12.519534,,,,2,ITO113
-ITO425,Giulio Agricola,248
-ITO426,Giulio Agricola,248
-ITO427,,Libia,"",41.932125,12.518989,,,,2,ITO113
-ITO428,Giulio Agricola,248
-ITO429,,Libia,"",41.931923,12.518768,,,,2,ITO113
-ITO430,Giulio Agricola,248
-ITO431,,Libia,"",41.931755,12.518969,,,,2,ITO113
-ITO432,Giulio Agricola,248
-ITO433,Giulio Agricola,248
-ITO434,,Libia Lift,"",41.931911,12.518954,,,,2,ITO113
-ITO435,Lepanto,248
-ITO436,,Graniti,"",41.865398,12.697868,,,,2,ITO118
-ITO437,Lepanto,248
-ITO438,Lepanto,248
-ITO439,Lepanto,248
-ITO440,Lepanto,248
-ITO441,Lepanto,248
-ITO442,,Grotte Celoni,"",41.862461,12.646112,,,,2,ITO117
-ITO443,Lepanto,248
-ITO444,Lepanto,248
-ITO445,,Jonio,"",41.946243,12.528022,,,,2,ITO116
-ITO446,,Laurentina,"",41.827213,12.480806,,,,2,ITO115
-ITO447,,Laurentina,"",41.826824,12.481707,,,,2,ITO115
-ITO628,,Via Giovanni Giolitti,"",41.900223,12.501065,,,,2,ITO78
-ITO661,,Via Tuscolana,"",41.841518,12.585524,,,,2,ITO68
-ITO694,,Piazza di Santa Maria del Soccorso / Via Tiburtina,"",41.915237,12.561189,,,,2,ITO83
-ITO727,,Via dei Monti Tiburtini,"",41.915688,12.547115,,,,2,ITO105
-ITO728,,Via dei Monti Tiburtini,"",41.915421,12.547874,,,,2,ITO105
-ITO760,,Parcheggio,"",41.865726,12.708231,,,,2,ITO102
-ITO761,,Parcheggio,"",41.865845,12.707354,,,,2,ITO102
-ITO762,,Via Casilina,"",41.865509,12.708166,,,,2,ITO102
-ITO763,,Via dei Castani / Piazza dei Mirti,"",41.880825,12.566288,,,,2,ITO106
-ITO764,,Piazza dei Mirti / Via dei Platani,"",41.880936,12.567082,,,,2,ITO106
-ITO765,,Via Tor de' Schiavi,"",41.886250,12.562800,,,,2,ITO122
-ITO766,,Via Casilina / Via di Torre Spaccata,"",41.868412,12.586976,,,,2,ITO72
-ITO793,,Via Teano / Viale Partenope,"",41.889702,12.551437,,,,2,ITO79
-ITO794,,Via la Spezia,"",41.886620,12.517701,,,,2,ITO112
-ITO795,,Via la Spezia,"",41.886765,12.517540,,,,2,ITO112
-ITO796,,Via Casilina,"",41.871620,12.578905,,,,2,ITO67
-ITO826,,Via Cipro / Via della Meloria,"",41.906918,12.446727,,,,2,ITO135
-ITO827,,Via Cipro,"",41.907330,12.447079,,,,2,ITO135
-ITO828,,Via Anastasio II,"",41.902901,12.441810,,,,2,ITO70
-ITO829,,Via Mattia Battistini / Via Ennio Bonifazi,"",41.906292,12.414664,,,,2,ITO97
-ITO859,,S. Agnese/Annibaliano,"",41.923904,12.515795,,,,2,ITO85
-ITO860,,S. Agnese/Annibaliano,"",41.923935,12.515674,,,,2,ITO85
-ITO892,,San Giovanni,"",41.885250,12.510257,,,,2,ITO82
-ITO893,,San Giovanni,"",41.885086,12.509911,,,,2,ITO82
-ITO925,,San Giovanni,"",41.885509,12.510805,,,,2,ITO82
-ITO926,,San Giovanni,"",41.885498,12.510966,,,,2,ITO82
-ITO927,,San Giovanni,"",41.885559,12.511117,,,,2,ITO82
-ITO928,,San Giovanni,"",41.885170,12.509468,,,,2,ITO82
-ITO929,,San Giovanni,"",41.884991,12.509691,,,,2,ITO82
-ITO958,,Torre Maura,"",41.866619,12.597042,,,,2,ITO73
-ITO959,,Torre Spaccata,"",41.869007,12.586411,,,,2,ITO72
-ITO960,,Torre Spaccata,"",41.868813,12.586925,,,,2,ITO72
-ITO961,,Cavour,"",41.894867,12.493246,,,,2,ITO130
-ITO962,,Tiburtina,"",41.910831,12.529105,,,,2,ITO77
-ITO963,,Tiburtina,"",41.911087,12.529954,,,,2,ITO77
-ITO964,,Tiburtina (Elevator),"",41.910759,12.529591,,,,2,ITO77
-ITO965,,Tiburtina,"",41.910351,12.530283,,,,2,ITO77
-ITO966,,Tiburtina,"",41.909840,12.530134,,,,2,ITO77
-ITO967,,Tiburtina,"",41.910892,12.528710,,,,2,ITO77
-ITO968,,Libia,"",41.932045,12.519108,,,,2,ITO113
-ITO969,,Monti Tiburtini,"",41.915798,12.548058,,,,2,ITO105
-ITO970,,Rebibbia,"",41.925217,12.573545,,,,2,ITO89
-ITO971,,Rebibbia,"",41.925339,12.573659,,,,2,ITO89
-ITO991,,EUR Palasport,"",41.829571,12.469209,,,,2,ITO131
-ITO1024,,Termini,"",41.900539,12.500643,,,,2,ITO78
-ITO1057,,EUR Fermi,"",41.829765,12.468544,,,,2,ITO134
-ITO88,,Barberini,"",41.903694,12.488578,,,,1,
-ITO111,,Lucio Sestio,"",41.859818,12.557253,,,,1,
-ITO130,,Cavour,"",41.895138,12.493609,,,,1,
-ITO105,,Monti Tiburtini,"",41.915829,12.547617,,,,1,
-ITO92,,Quintiliani,"",41.914650,12.539096,,,,1,
-ITO77,,Tiburtina,"",41.909950,12.530163,,,,1,
-ITO107,,Bologna,"",41.913666,12.520810,,,,1,
-ITO96,,Policlinico,"",41.908546,12.512219,,,,1,
-ITO115,,Laurentina,"",41.827232,12.480657,,,,1,
-ITO100,,Pietralata,"",41.913971,12.555648,,,,1,
-ITO134,,EUR Fermi,"",41.828773,12.470958,,,,1,
-ITO137,,Circo Massimo,"",41.883488,12.487731,,,,1,
-ITO123,,Borghesiana,"",41.864662,12.666590,,,,1,
-ITO101,,Parco di Centocelle,"",41.874454,12.568499,,,,1,
-ITO126,,Due Leoni/Fontana Candida,"",41.865025,12.658104,,,,1,
-ITO74,,Torre Gaia,"",41.864235,12.635645,,,,1,
-ITO121,,Giardinetti,"",41.864120,12.610313,,,,1,
-ITO72,,Torre Spaccata,"",41.869289,12.586530,,,,1,
-ITO67,,Alessandrino,"",41.870846,12.578947,,,,1,
-ITO106,,Mirti,"",41.881042,12.566760,,,,1,
-ITO110,,Malatesta,"",41.887325,12.540216,,,,1,
-ITO99,,Pigneto,"",41.888344,12.528663,,,,1,
-ITO82,San Giovanni,248,DA QUI SOTTO
+ITO88,Barberini,248
+ITO111,Lucio Sestio,248
+ITO130,Cavour,249
+ITO105,Monti Tiburtini,249
+ITO92,Quintiliani,249
+ITO77,Tiburtina,249
+ITO107,Bologna,249
+ITO96,Policlinico,249
+ITO115,Laurentina,249
+ITO100,Pietralata,249
+ITO134,EUR Fermi,249
+ITO137,Circo Massimo,249
+ITO123,Borghesiana,342
+ITO101,Parco di Centocelle,342
+ITO126,Due Leoni/Fontana Candida,342
+ITO74,Torre Gaia,342
+ITO121,Giardinetti,342
+ITO72,Torre Spaccata,342
+ITO67,Alessandrino,342
+ITO106,Mirti,342
+ITO110,Malatesta,342
+ITO99,Pigneto,342
+ITO82,San Giovanni,248
 ITO125,Furio Camillo,248
 ITO90,Re di Roma,248
 ITO109,Manzoni,248
@@ -331,6 +29,8 @@ ITO135,Cipro,248
 ITO133,Cinecittà,248
 ITO89,Rebibbia,248
 ITO78,Termini,248
+ITO78,Termini,249
+ITO78,Termini,305
 ITO97,Battistini,248
 ITO87,Repubblica,248
 ITO69,Vittorio Emanuele,248
@@ -346,32 +46,32 @@ ITO103,Ottaviano,248
 ITO139,Colli Albani,248
 ITO95,Ponte Lungo,248
 ITO81,Spagna,248
-ITO127,,Castro Pretorio,"",41.906265,12.505364,,,,1,
-ITO98,,Piramide,"",41.875713,12.482177,,,,1,
-ITO124,,Garbatella,"",41.866463,12.483265,,,,1,
-ITO91,,Basilica San Paolo,"",41.855980,12.478110,,,,1,
-ITO108,,Marconi,"",41.848804,12.475642,,,,1,
-ITO94,,Ponte Mammolo,"",41.920918,12.565234,,,,1,
-ITO131,,EUR Palasport,"",41.830196,12.466027,,,,1,
-ITO85,,S. Agnese/Annibaliano,"",41.923786,12.516383,,,,1,
-ITO113,,Libia,"",41.931618,12.519337,,,,1,
-ITO83,,Santa Maria del Soccorso,"",41.915913,12.561639,,,,1,
-ITO129,,Finocchio,"",41.865566,12.687932,,,,1,
-ITO140,,Colosseo,"",41.891220,12.491604,,,,1,
-ITO138,,Conca d'Oro,"",41.938915,12.527501,,,,1,
-ITO118,,Graniti,"",41.865723,12.697720,,,,1,
-ITO71,,Torrenova,"",41.863453,12.616706,,,,1,
-ITO132,,EUR Magliana,"",41.839516,12.463584,,,,1,
-ITO117,,Grotte Celoni,"",41.862991,12.646089,,,,1,
-ITO79,,Teano,"",41.889484,12.551361,,,,1,
-ITO76,,Arco di Travertino,"",41.865936,12.535897,,,,1,
-ITO119,,Giulio Agricola,"",41.856739,12.562781,,,,1,
-ITO114,,Lepanto,"",41.911476,12.466101,,,,1,
-ITO128,,Flaminio,"",41.912800,12.476381,,,,1,
-ITO116,,Jonio,"",41.947266,12.527944,,,,1,
-ITO102,,Monte Compatri/Pantano,"",41.865665,12.707708,,,,1,
-ITO120,,Bolognetta,"",41.865089,12.681058,,,,1,
-ITO75,,Torre Angela,"",41.864460,12.625500,,,,1,
-ITO73,,Torre Maura,"",41.866882,12.596841,,,,1,
-ITO122,,Gardenie,"",41.886116,12.562108,,,,1,
-ITO112,,Lodi,"",41.887054,12.518793,,,,1,
+ITO127,Castro Pretorio,249
+ITO98,Piramide,249
+ITO124,Garbatella,249
+ITO91,Basilica San Paolo,249
+ITO108,Marconi,249
+ITO94,Ponte Mammolo,249
+ITO131,EUR Palasport,249
+ITO85,S. Agnese/Annibaliano,305
+ITO113,Libia,305
+ITO83,Santa Maria del Soccorso,249
+ITO129,Finocchio,342
+ITO140,Colosseo,249
+ITO138,Conca d'Oro,305
+ITO118,Graniti,342
+ITO71,Torrenova,342
+ITO132,EUR Magliana,249
+ITO117,Grotte Celoni,342
+ITO79,Teano,342
+ITO76,Arco di Travertino,248
+ITO119,Giulio Agricola,248
+ITO114,Lepanto,248
+ITO128,Flaminio,248
+ITO116,Jonio,305
+ITO102,Monte Compatri/Pantano,342
+ITO120,Bolognetta,342
+ITO75,Torre Angela,342
+ITO73,Torre Maura,342
+ITO122,Gardenie,342
+ITO112,Lodi,342

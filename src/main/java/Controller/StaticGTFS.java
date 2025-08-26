@@ -98,7 +98,6 @@ public class StaticGTFS
     public static ArrayList<GeoPosition> getPosizioneVeicolo(String routeId)
     {
         LocalTime adesso = LocalTime.now();
-        System.out.println(adesso.truncatedTo(ChronoUnit.MINUTES));
 
         List<Trip> viaggiTrovati = trips.stream()
                 .filter(t -> t.getRouteId().equals(routeId))
@@ -160,6 +159,23 @@ public class StaticGTFS
             case "305" -> true;
             case "342" -> true;
             default -> false;
+        };
+    }
+
+    // Questo metodo serve per le linee delle metropolitane: queste infatti hanno id come le altre
+    // linee, ma è più comodo usare il loro nome commerciale (linea A, B...). Tuttavia questo
+    // controllo deve essere fatto a mano perché nei file GTFS non è incluso il nome commerciale
+    // delle linee (o comunque non per le metropolitane)
+    //TODO: fare qualcosa per i nomi della linea B (non c'entrano) [magari rendere i pulsanti responsive?]
+    public static String getNomeRealeMetro(String routeId)
+    {
+        return switch (routeId)
+        {
+            case "248" -> "Linea A";
+            case "249" -> "Linea B (Laurentina-Rebibbia)";
+            case "305" -> "Linea B1 (Laurentina-Jonio)";
+            case "342" -> "Linea C";
+            default -> "";
         };
     }
 

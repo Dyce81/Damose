@@ -107,7 +107,15 @@ public class InformazioniFermata
             pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
             //pulsanteLinea.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            pulsanteLinea.addActionListener(e -> mostraInfoLinea(pulsanteLinea.getText(), false));
+            //pulsanteLinea.addActionListener(e -> mostraInfoLinea(pulsanteLinea.getText(), false));
+            pulsanteLinea.addActionListener(e -> mostraInfoLinea(r.getId(), false));
+
+            //TODO: vabbe qui potrebbe essere gestito meglio:
+            // l'unico motivo per cui non viene creato un pulsante vuoto con testo messo poi (in queste righe)
+            // è perché altrimenti, per alcuni pulsanti, il testo non viene mostrato correttamente
+            if (StaticGTFS.lineaDellaMetro(r.getId()))
+                pulsanteLinea.setText(StaticGTFS.getNomeRealeMetro(r.getId()));
+
             pulsantiLinee.add(pulsanteLinea);
         }
 
