@@ -26,6 +26,7 @@ dependencies {
     implementation 'com.h2database:h2:2.3.232'
     implementation 'com.google.transit:gtfs-realtime-bindings:0.0.4'
     implementation 'org.mindrot:jbcrypt:0.4'
+    implementation 'com.opencsv:opencsv:5.9'
 }
 
 // Configurazione per il plugin per JAR eseguibile

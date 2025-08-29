@@ -2,9 +2,9 @@ package Controller;
 
 import Model.*;
 import View.LoadingScreen;
+import com.opencsv.CSVReader;
 import org.jxmapviewer.viewer.GeoPosition;
 
-import java.io.BufferedReader;
 import java.io.FileReader;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -33,7 +33,7 @@ public class StaticGTFS
 
     public static void inizializzaDati()
     {
-        ArrayList<String[]> provvisorio = leggi_csv("data/rome_static_gtfs/routes.txt");
+        ArrayList<String[]> provvisorio = leggiCSV("data/rome_static_gtfs/routes.txt");
         //questi pezzi di codice aggiornano la progressBar della LoadingScreen
         LoadingScreen.updateProgress(0, 5, LoadingScreen.progressBar);
 
@@ -48,7 +48,7 @@ public class StaticGTFS
         LoadingScreen.updateProgress(6, 25, LoadingScreen.progressBar);
 
 
-        provvisorio = leggi_csv("data/rome_static_gtfs/trips.txt");
+        provvisorio = leggiCSV("data/rome_static_gtfs/trips.txt");
         LoadingScreen.updateProgress(26, 30, LoadingScreen.progressBar);
 
         for (String[] lista : provvisorio)
@@ -60,7 +60,7 @@ public class StaticGTFS
         }
         LoadingScreen.updateProgress(31, 44, LoadingScreen.progressBar);
 
-        provvisorio = leggi_csv("data/rome_static_gtfs/stop_times.txt");
+        provvisorio = leggiCSV("data/rome_static_gtfs/stop_times.txt");
         LoadingScreen.updateProgress(45, 55, LoadingScreen.progressBar);
 
         for (String[] lista : provvisorio)
@@ -70,7 +70,7 @@ public class StaticGTFS
         }
         LoadingScreen.updateProgress(56, 75, LoadingScreen.progressBar);
 
-        provvisorio = leggi_csv("data/rome_static_gtfs/shapes.txt");
+        provvisorio = leggiCSV("data/rome_static_gtfs/shapes.txt");
         LoadingScreen.updateProgress(76, 80, LoadingScreen.progressBar);
 
         for (String[] lista : provvisorio)
@@ -83,7 +83,7 @@ public class StaticGTFS
         }
         LoadingScreen.updateProgress(81, 100, LoadingScreen.progressBar);
 
-        provvisorio = leggi_csv("data/collegamenti_metro.txt");
+        provvisorio = leggiCSV("data/collegamenti_metro.txt");
         for (String[] lista : provvisorio)
         {
             CollegamentoMetro aggiungi = new CollegamentoMetro(lista[0], lista[2]);
@@ -184,7 +184,7 @@ public class StaticGTFS
     //Da lì si può poi generare ogni singola fermata (oggetto) sulla mappa
 
     //più generalmente restituisce una lista di lista (quest'ultima contiene i valori di ogni riga)
-    public static ArrayList<String[]> leggi_csv(String path)
+    /*public static ArrayList<String[]> leggi_csv(String path)
     {
         //Senza try... catch non è possibile usare FileReader
         try {
@@ -206,6 +206,26 @@ public class StaticGTFS
             System.out.println("Impossibile leggere il file indicato. \n " + path);
             return new ArrayList<>();
         }
+    }*/
+
+    public static ArrayList<String[]> leggiCSV(String path)
+    {
+        ArrayList<String[]> valori = new ArrayList<>();
+
+        try (CSVReader reader = new CSVReader(new FileReader(path)))
+        {
+            String[] linea = reader.readNext(); //Ignora la prima linea
+            while ((linea = reader.readNext()) != null)
+            {
+                valori.add(linea);
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("DEBUG: Impossibile leggere il file indicato: " + path);
+        }
+
+        return valori;
     }
 
     //Metodo sostitutivo di String.split() - questo metodo divide una stringa in un Array in base

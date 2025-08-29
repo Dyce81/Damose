@@ -6,12 +6,8 @@ import Model.ProgressBarUI;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import javax.swing.border.Border;
-
-import static Controller.StaticGTFS.leggi_csv;
 
 public class LoadingScreen extends JDialog {
 
