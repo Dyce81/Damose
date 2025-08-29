@@ -5,6 +5,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.*;
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class Frame extends JFrame{
     private final JLabel testoWiFi;
 
     private CustomWaypoint ultimaFermata;
+    private boolean finestraAvvisoAperta = false;
 
     private static final Color verde = new Color(22, 189, 88);
     private static final Color rosso = new Color(191, 63, 24);
@@ -82,7 +85,7 @@ public class Frame extends JFrame{
         mappa = new Mappa(frame);
 
         //Pannello informazioni laterale per le fermate
-        pannelloInformazioni = new InformazioniFermata();
+        pannelloInformazioni = new InformazioniFermata(this);
         JScrollPane pannello = new JScrollPane(pannelloInformazioni.getPannello());
         pannello.setPreferredSize(new Dimension(200, Integer.MAX_VALUE));
         pannello.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -289,6 +292,34 @@ public class Frame extends JFrame{
 
     public void mostraAvviso(String testo)
     {
-        JDialog avviso = new JDialog(frame, testo, true);
+        if (finestraAvvisoAperta) return;
+
+        JDialog avviso = new JDialog(frame, "Problema sulla linea!", false);
+        avviso.setSize(600, 200);
+        avviso.setLocationRelativeTo(frame);
+        avviso.add(new JLabel(testo));
+        avviso.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) { finestraAvvisoAperta = true; }
+
+            @Override
+            public void windowClosing(WindowEvent e) { finestraAvvisoAperta = false; }
+
+            @Override
+            public void windowClosed(WindowEvent e) { finestraAvvisoAperta = false; }
+
+            @Override
+            public void windowIconified(WindowEvent e) {}
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {}
+
+            @Override
+            public void windowActivated(WindowEvent e) {}
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {}
+        });
+        avviso.setVisible(true);
     }
 }

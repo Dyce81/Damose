@@ -1,4 +1,5 @@
 import Controller.DatabaseManager;
+import Controller.DynamicGTFS;
 import Controller.StaticGTFS;
 import Controller.WiFi;
 import Model.CustomWaypoint;
@@ -37,7 +38,5 @@ public class Main
         //quindi più tardi questa cosa è da aggiustare perché è indecente :(
 
         WiFi.impostaFrame(frame, frame.getMappa());
-
-
     }
 }

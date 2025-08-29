@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 
 public class InformazioniFermata
 {
+    private final Frame padre;
+
     private final JPanel pannello;
     private final JLabel indicazioneFermata;
     private final JLabel nome;
@@ -35,12 +37,15 @@ public class InformazioniFermata
 
     private boolean tracciamentoAttivo = false;
     private String tipoMezzoSelezionato = "";
+    private boolean avvisoMostrato = false;
 
     private static final Color rossoScuro = new Color(143, 51, 51);
     private static final Color rosso = new Color(175, 62, 62);
 
-    public InformazioniFermata()
+    public InformazioniFermata(Frame padre)
     {
+        this.padre = padre;
+
         pannello = new JPanel();
         pannello.setBackground(rossoScuro);
         //pannello.setPreferredSize(new Dimension(200, pannello.getPreferredSize().height)); //forse? (non proprio responsive)
@@ -235,6 +240,15 @@ public class InformazioniFermata
                         Mappa.disegnaLinea(percorso);
 
                         Mappa.getMapViewer().repaint();
+                    }
+
+                    String problema = DynamicGTFS.getServiceAlert(id);
+                    if (!problema.isBlank() && !avvisoMostrato)
+                    {
+                        avvisoMostrato = true;
+                        padre.mostraAvviso(problema);
+                        //TODO: forse al posto di mostrare una finestra andrebbe proprio lasciato
+                        // scritto da qualche parte nel pannello/sulla mappa?
                     }
 
                     //prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);

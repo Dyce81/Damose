@@ -1,5 +1,6 @@
 package Controller;
 
+import View.Frame;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.transit.realtime.GtfsRealtime.*;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -15,6 +16,7 @@ public class DynamicGTFS
 {
     private final static String tripUpdateUrl = "https://romamobilita.it/sites/default/files/rome_rtgtfs_trip_updates_feed.pb";
     private final static String vehicleUrl = "https://romamobilita.it/sites/default/files/rome_rtgtfs_vehicle_positions_feed.pb";
+    private final static String serviceAlertsUrl = "https://romamobilita.it/sites/default/files/rome_rtgtfs_service_alerts_feed.pb";
 
     private static TripUpdate ultimoTripUpdate;
     private static TripDescriptor ultimoTripDescriptor;
@@ -111,6 +113,61 @@ public class DynamicGTFS
         catch (Exception e)
         {
             System.out.println("DEBUG: Errore nella ricezione del messaggio (Dati GTFS dinamici)");
+        }
+
+        return "";
+    }
+
+    // Controlla se c'è qualche avviso relativo alla linea selezionata (passata come parametro qui)
+    public static String getServiceAlert(String routeId)
+    {
+        if (!WiFi.wifi_connesso()) return "";
+
+        try (InputStream input = new URL(serviceAlertsUrl).openStream())
+        {
+            FeedMessage feed = FeedMessage.parseFrom(input);
+
+            for (FeedEntity entita : feed.getEntityList())
+            {
+                Alert allerta = entita.getAlert();
+                for (EntitySelector entitySelector : entita.getAlert().getInformedEntityList())
+                {
+                    if (entitySelector.getRouteId().equals(routeId))
+                    {
+                        //System.out.println(entita);
+                        //TODO: cambiare i nomi dei campi qui sotto
+
+                        long adesso = Instant.now().getEpochSecond();
+                        long tempoInizio = allerta.getActivePeriod(0).getStart();
+                        long tempoFine = allerta.getActivePeriod(0).getEnd();
+
+                        String orarioValidita = "Valido tutto il giorno.";
+
+                        if (tempoInizio < adesso && adesso < tempoFine)
+                        {
+                            String stringaInizioTempo = Instant.ofEpochSecond(tempoInizio)
+                                    .atZone(ZoneId.systemDefault())
+                                    .format(DateTimeFormatter.ofPattern("HH:mm"));
+
+                            String stringaFineTempo = Instant.ofEpochSecond(tempoFine)
+                                    .atZone(ZoneId.systemDefault())
+                                    .format(DateTimeFormatter.ofPattern("HH:mm"));
+
+                            orarioValidita = "Valido dalle " + stringaInizioTempo + " alle " + stringaFineTempo;
+                        }
+
+                        String causa = "<html><i>Causa indicata:</i><br>" +
+                                allerta.getDescriptionText().getTranslation(0).getText() +
+                                "</html>";
+
+                        return "<html>Problema sulla linea:<br><br>" + causa + "<br><br><i>" + orarioValidita + "</i></html>";
+                    }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
 
         return "";
