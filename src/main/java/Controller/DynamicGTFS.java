@@ -1,12 +1,11 @@
 package Controller;
 
-import View.Frame;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.transit.realtime.GtfsRealtime.*;
 import org.jxmapviewer.viewer.GeoPosition;
 
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -25,7 +24,7 @@ public class DynamicGTFS
     //alla funzione chiamante, che si occuperà poi di disegnare i mezzi
     public static ArrayList<GeoPosition> getVehiclePosition(String routeId)
     {
-        try (InputStream input = new URL(vehicleUrl).openStream())
+        try (InputStream input = new URI(vehicleUrl).toURL().openStream())
         {
             FeedMessage feed = FeedMessage.parseFrom(input);
             ArrayList<GeoPosition> lista = new ArrayList<>();
@@ -38,25 +37,16 @@ public class DynamicGTFS
                 if (!idTrovato.equals(routeId)) continue;
 
                 VehiclePosition posizione = entita.getVehicle();
-                //String tripId = posizione.getTrip().getTripId();
-                //String vehicleId = posizione.getVehicle().getId();
                 double latitudine = posizione.getPosition().getLatitude();
                 double longitudine = posizione.getPosition().getLongitude();
-                //long timestamp = posizione.getTimestamp();*/
 
                 lista.add(new GeoPosition(latitudine, longitudine));
-                /*lista.add(posizione.toString());
-                lista.add(tripId);
-                lista.add(vehicleId);
-                lista.add(Double.toString(latitudine));
-                lista.add(Double.toString(longitudine));
-                lista.add(Long.toString(timestamp));*/
             }
             return lista;
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            System.out.println("DEBUG: Errore nell'ottenimento delle informazioni sui veicoli.");
         }
 
         return new ArrayList<>();
@@ -64,9 +54,9 @@ public class DynamicGTFS
 
     public static String getTripUpdate(String routeId, String stopId)
     {
-        if (!WiFi.wifi_connesso()) return "";
+        if (!WiFi.connesso()) return "";
 
-        try (InputStream input = new URL(tripUpdateUrl).openStream()) {
+        try (InputStream input = new URI(tripUpdateUrl).toURL().openStream()) {
             FeedMessage feed = FeedMessage.parseFrom(input);
 
             long adesso = Instant.now().getEpochSecond();
@@ -121,9 +111,9 @@ public class DynamicGTFS
     // Controlla se c'è qualche avviso relativo alla linea selezionata (passata come parametro qui)
     public static String getServiceAlert(String routeId)
     {
-        if (!WiFi.wifi_connesso()) return "";
+        if (!WiFi.connesso()) return "";
 
-        try (InputStream input = new URL(serviceAlertsUrl).openStream())
+        try (InputStream input = new URI(serviceAlertsUrl).toURL().openStream())
         {
             FeedMessage feed = FeedMessage.parseFrom(input);
 
@@ -167,7 +157,7 @@ public class DynamicGTFS
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            System.out.println("DEBUG: Problema con URL dei serviceAlerts");
         }
 
         return "";
@@ -179,7 +169,7 @@ public class DynamicGTFS
 
     public static int getRitardo(TripUpdate trip)
     {
-        if (!WiFi.wifi_connesso() || !trip.isInitialized()) return 0;
+        if (!WiFi.connesso() || !trip.isInitialized()) return 0;
 
         // Ottiene il ritardo della corsa tramite trip.getDelay() e lo converte in secondi
         return (trip.getDelay() % 3600) / 60;
@@ -187,7 +177,7 @@ public class DynamicGTFS
 
     public static String getStato(TripDescriptor trip)
     {
-        if (!WiFi.wifi_connesso() || !trip.isInitialized()) return "";
+        if (!WiFi.connesso() || !trip.isInitialized()) return "";
 
         String stato = trip.getScheduleRelationship().toString();
 
