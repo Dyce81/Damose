@@ -22,9 +22,9 @@ import java.util.List;
 
 public class Mappa
 {
-    public static JXMapViewer mappa;
-    public static Painter<JXMapViewer> painter = null;
-    public static boolean compound = false;
+    private static JXMapViewer mappa;
+    private static Painter<JXMapViewer> painter = null;
+    private static boolean compound = false;
 
     private static final TileFactoryInfo info = new OSMTileFactoryInfo();
     private static final DefaultTileFactory tileFactory = new DefaultTileFactory(info);
@@ -37,7 +37,7 @@ public class Mappa
     {
         mappa = new JXMapViewer();
 
-        if (WiFi.WiFi)
+        if (WiFi.connesso())
         {
             //TileFactoryInfo info = new OSMTileFactoryInfo();
             //DefaultTileFactory tileFactory = new DefaultTileFactory(info);
@@ -70,7 +70,7 @@ public class Mappa
         mappa.addKeyListener(new PanKeyListener(mappa));
     }
 
-    public void cambia_posizione(double latitude, double longitude)
+    public void impostaPosizione(double latitude, double longitude)
     {
         //imposta la posizione effettiva
         GeoPosition posizione = new GeoPosition(latitude, longitude);
@@ -78,7 +78,7 @@ public class Mappa
         mappa.setZoom(2);
     }
 
-    public static void set_painter(Painter<JXMapViewer> p)
+    public static void setPainter(Painter<JXMapViewer> p)
     {
         if (compound) return;
         if (painter == null) painter = p; //se painter non è già stato definito, impostalo correttamente
@@ -93,7 +93,7 @@ public class Mappa
 
     public void cambiaStatoMappa()
     {
-        if (WiFi.wifi_connesso())
+        if (WiFi.connesso())
         {
             if (mappa.getTileFactory() != tileFactory)
                 mappa.setTileFactory(tileFactory);
@@ -113,7 +113,7 @@ public class Mappa
         painters.add(rPainter);
         CompoundPainter<JXMapViewer> painter = new CompoundPainter<>(painters);
         compound = false;
-        set_painter(painter);
+        setPainter(painter);
         compound = true;
 
         //mappa.zoomToBestFit(new HashSet<>(percorso), 0.7);
