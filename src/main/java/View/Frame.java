@@ -18,15 +18,10 @@ import org.jxmapviewer.viewer.GeoPosition;
 //TODO: la classe inizia ad essere un po' troppo lunga, quindi più tardi sarebbe meglio scomporre in varie classi il frame
 
 public class Frame extends JFrame{
-    public final JFrame frame;
-    public final Mappa mappa;
-    public ArrayList<CustomWaypoint> listaFermate;
-    //TODO: credo che listaFermate possa essere sostituito in ogni caso da StaticGTFS.stops
+    private final JFrame frame;
+    private final Mappa mappa;
 
-    //private final JComboBox<CustomWaypoint> testoFermata = new JComboBox<>();
     private final FilteredComboBox<CustomWaypoint> testoFermata = new FilteredComboBox<>();
-
-    //private final JComboBox<Route> testoLinea = new JComboBox<>();
     private final FilteredComboBox<Route> testoLinea = new FilteredComboBox<>();
 
     private final InformazioniFermata pannelloInformazioni;
@@ -47,7 +42,7 @@ public class Frame extends JFrame{
         frame.setLocationRelativeTo(null);
 
         //Casella testo e pulsante per la ricerca delle fermate
-        JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
+        JPanel pannelloSuperiore = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
 
         testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
         testoFermata.setRenderer(new StopsComboBoxRenderer());
@@ -86,10 +81,11 @@ public class Frame extends JFrame{
 
         //accesso alla pagina di login
         profileButton.addActionListener(new ActionListener()
-        {public void actionPerformed(ActionEvent e)
         {
-            LoginPage loginPage = new LoginPage();
-        }
+            public void actionPerformed(ActionEvent e)
+            {
+                LoginPage loginPage = new LoginPage();
+            }
         });
 
         //tasto per accesso alle impostazioni
@@ -108,38 +104,21 @@ public class Frame extends JFrame{
         }
         });
 
-        pannello_sup.add(profileButton);
-        pannello_sup.add(testoLinea);
-        pannello_sup.add(testoFermata);
-        pannello_sup.add(settings);
-        pannello_sup.setBackground(new Color(175, 62, 62));
+        pannelloSuperiore.add(profileButton);
+        pannelloSuperiore.add(testoLinea);
+        pannelloSuperiore.add(testoFermata);
+        pannelloSuperiore.add(settings);
+        pannelloSuperiore.setBackground(new Color(175, 62, 62));
 
-        frame.add(pannello_sup, BorderLayout.PAGE_START);
+        frame.add(pannelloSuperiore, BorderLayout.PAGE_START);
         frame.setVisible(true);
     }
-
-    //questa funzione riempie la combo box con i nomi delle fermate
-    /*public void imposta_combo_box(ArrayList<String> nomi)
-    {
-        /*testoFermata.setRenderer(new DefaultListCellRenderer()
-        {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-            {
-                JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                Icon icona = new Icon()
-            }
-        });
-
-        for (String s : nomi)
-            testoFermata.addItem(s);
-    }*/
 
     //Fa esattamente quello che sembra
     public void imposta_combo_box()
     {
         testoFermata.addItem(new CustomWaypoint("null", "- Seleziona una fermata -", new GeoPosition(0, 0)));
-        for (CustomWaypoint f : listaFermate)
+        for (CustomWaypoint f : StaticGTFS.stops)
         {
             testoFermata.addItem(f);
         }
@@ -147,7 +126,7 @@ public class Frame extends JFrame{
         testoFermata.setSelectedItem("- Seleziona una fermata -");
         testoFermata.hidePopup();
 
-        testoLinea.addItem(new Route("null", "- Seleziona una linea -", -1, ""));
+        testoLinea.addItem(new Route("null", "- Seleziona una linea -", -1));
         for (Route l : StaticGTFS.routes)
         {
             testoLinea.addItem(l);
@@ -168,7 +147,7 @@ public class Frame extends JFrame{
             GestoreWaypoint.ultimaFermata.deseleziona();
 
         //cerca la fermata dentro la lista fermate;
-        for (CustomWaypoint f : this.listaFermate)
+        for (CustomWaypoint f : StaticGTFS.stops)
         {
             if (f.getNome().equals(nomeFermata)) //fermata trovata
             {
@@ -184,7 +163,6 @@ public class Frame extends JFrame{
     private void cercaLinea(ActionEvent e)
     {
         if (testoLinea.getSelectedItem() == null || testoLinea.getSelectedIndex() == -1) return;
-        //System.out.println(testoLinea.getSelectedItem());
         String nomeLinea = testoLinea.getSelectedItem().toString();
 
         List<GeoPosition> percorso = StaticGTFS.getPercorso(nomeLinea);
@@ -209,11 +187,6 @@ public class Frame extends JFrame{
         }
 
         testoWiFi.repaint();
-    }
-
-    public JFrame getFrame()
-    {
-        return frame;
     }
 
     public Mappa getMappa()

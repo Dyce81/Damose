@@ -155,7 +155,7 @@ public class DynamicGTFS
                 }
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             System.out.println("DEBUG: Problema con URL dei serviceAlerts");
         }

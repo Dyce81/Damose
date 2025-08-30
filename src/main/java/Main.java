@@ -28,7 +28,6 @@ public class Main
 
         Frame frame = new Frame(600, 800, "Damose");
         GestoreWaypoint.posizionaFermate();
-        frame.listaFermate = StaticGTFS.stops;
         CustomWaypoint.setPannello(frame.getPannelloInformazioni());
         frame.imposta_combo_box(); //se questa riga viene spostata sopra, la combobox NON funziona,
         //quindi più tardi questa cosa è da aggiustare perché è indecente :(

@@ -6,11 +6,10 @@ import java.time.LocalTime;
 
 public class StopTime
 {
-    private String tripId;
-    private String stopId;
-    private LocalTime orarioArrivo;
-    private LocalTime orarioPartenza;
-    private int stopSequenza;
+    private final String tripId;
+    private final String stopId;
+    private final LocalTime orarioArrivo;
+    private final LocalTime orarioPartenza;
 
     public StopTime(String tripId, String stopId, String orarioArrivo, String orarioPartenza)
     {
@@ -24,37 +23,16 @@ public class StopTime
         return tripId;
     }
 
-    public void setTripId(String tripId) {
-        this.tripId = tripId;
-    }
-
     public String getStopId() {
         return stopId;
-    }
-
-    public void setStopId(String stopId) {
-        this.stopId = stopId;
     }
 
     public LocalTime getOrarioArrivo() {
         return orarioArrivo;
     }
 
-    public void setOrarioArrivo(String orarioArrivo) {
-        this.orarioArrivo = StaticGTFS.parseTimeCorretto(orarioArrivo);
-    }
-
     public LocalTime getOrarioPartenza() {
         return orarioPartenza;
-    }
-
-    public void setOrarioPartenza(String orarioPartenza) {
-        this.orarioPartenza = StaticGTFS.parseTimeCorretto(orarioPartenza);
-    }
-
-    public int getStopSequenza()
-    {
-        return stopSequenza;
     }
 
     @Override

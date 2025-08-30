@@ -30,7 +30,6 @@ public class StaticGTFS
         // sia in grado di capire in automatica quale lista popolare (magari un solo for con dentro uno
         // switch?)
 
-        //DA QUI E' NUOVO
         ArrayList<String[]> provvisorio = leggiCSV("data/rome_static_gtfs/stops.txt");
 
         for (String[] lista : provvisorio)
@@ -42,9 +41,9 @@ public class StaticGTFS
             // location_type != 1 (1 è la stazione fisica, altri valori rappresentano
             // "sottocomponenti" della stazione stessa)
             if (lista[0].startsWith("ITO"))
+            {
                 if (!lista[9].equals("1")) continue;
-                else
-                {
+                else {
                     // Sposta leggermente la fermata, perché quei geni di Roma Capitale hanno messo
                     // (per OGNI stazione della metro) una fermata dell'autobus ESATTAMENTE alle
                     // stesse identiche coordinate, rendendo di fatto impossibile cliccare
@@ -53,23 +52,13 @@ public class StaticGTFS
                     // ad essere piazzate sulla mappa)
                     longit += 0.0002;
                 }
+            }
 
-            //double longit = Double.parseDouble(valori[4]);
-            //double latit = Double.parseDouble(valori[5]);
             GeoPosition coords = new GeoPosition(longit, latit);
             CustomWaypoint stop = new CustomWaypoint(lista[0], lista[2], coords);
-            //waypoints.add(cwp);
 
-            //nomi_fermate.add(valori[2].toUpperCase());
-            //listaFermate.add(cwp);
             stops.add(stop);
         }
-
-        /*CustomWaypointPainter waypointPainter = new CustomWaypointPainter();
-        waypointPainter.setWaypoints(new HashSet<>(stops));
-        Mappa.setPainter(waypointPainter);*/
-
-        //DA QUI E' VECCHIO
 
         provvisorio = leggiCSV("data/rome_static_gtfs/routes.txt");
         //questi pezzi di codice aggiornano la progressBar della LoadingScreen
@@ -77,7 +66,7 @@ public class StaticGTFS
 
         for (String[] lista : provvisorio)
         {
-            Route aggiungi = new Route(lista[0], lista[2], Integer.parseInt(lista[4]), lista[5]);
+            Route aggiungi = new Route(lista[0], lista[2], Integer.parseInt(lista[4]));
             routes.add(aggiungi);
         }
         LoadingScreen.updateProgress(6, 25, LoadingScreen.progressBar);
