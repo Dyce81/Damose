@@ -49,14 +49,7 @@ public class Frame extends JFrame{
         //Casella testo e pulsante per la ricerca delle fermate
         JPanel pannello_sup = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
 
-        ////testoFermata.setEditable(true);
         testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
-        /*testoFermata.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(e);
-            }
-        });*/
         testoFermata.setRenderer(new StopsComboBoxRenderer());
         testoFermata.setMaximumRowCount(5);
 
@@ -64,23 +57,6 @@ public class Frame extends JFrame{
         testoLinea.addActionListener(this::cercaLinea);
         testoLinea.setRenderer(new RoutesComboBoxRenderer());
         testoLinea.setMaximumRowCount(5);
-
-        /*testoFermata.setRenderer(new ListCellRenderer<String>() {
-            @Override
-            public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus) {
-                JLabel testo = new JLabel(value);
-                //testo.setIcon(value.getIcona());
-
-                if (isSelected)
-                {
-                    testo.setBackground(list.getSelectionBackground());
-                } else {
-                    testo.setBackground(list.getBackground());
-                }
-
-                return testo;
-            }
-        });*/
 
         mappa = new Mappa(frame);
 
@@ -196,7 +172,7 @@ public class Frame extends JFrame{
         {
             if (f.getNome().equals(nomeFermata)) //fermata trovata
             {
-                mappa.cambia_posizione(f.getLatitudine(), f.getLongitudine());
+                mappa.impostaPosizione(f.getLatitudine(), f.getLongitudine());
                 GestoreWaypoint.ultimaFermata = f;
                 f.seleziona();
                 //mostraInformazioni(f);
@@ -211,33 +187,6 @@ public class Frame extends JFrame{
         //System.out.println(testoLinea.getSelectedItem());
         String nomeLinea = testoLinea.getSelectedItem().toString();
 
-        //provvisorio!!!! (PARTE DA QUI)
-        /*
-        ArrayList<Trip> viaggi = StaticGTFS.trips.stream()
-                .filter(trip -> trip.getRouteId().equals(nomeLinea)).collect(Collectors.toCollection(ArrayList::new));
-
-        if (viaggi.isEmpty()) return;
-
-        Trip viaggioSelezionato = viaggi.getFirst();*/
-
-        /*ArrayList<GeoPosition> percorso = StaticGTFS.stopTimes.stream()
-                .filter(st -> st.getTripId().equals(viaggioSelezionato.getId()))
-                .sorted(Comparator.comparingInt(StopTime::getStopSequenza))
-                .map(st -> {
-                    CustomWaypoint f = listaFermate.stream()
-                            .filter(s -> s.getId().equals(st.getStopId()))
-                            .findFirst()
-                            .orElse(null);
-                    return f != null ? new GeoPosition(f.getLatitudine(), f.getLongitudine()) : null;
-                })
-                .filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));*/
-
-        /*List<GeoPosition> percorso = StaticGTFS.shapes.stream()
-                .filter(sp -> sp.getId().equals(viaggioSelezionato.getShapeId()))
-                .sorted(Comparator.comparingInt(PuntoShape::getSequenza))
-                .map(sp -> new GeoPosition(sp.getLatitudine(), sp.getLongitudine()))
-                .collect(Collectors.toList());*/
-
         List<GeoPosition> percorso = StaticGTFS.getPercorso(nomeLinea);
         Mappa.disegnaLinea(percorso);
         Mappa.getMapViewer().zoomToBestFit(new HashSet<>(percorso), 0.7);
@@ -248,19 +197,6 @@ public class Frame extends JFrame{
             pannelloInformazioni.mostraInfoLinea(nomeLinea, true);
         }
     }
-
-    //Questo metodo mostra le informazioni della fermata selezionata (al lato della finestra?)
-    /*public void mostraInformazioni(CustomWaypoint fermata)
-    {
-        pannelloInformazioni.setNome(fermata.getNome());
-
-        //PROVA!!!!
-        ArrayList<String> tripsIds = new ArrayList<>();
-        /*for (Map<String, String> orario : orari)
-        {
-            if (orario.get(""));
-        }
-    }*/
 
     public void cambiaStatoWiFi()
     {
