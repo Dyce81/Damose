@@ -1,5 +1,4 @@
 import Controller.DatabaseManager;
-import Controller.DynamicGTFS;
 import Controller.StaticGTFS;
 import Controller.WiFi;
 import Model.CustomWaypoint;
@@ -23,8 +22,7 @@ public class Main
         dbManager.createUsersTable();
 
         StaticGTFS.inizializzaDati();
-
-        WiFi.wifi_controller();
+        WiFi.inizializza();
 
         loadingScreen.dispose();
 

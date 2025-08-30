@@ -35,7 +35,7 @@ public class GestoreWaypoint {
 
     public void posizionaFermate(Mappa mappa) {
         ArrayList<String[]> listaValoriFermate;
-        listaValoriFermate = StaticGTFS.leggi_csv("data/rome_static_gtfs/stops.txt");
+        listaValoriFermate = StaticGTFS.leggiCSV("data/rome_static_gtfs/stops.txt");
 
         //nomi_fermate.add("-- Seleziona una fermata --");
 
@@ -73,7 +73,7 @@ public class GestoreWaypoint {
 
         //forse
         //mappa.set_painter(waypoint_painter);
-        Mappa.set_painter(waypoint_painter);
+        Mappa.setPainter(waypoint_painter);
     }
 
     //Collega alla mappa un mouse listener per poter interagire con i singoli waypoint (che sono immagini)
