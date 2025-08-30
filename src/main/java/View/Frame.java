@@ -21,6 +21,7 @@ public class Frame extends JFrame{
     public final JFrame frame;
     public final Mappa mappa;
     public ArrayList<CustomWaypoint> listaFermate;
+    //TODO: credo che listaFermate possa essere sostituito in ogni caso da StaticGTFS.stops
 
     //private final JComboBox<CustomWaypoint> testoFermata = new JComboBox<>();
     private final FilteredComboBox<CustomWaypoint> testoFermata = new FilteredComboBox<>();
@@ -31,7 +32,6 @@ public class Frame extends JFrame{
     private final InformazioniFermata pannelloInformazioni;
     private final JLabel testoWiFi;
 
-    private CustomWaypoint ultimaFermata;
     private boolean finestraAvvisoAperta = false;
 
     private static final Color verde = new Color(22, 189, 88);

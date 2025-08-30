@@ -130,13 +130,11 @@ public class CustomWaypoint extends DefaultWaypoint
                         if (c.getRouteId().equals(r.getId()))
                             lineeTrovate.add(r);
 
-            System.out.println(id);
-
             //TODO: attualmente c'è un file fatto da noi per verificare quali linee della metro
-            //corrispondono ad una certa fermata;
-            //nel file stoptimes.txt mancano gli orari di arrivo delle metropolitane, quindi non
-            //è possibile mettere in correlazione le routes e le stops correttamente.
-            //forse c'è un modo, ma meglio verificarlo alla fine
+            // corrispondono ad una certa fermata;
+            // nel file stoptimes.txt mancano gli orari di arrivo delle metropolitane, quindi non
+            // è possibile mettere in correlazione le routes e le stops correttamente.
+            // forse c'è un modo, ma meglio verificarlo alla fine
         }
         else {
             Set<String> tripIds = new HashSet<>();

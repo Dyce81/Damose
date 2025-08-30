@@ -88,9 +88,7 @@ public class StaticGTFS
 
         for (String[] lista : provvisorio)
         {
-            Trip aggiungi = new Trip(lista[2], lista[0], lista[3], lista[7]);
-
-            aggiungi.setServiceId(lista[1]);
+            Trip aggiungi = new Trip(lista[2], lista[0], lista[7]);
             trips.add(aggiungi);
         }
         LoadingScreen.updateProgress(31, 44, LoadingScreen.progressBar);

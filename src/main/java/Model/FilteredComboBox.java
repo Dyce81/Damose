@@ -3,7 +3,6 @@ package Model;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class FilteredComboBox<T> extends JComboBox<T>
 {
-    private List<T> entries;
+    private final List<T> entries;
 
     public List<T> getEntries()
     {
@@ -21,8 +20,6 @@ public class FilteredComboBox<T> extends JComboBox<T>
 
     public FilteredComboBox()
     {
-        //super(entries.toArray());
-        //this.entries = entries;
         this.entries = new ArrayList<>();
         this.setEditable(true);
 
@@ -33,14 +30,7 @@ public class FilteredComboBox<T> extends JComboBox<T>
             @Override
             public void keyReleased(KeyEvent e)
             {
-                SwingUtilities.invokeLater(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        filtra(textField.getText());
-                    }
-                });
+                SwingUtilities.invokeLater(() -> filtra(textField.getText()));
             }
         });
     }
@@ -55,9 +45,8 @@ public class FilteredComboBox<T> extends JComboBox<T>
     {
         if (testo.isBlank())
         {
-            List<T> elementi = entries;
             this.setModel(
-                    new DefaultComboBoxModel(elementi.toArray())
+                    new DefaultComboBoxModel(entries.toArray())
             );
             this.setSelectedItem("");
             this.showPopup();

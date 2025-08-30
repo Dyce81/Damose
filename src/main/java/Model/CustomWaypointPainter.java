@@ -20,9 +20,8 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
     private final int offsetVisibilita = 30;
     private static boolean tracciamentoAttivo = false;
     private static ArrayList<GeoPosition> posizioniMezzi = new ArrayList<>();
-    private static String lineaTracciata;
 
-    private static final Image iconaAutobus = new ImageIcon("assets/autobus_icona.png").getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);;
+    private static final Image iconaAutobus = new ImageIcon("assets/autobus_icona.png").getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
 
     @Override
     protected void doPaint(Graphics2D g, JXMapViewer map, int larghezza, int altezza)
