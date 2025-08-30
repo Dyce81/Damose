@@ -2,6 +2,7 @@ package Controller;
 
 import Model.*;
 import View.LoadingScreen;
+import View.Mappa;
 import com.opencsv.CSVReader;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -12,17 +13,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/*                                  IMPORTANTE
-    Sarebbe meglio usare una libreria come OpenCSV per leggere i file .csv; per il momento
-    è stato implementato un metodo (dividi_stringa).
- */
-
-//SOLO PER ADESSO questa classe contiene anche il riferimento (statico) alle liste di routes, trips,
-//(shapes) e stopTimes
-// - no forse conviene che rimangano qui (magari più tardi insieme a stops)
-
 public class StaticGTFS
 {
+    public static ArrayList<CustomWaypoint> stops = new ArrayList<>();
     public static ArrayList<Route> routes = new ArrayList<>();
     public static ArrayList<Trip> trips = new ArrayList<>();
     public static ArrayList<StopTime> stopTimes = new ArrayList<>();
@@ -33,13 +26,55 @@ public class StaticGTFS
 
     public static void inizializzaDati()
     {
-        ArrayList<String[]> provvisorio = leggiCSV("data/rome_static_gtfs/routes.txt");
+        //TODO: (forse) creare un metodo unico che prenda in input il percorso del file da leggere e
+        // sia in grado di capire in automatica quale lista popolare (magari un solo for con dentro uno
+        // switch?)
+
+        //DA QUI E' NUOVO
+        ArrayList<String[]> provvisorio = leggiCSV("data/rome_static_gtfs/stops.txt");
+
+        for (String[] lista : provvisorio)
+        {
+            double longit = Double.parseDouble(lista[4]);
+            double latit = Double.parseDouble(lista[5]);
+
+            // Se la stazione/fermata analizzata è della metro, ignorare quelle con campo
+            // location_type != 1 (1 è la stazione fisica, altri valori rappresentano
+            // "sottocomponenti" della stazione stessa)
+            if (lista[0].startsWith("ITO"))
+                if (!lista[9].equals("1")) continue;
+                else
+                {
+                    // Sposta leggermente la fermata, perché quei geni di Roma Capitale hanno messo
+                    // (per OGNI stazione della metro) una fermata dell'autobus ESATTAMENTE alle
+                    // stesse identiche coordinate, rendendo di fatto impossibile cliccare
+                    // una delle due (solitamente la fermata dell'autobus, perché in stops.txt
+                    // le fermate della metro sono le ultime ad essere specificate, ergo le ultime
+                    // ad essere piazzate sulla mappa)
+                    longit += 0.0002;
+                }
+
+            //double longit = Double.parseDouble(valori[4]);
+            //double latit = Double.parseDouble(valori[5]);
+            GeoPosition coords = new GeoPosition(longit, latit);
+            CustomWaypoint stop = new CustomWaypoint(lista[0], lista[2], coords);
+            //waypoints.add(cwp);
+
+            //nomi_fermate.add(valori[2].toUpperCase());
+            //listaFermate.add(cwp);
+            stops.add(stop);
+        }
+
+        /*CustomWaypointPainter waypointPainter = new CustomWaypointPainter();
+        waypointPainter.setWaypoints(new HashSet<>(stops));
+        Mappa.setPainter(waypointPainter);*/
+
+        //DA QUI E' VECCHIO
+
+        provvisorio = leggiCSV("data/rome_static_gtfs/routes.txt");
         //questi pezzi di codice aggiornano la progressBar della LoadingScreen
         LoadingScreen.updateProgress(0, 5, LoadingScreen.progressBar);
 
-        //TODO: (forse) creare un metodo unico che prenda in input il percorso del file da leggere e
-        //sia in grado di capire in automatica quale lista popolare (magari un solo for con dentro uno
-        //switch?)
         for (String[] lista : provvisorio)
         {
             Route aggiungi = new Route(lista[0], lista[2], Integer.parseInt(lista[4]), lista[5]);
@@ -108,7 +143,7 @@ public class StaticGTFS
                 .filter(st -> viaggiTrovati.stream().anyMatch(t -> t.getId().equals(st.getTripId())))
                 .toList();
 
-        List<CustomWaypoint> fermate = GestoreWaypoint.listaFermate.stream()
+        List<CustomWaypoint> fermate = stops.stream()
                 .filter(f -> orariFermate.stream().anyMatch(st -> st.getStopId().equals(f.getId())))
                 .toList();
 
@@ -122,9 +157,6 @@ public class StaticGTFS
 
     public static String getTripUpdate(String stopId, String routeId)
     {
-        //long adesso = Instant.now().getEpochSecond();
-        //System.out.println(adesso);
-
         List<Trip> viaggiTrovati = trips.stream()
                 .filter(t -> t.getRouteId().equals(routeId))
                 .toList();
@@ -154,10 +186,7 @@ public class StaticGTFS
         // dover aggiungere a mano le linee a questo metodo
         return switch (routeId)
         {
-            case "248" -> true;
-            case "249" -> true;
-            case "305" -> true;
-            case "342" -> true;
+            case "248", "249", "305", "342" -> true;
             default -> false;
         };
     }
@@ -179,35 +208,6 @@ public class StaticGTFS
         };
     }
 
-    //Questo metodo restituisce un'arraylist di array, dove ciascuna lista interna
-    //indica i valori di una singola fermata; quindi l'array esterno racchiude tutte le fermate.
-    //Da lì si può poi generare ogni singola fermata (oggetto) sulla mappa
-
-    //più generalmente restituisce una lista di lista (quest'ultima contiene i valori di ogni riga)
-    /*public static ArrayList<String[]> leggi_csv(String path)
-    {
-        //Senza try... catch non è possibile usare FileReader
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
-
-            ArrayList<String[]> lista_fermate = new ArrayList<>();
-
-            String linea;
-            //linea = reader.readLine(); //Ignora la prima riga (contiene i nomi dei campi)
-            reader.readLine();
-            while ((linea = reader.readLine()) != null)
-            {
-                String[] valori = dividi_stringa(linea, ',').toArray(new String[0]);
-                lista_fermate.add(valori);
-            }
-
-            return lista_fermate;
-        } catch (Exception e) {
-            System.out.println("Impossibile leggere il file indicato. \n " + path);
-            return new ArrayList<>();
-        }
-    }*/
-
     public static ArrayList<String[]> leggiCSV(String path)
     {
         ArrayList<String[]> valori = new ArrayList<>();
@@ -226,31 +226,6 @@ public class StaticGTFS
         }
 
         return valori;
-    }
-
-    //Metodo sostitutivo di String.split() - questo metodo divide una stringa in un Array in base
-    //al carattere separatore scelto; a differenze di String.split(), in un caso come ",," il metodo
-    //comunque restituisce un valore vuoto
-    public static ArrayList<String> dividi_stringa(String valore, char separatore)
-    {
-        //String buffer = "";
-        StringBuilder buffer = new StringBuilder();
-        ArrayList<String> lista = new ArrayList<>();
-        for (int c = 0; c < valore.length(); c++)
-        {
-            if (valore.charAt(c) == separatore)
-            {
-                lista.add(buffer.toString());
-                buffer.delete(0, buffer.length());
-                continue;
-            }
-            buffer.append(valore.charAt(c));
-            //buffer += valore.charAt(c);
-        }
-
-        lista.add(buffer.toString());
-        //lista.add(buffer);
-        return lista;
     }
 
     public static LocalTime parseTimeCorretto(String tempo)

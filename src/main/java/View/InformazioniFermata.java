@@ -197,6 +197,7 @@ public class InformazioniFermata
                     String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
                     if (tempo.isEmpty()) {
                         System.out.println("DEBUG: Connesso a internet ma orario vuoto - orario previsto staticamente");
+                        // TODO: a volte questo metodo (StaticGTFS.getTripUpdate) sembra non trovare mai un risultato, andando avanti all'infinito. questa cosa è da risolvere
                         tempo = StaticGTFS.getTripUpdate(fermata.getId(), id);
                         avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
                         infoLinea.add(avvisoPrevisione);

@@ -47,6 +47,7 @@ public class WiFi
             URLConnection conn = url.openConnection();
             conn.setConnectTimeout(5000); //Non so se sono necessari? (forse meglio averli comunque?)
             conn.setReadTimeout(3000);
+            conn.connect();
         }
         catch (Exception e)
         {

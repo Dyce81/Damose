@@ -17,13 +17,7 @@ import java.util.HashSet;
 // caso vengono gestite dal frame stesso
 
 public class GestoreWaypoint {
-    //Come suggerisce il nome, contiene tutti gli oggetti delle fermate
     public final static ArrayList<CustomWaypoint> listaFermate = new ArrayList<>();
-    //public final static ArrayList<String> nomi_fermate = new ArrayList<>();
-    private final static Set<CustomWaypoint> waypoints = new HashSet<>();
-    //questo era originariamente locale all'interno del metodo "elabora_fermate"; probabilmente
-    //converebbe in locale, magari passandolo per riferimento come parametro quando si
-    //richiama la funzione
     public static WaypointPainter<CustomWaypoint> waypoint_painter = new CustomWaypointPainter();
 
     public static CustomWaypoint ultimaFermata;
@@ -33,51 +27,17 @@ public class GestoreWaypoint {
     // visto che adesso ci sono due liste (waypoints e listaFermate), mentre se ne potrebbe fare solo
     // una (stops) (forse?)
 
-    public void posizionaFermate(Mappa mappa) {
-        ArrayList<String[]> listaValoriFermate;
-        listaValoriFermate = StaticGTFS.leggiCSV("data/rome_static_gtfs/stops.txt");
-
-        //nomi_fermate.add("-- Seleziona una fermata --");
-
-        for (String[] valori : listaValoriFermate) {
-            double longit = Double.parseDouble(valori[4]);
-            double latit = Double.parseDouble(valori[5]);
-
-            // Se la stazione/fermata analizzata è della metro, ignorare quelle con campo
-            // location_type != 1 (1 è la stazione fisica, altri valori rappresentano
-            // "sottocomponenti" della stazione stessa)
-            if (valori[0].startsWith("ITO"))
-                if (!valori[9].equals("1")) continue;
-            else
-            {
-                // Sposta leggermente la fermata, perché quei geni di Roma Capitale hanno messo
-                // (per OGNI stazione della metro) una fermata dell'autobus ESATTAMENTE alle
-                // stesse identiche coordinate, rendendo di fatto impossibile cliccare
-                // una delle due (solitamente la fermata dell'autobus, perché in stops.txt
-                // le fermate della metro sono le ultime ad essere specificate, ergo le ultime
-                // ad essere piazzate sulla mappa)
-                longit += 0.0002;
-            }
-
-            //double longit = Double.parseDouble(valori[4]);
-            //double latit = Double.parseDouble(valori[5]);
-            GeoPosition coords = new GeoPosition(longit, latit);
-            CustomWaypoint cwp = new CustomWaypoint(valori[0], valori[2], coords);
-            waypoints.add(cwp);
-
-            //nomi_fermate.add(valori[2].toUpperCase());
-            listaFermate.add(cwp);
-        }
-
-        waypoint_painter.setWaypoints(waypoints);
-
-        //forse
-        //mappa.set_painter(waypoint_painter);
+    // Questo metodo, oltre a posizionare le fermate sulla mappa (richiamando il CustomWaypointPainter),
+    // si occupa anche di associare un MouseListener per rendere interattivi i vari waypoint
+    public static void posizionaFermate() {
+        waypoint_painter.setWaypoints(new HashSet<>(StaticGTFS.stops));
         Mappa.setPainter(waypoint_painter);
+
+        CustomMouseListener(Mappa.getMapViewer());
     }
 
     //Collega alla mappa un mouse listener per poter interagire con i singoli waypoint (che sono immagini)
-    public void CustomMouseListener(JXMapViewer mappa) {
+    private static void CustomMouseListener(JXMapViewer mappa) {
         mappa.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -90,12 +50,12 @@ public class GestoreWaypoint {
                 //if (ultimaFermata != null)
                 //    ultimaFermata.deseleziona();
 
-                for (CustomWaypoint wp : waypoints) {
+                for (CustomWaypoint wp : StaticGTFS.stops) {
                     Point2D punto = mappa.getTileFactory().geoToPixel(wp.getPosition(), mappa.getZoom());
                     int x = (int) (punto.getX() - viewport.getX());
                     int y = (int) (punto.getY() - viewport.getY());
                     Rectangle bordi = new Rectangle(x - 8, y - 8, 17, 17); //TODO: rivedere i bordi
-                    //8 sopra è un po' un numero magico - in questo caso la metà (-1) di 17, ovvero
+                    //8 sopra è un po' un numero magico - in questo caso la metà (-.5) di 17, ovvero
                     //la metà della grandezza dell'icona delle fermate
                     if (bordi.contains(puntoClick)) {
                         if (wp.selezionato)
