@@ -115,7 +115,7 @@ public class Frame extends JFrame{
     }
 
     //Fa esattamente quello che sembra
-    public void imposta_combo_box()
+    public void impostaComboBox()
     {
         testoFermata.addItem(new CustomWaypoint("null", "- Seleziona una fermata -", new GeoPosition(0, 0)));
         for (CustomWaypoint f : StaticGTFS.stops)

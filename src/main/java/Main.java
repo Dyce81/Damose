@@ -5,7 +5,6 @@ import Model.CustomWaypoint;
 import Model.GestoreWaypoint;
 import View.Frame;
 import View.LoadingScreen;
-import View.Mappa;
 
 //disclaimer: il progetto potrebbe essere organizzato meglio - magari separando ulteriormente la logica
 //della creazione delle fermate, creando un'altra classe WaypointManager che si occupa di piazzare
@@ -29,7 +28,7 @@ public class Main
         Frame frame = new Frame(600, 800, "Damose");
         GestoreWaypoint.posizionaFermate();
         CustomWaypoint.setPannello(frame.getPannelloInformazioni());
-        frame.imposta_combo_box(); //se questa riga viene spostata sopra, la combobox NON funziona,
+        frame.impostaComboBox(); //se questa riga viene spostata sopra, la combobox NON funziona,
         //quindi più tardi questa cosa è da aggiustare perché è indecente :(
 
         WiFi.impostaFrame(frame, frame.getMappa());

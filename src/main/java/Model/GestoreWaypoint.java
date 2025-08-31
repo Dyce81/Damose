@@ -23,9 +23,6 @@ public class GestoreWaypoint {
     public static CustomWaypoint ultimaFermata;
 
     //DATI GTFS Statici
-    //TODO: spostare questo metodo qui sotto in StaticGTFS (in realtà è un po' da ripensare tutto,
-    // visto che adesso ci sono due liste (waypoints e listaFermate), mentre se ne potrebbe fare solo
-    // una (stops) (forse?)
 
     // Questo metodo, oltre a posizionare le fermate sulla mappa (richiamando il CustomWaypointPainter),
     // si occupa anche di associare un MouseListener per rendere interattivi i vari waypoint

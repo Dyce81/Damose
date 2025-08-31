@@ -163,7 +163,7 @@ public class StaticGTFS
         if (prossimoArrivo.isPresent())
             return prossimoArrivo.get().getOrarioArrivo().format(DateTimeFormatter.ofPattern("HH:mm"));
         else
-            return null;
+            return "";
     }
 
     public static boolean lineaDellaMetro(String routeId)

@@ -71,7 +71,6 @@ public class InformazioniFermata
 
         statoCorsa = new JLabel("");
         ritardoCorsa = new JLabel("");
-
         avvisoTracciamento = new JLabel("");
 
         pannello.setLayout(new BoxLayout(pannello, BoxLayout.Y_AXIS));
@@ -80,7 +79,6 @@ public class InformazioniFermata
         pannello.add(lineeServite);
         pannello.add(pulsantiLinee);
         pannello.add(infoLinea);
-        //pannello.add(tipoMezzo);
     }
 
     public JPanel getPannello()
@@ -193,9 +191,11 @@ public class InformazioniFermata
             }
             else
             {
+                boolean orarioStatico = false; // Specifica se l'orario attuale è calcolata staticamente
                 if (!StaticGTFS.lineaDellaMetro(id)) {
                     String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
                     if (tempo.isEmpty()) {
+                        orarioStatico = true;
                         System.out.println("DEBUG: Connesso a internet ma orario vuoto - orario previsto staticamente");
                         // TODO: a volte questo metodo (StaticGTFS.getTripUpdate) sembra non trovare mai un risultato, andando avanti all'infinito. questa cosa è da risolvere
                         tempo = StaticGTFS.getTripUpdate(fermata.getId(), id);
@@ -203,18 +203,32 @@ public class InformazioniFermata
                         infoLinea.add(avvisoPrevisione);
                     }
 
-                    statoCorsa.setText("Stato corsa: " + DynamicGTFS.getStato(DynamicGTFS.getUltimoTripDescriptor()));
+                    // Se l'orario risulta nullo anche tramite dati statici, allora non è proprio
+                    // possibile calcolare l'orario
+                    if (tempo.isBlank())
+                    {
+                        infoLinea.remove(avvisoPrevisione); //Forse?
+                        prossimoArrivo.setText("<html>Impossibile calcolare l'orario<br>di arrivo.</html>");
+                    }
+                    else
+                        prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
 
-                    int ritardo = DynamicGTFS.getRitardo(DynamicGTFS.getUltimoTripUpdate());
-                    if (ritardo < 0) // In anticipo
-                        ritardoCorsa.setText("Anticipo stimato: " + ritardo * -1 + " minuti.");
-                    else             // In ritardo
-                        ritardoCorsa.setText("Ritardo stimato: " + ritardo + " minuti.");
+                    // Se orarioStatico è vero, allora il trip update è stato calcolato
+                    // staticamente non è possibile ottenere in tempo reale lo stato della
+                    // corsa e il ritardo/anticipo stimato, quindi è inutile calcolarli
+                    if(!orarioStatico)
+                    {
+                        statoCorsa.setText("Stato corsa: " + DynamicGTFS.getStato(DynamicGTFS.getUltimoTripDescriptor()));
 
-                    infoLinea.add(statoCorsa);
-                    infoLinea.add(ritardoCorsa);
+                        int ritardo = DynamicGTFS.getRitardo(DynamicGTFS.getUltimoTripUpdate());
+                        if (ritardo < 0) // In anticipo
+                            ritardoCorsa.setText("Anticipo stimato: " + ritardo * -1 + " minuti.");
+                        else             // In ritardo
+                            ritardoCorsa.setText("Ritardo stimato: " + ritardo + " minuti.");
 
-                    prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
+                        infoLinea.add(statoCorsa);
+                        infoLinea.add(ritardoCorsa);
+                    }
                 }
 
                 if (tracciamentoAttivo) {
@@ -224,9 +238,7 @@ public class InformazioniFermata
                         infoLinea.add(avvisoTracciamento);
                     }
 
-                    //Mappa.getMapViewer().zoomToBestFit(new HashSet<>(), 0.7);
                     CustomWaypointPainter.setPosizioniMezzi(lista);
-
                     CustomWaypointPainter.setTracciamentoAttivo(true);
 
                     List<GeoPosition> percorso = StaticGTFS.getPercorso(id);
@@ -242,8 +254,6 @@ public class InformazioniFermata
                     //TODO: forse al posto di mostrare una finestra andrebbe proprio lasciato
                     // scritto da qualche parte nel pannello/sulla mappa?
                 }
-
-                //prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
             }
         }, 0, 5, TimeUnit.SECONDS);
     }
