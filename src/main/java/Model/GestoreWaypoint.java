@@ -1,6 +1,7 @@
 package Model;
 
 import Controller.StaticGTFS;
+import View.CustomWaypointPainter;
 import View.Mappa;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.*;
@@ -10,7 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
 
 // Questa classe gestisce le fermate - tranne nel caso siano cercate tramite comboBox; in quel

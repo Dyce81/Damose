@@ -63,7 +63,8 @@ public class DynamicGTFS
             long prossimoArrivo = Long.MAX_VALUE;
             String tripIdCercato = null;
 
-            for (FeedEntity entita : feed.getEntityList()) {
+            for (FeedEntity entita : feed.getEntityList())
+            {
                 if (!entita.hasTripUpdate()) continue;
 
                 TripUpdate aggiornamento = entita.getTripUpdate();
@@ -71,18 +72,20 @@ public class DynamicGTFS
 
                 if (!viaggio.getRouteId().equals(routeId)) continue;
 
-                for (TripUpdate.StopTimeUpdate stu : aggiornamento.getStopTimeUpdateList()) {
+                for (TripUpdate.StopTimeUpdate stu : aggiornamento.getStopTimeUpdateList())
+                {
                     if (!stu.getStopId().equals(stopId)) continue;
                     if (!stu.hasArrival() || !stu.getArrival().hasTime()) continue;
 
                     long tempoArrivo = stu.getArrival().getTime();
 
-                    if (tempoArrivo > adesso && tempoArrivo < prossimoArrivo) {
+                    if (tempoArrivo > adesso && tempoArrivo < prossimoArrivo)
+                    {
                         prossimoArrivo = tempoArrivo;
                         tripIdCercato = viaggio.getTripId();
                         ultimoTripDescriptor = viaggio;
                         ultimoTripUpdate = aggiornamento;
-                        break; //TODO: non so se questa cosa va bene, se rompe in qualche modo il codice, se cambia qualcosa...? pare di no?
+                        break;
                     }
                 }
             }

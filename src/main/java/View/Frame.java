@@ -180,10 +180,13 @@ public class Frame extends JFrame{
 
     public void cambiaStatoWiFi()
     {
-        if (WiFi.connesso()) {
+        if (WiFi.connesso())
+        {
             testoWiFi.setText("WiFi connesso");
             testoWiFi.setBackground(verde);
-        } else {
+        }
+        else
+        {
             testoWiFi.setText("WiFi non connesso");
             testoWiFi.setBackground(rosso);
         }

@@ -1,4 +1,4 @@
-package Model;
+package View;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.Painter;

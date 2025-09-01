@@ -2,7 +2,6 @@ package View;
 
 import Controller.WiFi;
 
-import Model.RoutePainter;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;

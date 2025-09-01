@@ -1,4 +1,6 @@
-package Model;
+package View;
+
+import Model.Route;
 
 import javax.swing.*;
 import java.awt.*;

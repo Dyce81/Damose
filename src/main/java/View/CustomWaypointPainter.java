@@ -1,5 +1,6 @@
-package Model;
+package View;
 
+import Model.CustomWaypoint;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointPainter;
