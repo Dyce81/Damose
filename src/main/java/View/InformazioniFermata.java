@@ -31,6 +31,7 @@ public class InformazioniFermata
     private final JLabel avvisoTracciamento;
     private final JLabel statoCorsa;
     private final JLabel ritardoCorsa;
+    private final JLabel direzione;
 
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture<?> task;
@@ -72,6 +73,7 @@ public class InformazioniFermata
         statoCorsa = new JLabel("");
         ritardoCorsa = new JLabel("");
         avvisoTracciamento = new JLabel("");
+        direzione = new JLabel("");
 
         pannello.setLayout(new BoxLayout(pannello, BoxLayout.Y_AXIS));
         pannello.add(indicazioneFermata);
@@ -101,16 +103,11 @@ public class InformazioniFermata
         pulsantiLinee.removeAll();
 
         for (Route r : linee) {
-            //infoLinee.append("- ").append(r.getId()).append(", ").append(r.getUrl()).append('\n');
-            //infoLinee.append("- ").append(r.getId()).append('\n');
-
             JButton pulsanteLinea = new JButton(r.getId());
             pulsanteLinea.setBorderPainted(false);
             pulsanteLinea.setBackground(rossoScuro);
             pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
-            //pulsanteLinea.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            //pulsanteLinea.addActionListener(e -> mostraInfoLinea(pulsanteLinea.getText(), false));
             pulsanteLinea.addActionListener(e -> mostraInfoLinea(r.getId(), false));
 
             //TODO: vabbe qui potrebbe essere gestito meglio:
@@ -147,11 +144,12 @@ public class InformazioniFermata
 
         JLabel testoLinea = new JLabel("Linea selezionata: " + id);
         JLabel tipoMezzo = new JLabel("Tipo mezzo: " + tipoMezzoSelezionato);
-        JLabel prossimoArrivo = new JLabel("<html>Calcolo del prossimo arrivo<br> in corso...</html>"); //new JLabel("Prossimo arrivo: ");
+        JLabel prossimoArrivo = new JLabel("<html>Calcolo del prossimo arrivo<br> in corso...</html>");
 
         infoLinea.add(testoLinea);
         infoLinea.add(tipoMezzo);
         if (!f) infoLinea.add(prossimoArrivo);
+        //infoLinea.add(direzione);
 
         pannello.scrollRectToVisible(new Rectangle(infoLinea.getBounds()));
         pannello.add(mostraMezzi);
@@ -162,13 +160,12 @@ public class InformazioniFermata
 
         task = scheduler.scheduleAtFixedRate(() ->
         {
-            if (!WiFi.connesso()) {
-                /*task.cancel(true);*/
-                /*mostraInfoLinea(id);*/
-
+            if (!WiFi.connesso())
+            {
                 System.out.println("DEBUG: Offline [orario calcolato staticamente]");
 
-                if (!StaticGTFS.lineaDellaMetro(id)) {
+                if (!StaticGTFS.lineaDellaMetro(id))
+                {
                     //TODO: racchiudere queste righe in un metodo? (visto che anche sotto viene
                     // usata la stessa sequenza di istruzioni [per lap parte connessa al wifi])
                     prossimoArrivo.setText("Prossimo arrivo previsto: " +
@@ -177,7 +174,8 @@ public class InformazioniFermata
                     infoLinea.add(avvisoPrevisione);
                 }
 
-                if (tracciamentoAttivo) {
+                if (tracciamentoAttivo)
+                {
                     System.out.println("DEBUG: Offline [tracciamento statico]");
                     ArrayList<GeoPosition> lista = StaticGTFS.getPosizioneVeicolo(id);
                     CustomWaypointPainter.setPosizioniMezzi(lista);
@@ -192,9 +190,12 @@ public class InformazioniFermata
             else
             {
                 boolean orarioStatico = false; // Specifica se l'orario attuale è calcolata staticamente
-                if (!StaticGTFS.lineaDellaMetro(id)) {
+                //String headsign = "";
+                if (!StaticGTFS.lineaDellaMetro(id))
+                {
                     String tempo = DynamicGTFS.getTripUpdate(id, fermata.getId());
-                    if (tempo.isEmpty()) {
+                    if (tempo.isEmpty())
+                    {
                         orarioStatico = true;
                         System.out.println("DEBUG: Connesso a internet ma orario vuoto - orario previsto staticamente");
                         // TODO: a volte questo metodo (StaticGTFS.getTripUpdate) sembra non trovare mai un risultato, andando avanti all'infinito. questa cosa è da risolvere
@@ -211,7 +212,13 @@ public class InformazioniFermata
                         prossimoArrivo.setText("<html>Impossibile calcolare l'orario<br>di arrivo.</html>");
                     }
                     else
+                    {
                         prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
+                        //String tripId = DynamicGTFS.getUltimoTripUpdate().getTrip().getTripId();
+                        //headsign = StaticGTFS.getTrip(tripId).getHeadsign();
+                    }
+
+                    //direzione.setText("Direzione: " + headsign);
 
                     // Se orarioStatico è vero, allora il trip update è stato calcolato
                     // staticamente non è possibile ottenere in tempo reale lo stato della
@@ -231,9 +238,11 @@ public class InformazioniFermata
                     }
                 }
 
-                if (tracciamentoAttivo) {
+                if (tracciamentoAttivo)
+                {
                     ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(id);
-                    if (lista.isEmpty()) {
+                    if (lista.isEmpty())
+                    {
                         avvisoTracciamento.setText("<html><u><i>Attenzione: non è stato<br> possibile tracciare alcun mezzo.</i></u></html>");
                         infoLinea.add(avvisoTracciamento);
                     }
@@ -248,13 +257,17 @@ public class InformazioniFermata
                 }
 
                 String problema = DynamicGTFS.getServiceAlert(id);
-                if (!problema.isBlank() && !avvisoMostrato) {
+                if (!problema.isBlank() && !avvisoMostrato)
+                {
                     avvisoMostrato = true;
                     padre.mostraAvviso(problema);
                     //TODO: forse al posto di mostrare una finestra andrebbe proprio lasciato
                     // scritto da qualche parte nel pannello/sulla mappa?
                 }
             }
+
+            infoLinea.revalidate();
+            infoLinea.repaint();
         }, 0, 5, TimeUnit.SECONDS);
     }
 

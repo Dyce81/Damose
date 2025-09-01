@@ -2,7 +2,6 @@ package Controller;
 
 import Model.*;
 import View.LoadingScreen;
-import View.Mappa;
 import com.opencsv.CSVReader;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -23,6 +22,8 @@ public class StaticGTFS
     public static ArrayList<CollegamentoMetro> collegamentiMetro = new ArrayList<>();
 
     //public static ArrayList<Calendar> calendars = new ArrayList<>();
+
+    private static String ultimoTripIdCalcolato;
 
     public static void inizializzaDati()
     {
@@ -77,7 +78,7 @@ public class StaticGTFS
 
         for (String[] lista : provvisorio)
         {
-            Trip aggiungi = new Trip(lista[2], lista[0], lista[7]);
+            Trip aggiungi = new Trip(lista[2], lista[0], lista[7], lista[3]);
             trips.add(aggiungi);
         }
         LoadingScreen.updateProgress(31, 44, LoadingScreen.progressBar);
@@ -161,7 +162,10 @@ public class StaticGTFS
                 .min(Comparator.comparing(st -> parseTimeCorretto(st.getOrarioArrivo().toString())));
 
         if (prossimoArrivo.isPresent())
+        {
+            ultimoTripIdCalcolato = prossimoArrivo.get().getTripId();
             return prossimoArrivo.get().getOrarioArrivo().format(DateTimeFormatter.ofPattern("HH:mm"));
+        }
         else
             return "";
     }
@@ -253,5 +257,14 @@ public class StaticGTFS
                 .sorted(Comparator.comparingInt(PuntoShape::getSequenza))
                 .map(sp -> new GeoPosition(sp.getLatitudine(), sp.getLongitudine()))
                 .toList();
+    }
+
+    public static Trip getTrip(String id)
+    {
+        for (Trip trip : trips)
+            if (trip.getId().equals(id))
+                return trip;
+
+        return null;
     }
 }

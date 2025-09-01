@@ -165,6 +165,8 @@ public class Frame extends JFrame{
         if (testoLinea.getSelectedItem() == null || testoLinea.getSelectedIndex() == -1) return;
         String nomeLinea = testoLinea.getSelectedItem().toString();
 
+        pannelloInformazioni.resetPannello();
+
         List<GeoPosition> percorso = StaticGTFS.getPercorso(nomeLinea);
         Mappa.disegnaLinea(percorso);
         Mappa.getMapViewer().zoomToBestFit(new HashSet<>(percorso), 0.7);
