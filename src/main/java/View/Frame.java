@@ -2,11 +2,9 @@ package View;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
@@ -44,6 +42,7 @@ public class Frame extends JFrame{
         //Casella testo e pulsante per la ricerca delle fermate
         JPanel pannelloSuperiore = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
 
+        testoFermata.setEditable(true);
         testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
         testoFermata.setRenderer(new StopsComboBoxRenderer());
         testoFermata.setMaximumRowCount(5);
@@ -80,13 +79,7 @@ public class Frame extends JFrame{
         profileButton.setPreferredSize(new Dimension(50, 50));
 
         //accesso alla pagina di login
-        profileButton.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                LoginPage loginPage = new LoginPage();
-            }
-        });
+        profileButton.addActionListener(e -> new LoginPage());
 
         //tasto per accesso alle impostazioni
         ImageIcon settingsIcon = new ImageIcon("assets/settings.png");
@@ -97,12 +90,7 @@ public class Frame extends JFrame{
         settings.setPreferredSize(new Dimension(50, 50));
 
         //accesso alla pagina delle impostazioni
-        settings.addActionListener(new ActionListener()
-        {public void actionPerformed(ActionEvent e)
-        {
-                SettingsPage settingsPage = new SettingsPage();
-        }
-        });
+        settings.addActionListener(e -> new SettingsPage());
 
         pannelloSuperiore.add(profileButton);
         pannelloSuperiore.add(testoLinea);
@@ -117,7 +105,6 @@ public class Frame extends JFrame{
     //Fa esattamente quello che sembra
     public void impostaComboBox()
     {
-        testoFermata.addItem(new CustomWaypoint("null", "- Seleziona una fermata -", new GeoPosition(0, 0)));
         for (CustomWaypoint f : StaticGTFS.stops)
         {
             testoFermata.addItem(f);
@@ -126,7 +113,6 @@ public class Frame extends JFrame{
         testoFermata.setSelectedItem("- Seleziona una fermata -");
         testoFermata.hidePopup();
 
-        testoLinea.addItem(new Route("null", "- Seleziona una linea -", -1));
         for (Route l : StaticGTFS.routes)
         {
             testoLinea.addItem(l);
@@ -139,7 +125,7 @@ public class Frame extends JFrame{
     //la ricerca delle fermate è gestita dal frame tramite questo metodo
     private void cercaFermata(ActionEvent e)
     {
-        if (testoFermata.getSelectedItem() == null || testoFermata.getSelectedIndex() == -1) return; //magari con codice di errore
+        if (testoFermata.getSelectedItem() == null) return; //magari con codice di errore
         String nomeFermata = testoFermata.getSelectedItem().toString();
 
         //la fermata precedentemente selezionata (se è presente) non serve più
@@ -162,7 +148,7 @@ public class Frame extends JFrame{
 
     private void cercaLinea(ActionEvent e)
     {
-        if (testoLinea.getSelectedItem() == null || testoLinea.getSelectedIndex() == -1) return;
+        if (testoLinea.getSelectedItem() == null) return;
         String nomeLinea = testoLinea.getSelectedItem().toString();
 
         pannelloInformazioni.resetPannello();
@@ -171,8 +157,7 @@ public class Frame extends JFrame{
         Mappa.disegnaLinea(percorso);
         Mappa.getMapViewer().zoomToBestFit(new HashSet<>(percorso), 0.7);
         //Questo controllo è molto sbarazzino
-        if (!nomeLinea.equals("- Seleziona una linea -"))
-        {
+        if (nomeLinea != "- Seleziona una linea -") {
             //TODO: invocare altri metodi (non so quali) [CONTINUA DA QUI!!!]
             pannelloInformazioni.mostraInfoLinea(nomeLinea, true);
         }

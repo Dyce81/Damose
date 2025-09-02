@@ -15,14 +15,17 @@ public class LoginManager
 
     public static boolean accedi(String username, String password)
     {
-        String hashedPassword = DatabaseManager.getUserPasswordHash(username);
-        if (hashedPassword == null) {return false;}
-        if (DatabaseManager.checkPassword(password, hashedPassword) && DatabaseManager.userExists(username))
+        if (DatabaseManager.userExists(username))
         {
-            logged = true;
-            return true;
+            String hashedPassword = DatabaseManager.getUserPasswordHash(username);
+            if (hashedPassword == null) {return false;}
+            if (DatabaseManager.checkPassword(password, hashedPassword))
+            {
+                logged = true;
+                return true;
+            }
         }
-        else {return false;}
+        return false;
 
     }
 
@@ -40,5 +43,11 @@ public class LoginManager
     public static void disconnetti()
     {
         logged = false;
+    }
+
+    public static void eliminaAccount(String username)
+    {
+        logged = false;
+        DatabaseManager.removeUser(username);
     }
 }

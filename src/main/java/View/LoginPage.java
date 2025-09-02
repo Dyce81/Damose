@@ -24,7 +24,6 @@ public class LoginPage
         JPanel panel = new JPanel();
         panel.setBounds(68, 20, 300, 210);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        loginPage.add(panel);
 
         if (LoginManager.logged)
         {
@@ -37,7 +36,7 @@ public class LoginPage
         loginPage.setVisible(true);
     }
 
-    public void chiudiPagina(JDialog pagina, boolean riapri)
+    public static void chiudiPagina(JDialog pagina, boolean riapri)
     {
         int delay = 1200;
         Timer timer = new Timer(delay, e2 -> {
@@ -71,8 +70,7 @@ public class LoginPage
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                // Quando il mouse viene cliccato sul campo di testo
-                username.selectAll(); // Seleziona tutto il contenuto
+                username.selectAll();
             }
         });
         username.setForeground(Color.LIGHT_GRAY);
@@ -148,7 +146,10 @@ public class LoginPage
                         chiudiPagina(dialog, false);
                     }
 
-                    else {System.out.println("Registrazione fallita, utente già registrato.");}
+                    else {
+                        avviso.setText("Registrazione fallita, utente già registrato.");
+                        avviso.setForeground(Color.RED);
+                    }
                 }
 
                 //se è in fase di accesso
@@ -161,7 +162,10 @@ public class LoginPage
 
                         chiudiPagina(dialog, false);
                     }
-                    else {System.out.println("Accesso fallito, password o username errato.");}
+                    else {
+                        avviso.setText("Accesso fallito, password o username errato.");
+                        avviso.setForeground(Color.RED);
+                    }
                 }
             }
         });
@@ -197,11 +201,11 @@ public class LoginPage
 
     public void creaPaginaLogout(JPanel panel, JDialog dialog)
     {
-        panel.add(Box.createVerticalStrut(30));
         JLabel benvenuto = new JLabel("HAI GIA EFFETTUATO IL LOGIN");
         benvenuto.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(benvenuto);
-        panel.add(Box.createVerticalStrut(10));
+
+        panel.add(Box.createVerticalStrut(5));
 
         JButton disconnetti = new JButton("Disconnetti");
         disconnetti.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -211,8 +215,51 @@ public class LoginPage
             chiudiPagina(dialog, true);
 
         });
+        panel.add(Box.createVerticalStrut(10));
 
+        JLabel cambia = new JLabel("Se vuoi cambiare password:");
+        cambia.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(cambia);
 
+        panel.add(Box.createVerticalStrut(5));
 
+        JButton cambiaPassword = new JButton("Cambia Password");
+        cambiaPassword.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(cambiaPassword);
+        //crea la pagina per cambiare la password
+        cambiaPassword.addActionListener(e -> new ChangePasswordPage());
+
+        panel.add(Box.createVerticalStrut(10));
+
+        JLabel elimina = new JLabel("Se vuoi eliminare il tuo account:");
+        elimina.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(elimina);
+
+        panel.add(Box.createVerticalStrut(5));
+
+        JTextField nomeAccount = new JTextField("Inserisci l'username", 2);
+        nomeAccount.setAlignmentX(Component.CENTER_ALIGNMENT);
+        nomeAccount.setHorizontalAlignment(SwingConstants.CENTER);
+        nomeAccount.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                nomeAccount.selectAll();
+            }
+        });
+        panel.add(nomeAccount);
+
+        panel.add(Box.createVerticalStrut(5));
+
+        JButton eliminaAccount = new JButton("Elimina Account");
+        eliminaAccount.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(eliminaAccount);
+        eliminaAccount.addActionListener(e -> {
+            LoginManager.eliminaAccount(nomeAccount.getText());
+            chiudiPagina(dialog, true);
+        });
+
+        panel.add(Box.createVerticalStrut(20));
     }
 }

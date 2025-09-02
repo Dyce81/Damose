@@ -30,7 +30,7 @@ public class DatabaseManager {
     }
 
     // Crea la tabella per gli utenti
-    public void createUsersTable() {
+    public static void createUsersTable() {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS users (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY," +
                 "username VARCHAR(255) NOT NULL UNIQUE," +
@@ -54,7 +54,6 @@ public class DatabaseManager {
     // Metodo per controllare una password e l'hash esistente
     public static boolean checkPassword(String plainTextPassword, String hashedPassword)
     {
-        System.out.println(plainTextPassword + " " + hashedPassword);
         return BCrypt.checkpw(plainTextPassword, hashedPassword);
     }
 
@@ -99,7 +98,7 @@ public class DatabaseManager {
     }
 
     // Rimuove un utente
-    public boolean removeUser(String username)
+    public static boolean removeUser(String username)
     {
         String deleteSQL = "DELETE FROM users WHERE username = ?";
         try (Connection conn = getConnection();
@@ -134,6 +133,43 @@ public class DatabaseManager {
             System.err.println("Errore durante il recupero della password per l'utente '" + username + "': " + e.getMessage());
         }
         return null; // Utente non trovato o errore
+    }
+
+    public static boolean changePassword(String username, String oldPassword, String newPassword) {
+        String hashedPassword = getUserPasswordHash(username);
+
+        // 1. Controlla se l'utente esiste e se la vecchia password è corretta
+        if (hashedPassword == null) {
+            System.err.println("Errore: Utente non trovato.");
+            return false;
+        }
+
+        if (!checkPassword(oldPassword, hashedPassword)) {
+            System.err.println("Errore: Vecchia password non corretta.");
+            return false;
+        }
+
+        // 2. Hasha la nuova password
+        String newHashedPassword = hashPassword(newPassword);
+
+        // 3. Aggiorna la password nel database
+        String updateSQL = "UPDATE users SET password_hash = ? WHERE username = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
+            pstmt.setString(1, newHashedPassword);
+            pstmt.setString(2, username);
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Password dell'utente '" + username + "' cambiata con successo.");
+                return true;
+            } else {
+                System.err.println("Errore: Impossibile aggiornare la password per l'utente '" + username + "'.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore durante l'aggiornamento della password: " + e.getMessage());
+            return false;
+        }
     }
 
     // Svuota completamente la tabella degli utenti

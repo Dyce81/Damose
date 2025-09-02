@@ -19,8 +19,7 @@ public class Main
         LoadingScreen loadingScreen = new LoadingScreen();
         loadingScreen.setVisible(true);
 
-        DatabaseManager dbManager = new DatabaseManager();
-        dbManager.createUsersTable();
+        DatabaseManager.createUsersTable();
 
         StaticGTFS.inizializzaDati();
         WiFi.inizializza();

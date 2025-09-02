@@ -10,7 +10,7 @@ public class RoutesComboBoxRenderer extends JLabel implements ListCellRenderer<R
     public RoutesComboBoxRenderer()
     {
         setOpaque(true);
-        setHorizontalAlignment(LEADING);
+        setHorizontalAlignment(CENTER);
         setVerticalAlignment(CENTER);
         setPreferredSize(new Dimension(130, 40));
         setIconTextGap(12);

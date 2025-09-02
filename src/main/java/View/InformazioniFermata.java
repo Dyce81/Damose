@@ -88,14 +88,9 @@ public class InformazioniFermata
         return this.pannello;
     }
 
-    public void impostaInfo(CustomWaypoint fermata)
+    public void impostaNome(CustomWaypoint fermata)
     {
         nome.setText(fermata.getNome());
-
-        /*if (fermata.getId().startsWith("ITO"))
-            tipoMezzoSelezionato = "Metropolitana";
-        else
-            tipoMezzoSelezionato = "Autobus";*/
     }
 
     public void setLineeServite(ArrayList<Route> linee)

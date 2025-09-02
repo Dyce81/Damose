@@ -104,7 +104,7 @@ public class StaticGTFS
 
             shapes.add(new PuntoShape(lista[0], latitudine, longitudine, sequenza));
         }
-        LoadingScreen.updateProgress(81, 100, LoadingScreen.progressBar);
+        LoadingScreen.updateProgress(81, 95, LoadingScreen.progressBar);
 
         provvisorio = leggiCSV("data/collegamenti_metro.txt");
         for (String[] lista : provvisorio)
@@ -112,6 +112,7 @@ public class StaticGTFS
             CollegamentoMetro aggiungi = new CollegamentoMetro(lista[0], lista[2]);
             collegamentiMetro.add(aggiungi);
         }
+        LoadingScreen.updateProgress(96, 100, LoadingScreen.progressBar);
     }
 
     //Tracciamento statico dei mezzi

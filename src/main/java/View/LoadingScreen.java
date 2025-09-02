@@ -99,7 +99,7 @@ public class LoadingScreen extends JDialog {
 
     String scegliFrase()
     {
-        String[] lista = null;
+        String[] lista;
         try {
             lista = FileReader.getFrasi("data/rome_static_gtfs/facts.txt");
         } catch (IOException e) {

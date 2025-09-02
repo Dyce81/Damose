@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class CustomWaypoint extends DefaultWaypoint
 {
@@ -91,7 +90,7 @@ public class CustomWaypoint extends DefaultWaypoint
         ////pannelloInformazioni.setNome(this.nome);
         //pannelloInformazioni.setTipoMezzo();
 
-        pannelloInformazioni.impostaInfo(this);
+        pannelloInformazioni.impostaNome(this);
         Mappa.getMapViewer().repaint();
     }
 
