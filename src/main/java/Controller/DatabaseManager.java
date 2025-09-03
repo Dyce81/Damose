@@ -98,7 +98,7 @@ public class DatabaseManager {
     }
 
     // Rimuove un utente
-    public static boolean removeUser(String username)
+    public static void removeUser(String username)
     {
         String deleteSQL = "DELETE FROM users WHERE username = ?";
         try (Connection conn = getConnection();
@@ -107,14 +107,11 @@ public class DatabaseManager {
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Utente '" + username + "' rimosso con successo.");
-                return true;
             } else {
                 System.out.println("Nessun utente trovato con lo username '" + username + "'.");
-                return false;
             }
         } catch (SQLException e) {
             System.err.println("Errore durante la rimozione dell'utente: " + e.getMessage());
-            return false;
         }
     }
 
@@ -133,6 +130,22 @@ public class DatabaseManager {
             System.err.println("Errore durante il recupero della password per l'utente '" + username + "': " + e.getMessage());
         }
         return null; // Utente non trovato o errore
+    }
+
+    // Metodo per recuperare l'ID di un utente tramite lo username
+    public static Integer getUserId(String username) {
+        String sql = "SELECT id FROM users WHERE username = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nel recuperare l'ID utente: " + e.getMessage());
+        }
+        return null;
     }
 
     public static boolean changePassword(String username, String oldPassword, String newPassword) {
