@@ -2,7 +2,6 @@ package View;
 
 import Controller.DynamicGTFS;
 import Controller.StaticGTFS;
-import Controller.WiFi;
 import Model.*;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -20,12 +19,10 @@ public class InformazioniFermata
     private final Frame padre;
 
     private final JPanel pannello;
-    private final JLabel indicazioneFermata;
     private final JLabel nome;
     private final JLabel lineeServite;
     private final JPanel pulsantiLinee;
     private final JPanel infoLinea;
-    private final JLabel avvisoPrevisione;
     private final JButton mostraMezzi;
     private final JLabel avvisoTracciamento;
     private final JLabel statoCorsa;
@@ -52,7 +49,6 @@ public class InformazioniFermata
         pannello.setBackground(rossoScuro);
         //pannello.setPreferredSize(new Dimension(200, pannello.getPreferredSize().height)); //forse? (non proprio responsive)
 
-        indicazioneFermata = new JLabel("Fermata selezionata:");
         nome = new JLabel("Seleziona una fermata.");
         lineeServite = new JLabel("");
         lineeServite.setBackground(rossoScuro);
@@ -65,8 +61,6 @@ public class InformazioniFermata
         infoLinea.setLayout(new BoxLayout(infoLinea, BoxLayout.Y_AXIS));
         infoLinea.setBackground(rosso);
 
-        avvisoPrevisione = new JLabel("");
-
         mostraMezzi = new JButton("  Mostra mezzi sulla linea  ");
         mostraMezzi.addActionListener(e -> tracciaMezzi());
 
@@ -76,7 +70,7 @@ public class InformazioniFermata
         direzione = new JLabel("");
 
         pannello.setLayout(new BoxLayout(pannello, BoxLayout.Y_AXIS));
-        pannello.add(indicazioneFermata);
+        pannello.add(new JLabel("Fermata selezionata:"));
         pannello.add(nome);
         pannello.add(lineeServite);
         pannello.add(pulsantiLinee);
@@ -332,18 +326,11 @@ public class InformazioniFermata
                     }
                     else
                     {
-                        // TODO: forse al posto di farlo come oggetto lo si può creare qui (magari anche anonimamente)?
-                        avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
-                        infoLinea.add(avvisoPrevisione);
-                        prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
-                        // TODO: non mi piace che questa istr. si ripeta due volte, qui...
+                        infoLinea.add(new JLabel("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>"));
                     }
                 }
                 else
                 {
-                    prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
-                    //TODO: ...e qui
-
                     // Se la stringa del tempo non è vuota, allora il tempo è stato calcolato
                     // dinamicamente; questo vuol dire che è anche possibile ottenere lo stato della
                     // corsa (programmata, in ritardo, cancellata...) e l'eventuale ritardo/anticipo
@@ -358,6 +345,8 @@ public class InformazioniFermata
                     infoLinea.add(statoCorsa);
                     infoLinea.add(ritardoCorsa);
                 }
+
+                prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
             }
 
             if (tracciamentoAttivo) {
