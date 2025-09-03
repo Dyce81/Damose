@@ -1,53 +1,36 @@
 package View;
 
-import Controller.DatabaseManager;
 import Controller.LoginManager;
+import Model.Page;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class LoginPage
+public class LoginPage extends Page
 {
     public LoginPage()
     {
         //setup finestra
-        JDialog loginPage = new JDialog();
-        loginPage.setSize(450,280);
-        loginPage.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        loginPage.setLocationRelativeTo(null);
-        loginPage.setModal(true);
-        loginPage.setLayout(null);
+        page = new JDialog();
+        page.setSize(450,280);
+        page.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        page.setLocationRelativeTo(null);
+        page.setModal(true);
+        page.setLayout(null);
 
         //pannello in cui inserire i componenti
         JPanel panel = new JPanel();
         panel.setBounds(68, 20, 300, 210);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        if (LoginManager.logged)
-        {
-            creaPaginaLogout(panel, loginPage);
-        }
-        else {creaPaginaLogin(panel, loginPage);}
+        if (LoginManager.logged) {creaPaginaLogout(panel, page);}
+        else {creaPaginaLogin(panel, page);}
 
 
-        loginPage.add(panel);
-        loginPage.setVisible(true);
-    }
-
-    public static void chiudiPagina(JDialog pagina, boolean riapri)
-    {
-        int delay = 1200;
-        Timer timer = new Timer(delay, e2 -> {
-            pagina.dispose();
-            if (riapri)
-            {
-                LoginPage loginPage = new LoginPage();
-            }
-        });
-        timer.setRepeats(false);
-        timer.start();
+        page.add(panel);
+        page.setVisible(true);
     }
 
 
@@ -143,7 +126,7 @@ public class LoginPage
                         avviso.setText("Registrazione completata! Accesso eseguito!");
                         avviso.setForeground(green);
 
-                        chiudiPagina(dialog, false);
+                        chiudiPagina(dialog, false, 1200);
                     }
 
                     else {
@@ -160,7 +143,7 @@ public class LoginPage
                         avviso.setText("Accesso eseguito!");
                         avviso.setForeground(green);
 
-                        chiudiPagina(dialog, false);
+                        chiudiPagina(dialog, false, 1200);
                     }
                     else {
                         avviso.setText("Accesso fallito, password o username errato.");
@@ -212,7 +195,7 @@ public class LoginPage
         panel.add(disconnetti);
         disconnetti.addActionListener(e -> {
             LoginManager.disconnetti();
-            chiudiPagina(dialog, true);
+            chiudiPagina(dialog, true, 1200);
 
         });
         panel.add(Box.createVerticalStrut(10));
@@ -257,7 +240,7 @@ public class LoginPage
         panel.add(eliminaAccount);
         eliminaAccount.addActionListener(e -> {
             LoginManager.eliminaAccount(nomeAccount.getText());
-            chiudiPagina(dialog, true);
+            chiudiPagina(dialog, true, 1200);
         });
 
         panel.add(Box.createVerticalStrut(20));

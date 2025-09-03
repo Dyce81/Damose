@@ -2,7 +2,6 @@ package View;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -78,24 +77,24 @@ public class Frame extends JFrame{
         profileButton.setBorder(null);
         profileButton.setPreferredSize(new Dimension(50, 50));
 
-        //accesso alla pagina di login
+        //accesso alla pagina
         profileButton.addActionListener(e -> new LoginPage());
 
-        //tasto per accesso alle impostazioni
-        ImageIcon settingsIcon = new ImageIcon("assets/settings.png");
-        JButton settings = new JButton();
-        settings.setIcon(settingsIcon);
-        settings.setContentAreaFilled(false);
-        settings.setBorder(null);
-        settings.setPreferredSize(new Dimension(50, 50));
+        //tasto per accesso ai preferiti
+        ImageIcon favoritesIcon = new ImageIcon("assets/favorite.png");
+        JButton favorites = new JButton();
+        favorites.setIcon(favoritesIcon);
+        favorites.setContentAreaFilled(false);
+        favorites.setBorder(null);
+        favorites.setPreferredSize(new Dimension(50, 50));
 
-        //accesso alla pagina delle impostazioni
-        settings.addActionListener(e -> new SettingsPage());
+        //accesso alla pagina
+        favorites.addActionListener(e -> new FavoritesPage());
 
         pannelloSuperiore.add(profileButton);
         pannelloSuperiore.add(testoLinea);
         pannelloSuperiore.add(testoFermata);
-        pannelloSuperiore.add(settings);
+        pannelloSuperiore.add(favorites);
         pannelloSuperiore.setBackground(new Color(175, 62, 62));
 
         frame.add(pannelloSuperiore, BorderLayout.PAGE_START);
@@ -197,7 +196,9 @@ public class Frame extends JFrame{
         JDialog avviso = new JDialog(frame, "Problema sulla linea!", false);
         avviso.setSize(600, 200);
         avviso.setLocationRelativeTo(frame);
-        avviso.add(new JLabel(testo));
+        JLabel labelTesto = new JLabel(testo);
+        labelTesto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        avviso.add(labelTesto);
         avviso.addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent e) { finestraAvvisoAperta = true; }

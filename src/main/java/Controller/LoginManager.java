@@ -3,6 +3,7 @@ package Controller;
 public class LoginManager
 {
     public static boolean logged = false;
+    public static String username;
 
     public static int controllaCredenziali(String username, String password)
     {
@@ -13,15 +14,16 @@ public class LoginManager
         else {return 4;}
     }
 
-    public static boolean accedi(String username, String password)
+    public static boolean accedi(String user, String password)
     {
-        if (DatabaseManager.userExists(username))
+        if (DatabaseManager.userExists(user))
         {
-            String hashedPassword = DatabaseManager.getUserPasswordHash(username);
+            String hashedPassword = DatabaseManager.getUserPasswordHash(user);
             if (hashedPassword == null) {return false;}
             if (DatabaseManager.checkPassword(password, hashedPassword))
             {
                 logged = true;
+                username = user;
                 return true;
             }
         }
@@ -29,13 +31,14 @@ public class LoginManager
 
     }
 
-    public static boolean registra(String username, String password)
+    public static boolean registra(String user, String password)
     {
-        if (DatabaseManager.userExists(username)) {return false;}
+        if (DatabaseManager.userExists(user)) {return false;}
         else
         {
-            DatabaseManager.addUser(username, password);
+            DatabaseManager.addUser(user, password);
             logged = true;
+            username = user;
             return true;
         }
     }
@@ -43,11 +46,13 @@ public class LoginManager
     public static void disconnetti()
     {
         logged = false;
+        username = "";
     }
 
     public static void eliminaAccount(String username)
     {
         logged = false;
+        username = "";
         DatabaseManager.removeUser(username);
     }
 }
