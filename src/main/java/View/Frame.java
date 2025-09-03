@@ -157,7 +157,8 @@ public class Frame extends JFrame{
         Mappa.disegnaLinea(percorso);
         Mappa.getMapViewer().zoomToBestFit(new HashSet<>(percorso), 0.7);
         //Questo controllo è molto sbarazzino
-        if (nomeLinea != "- Seleziona una linea -") {
+        if (!nomeLinea.equals("- Seleziona una linea -"))
+        {
             //TODO: invocare altri metodi (non so quali) [CONTINUA DA QUI!!!]
             pannelloInformazioni.mostraInfoLinea(nomeLinea, true);
         }

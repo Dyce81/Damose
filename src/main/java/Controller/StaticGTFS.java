@@ -24,6 +24,7 @@ public class StaticGTFS
     //public static ArrayList<Calendar> calendars = new ArrayList<>();
 
     private static String ultimoTripIdCalcolato;
+    private static final List<String> lineeMetro = new ArrayList<>();
 
     public static void inizializzaDati()
     {
@@ -111,6 +112,18 @@ public class StaticGTFS
         {
             CollegamentoMetro aggiungi = new CollegamentoMetro(lista[0], lista[2]);
             collegamentiMetro.add(aggiungi);
+
+            boolean lineaTrovata = false;
+            for (String linea : lineeMetro)
+            {
+                if (aggiungi.getRouteId().equals(linea))
+                {
+                    lineaTrovata = true;
+                    break;
+                }
+            }
+
+            if (!lineaTrovata) lineeMetro.add(aggiungi.getRouteId());
         }
         LoadingScreen.updateProgress(96, 100, LoadingScreen.progressBar);
     }
@@ -171,16 +184,15 @@ public class StaticGTFS
             return "";
     }
 
+    // Controlla se la linea passata come parametro è una linea della metropolitana.
+    // La lista delle linee viene popolata in automatico in "inizializzaDati()"
     public static boolean lineaDellaMetro(String routeId)
     {
-        //TODO: (forse) fare una funzione che popola in automatico una lista di linee della metro
-        // per poi vedere se routeId è uno di quegli elementi; risparmierebbe anche il fatto di
-        // dover aggiungere a mano le linee a questo metodo
-        return switch (routeId)
-        {
-            case "248", "249", "305", "342" -> true;
-            default -> false;
-        };
+        for (String id : lineeMetro)
+            if (id.equals(routeId))
+                return true;
+
+        return false;
     }
 
     // Questo metodo serve per le linee delle metropolitane: queste infatti hanno id come le altre

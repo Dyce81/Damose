@@ -22,7 +22,6 @@ public class InformazioniFermata
     private final JPanel pannello;
     private final JLabel indicazioneFermata;
     private final JLabel nome;
-    //private final JLabel tipoMezzo;
     private final JLabel lineeServite;
     private final JPanel pulsantiLinee;
     private final JPanel infoLinea;
@@ -43,6 +42,8 @@ public class InformazioniFermata
     private static final Color rossoScuro = new Color(143, 51, 51);
     private static final Color rosso = new Color(175, 62, 62);
 
+    private boolean chiamataDaComboBox = false;
+
     public InformazioniFermata(Frame padre)
     {
         this.padre = padre;
@@ -53,7 +54,6 @@ public class InformazioniFermata
 
         indicazioneFermata = new JLabel("Fermata selezionata:");
         nome = new JLabel("Seleziona una fermata.");
-        //tipoMezzo = new JLabel("");
         lineeServite = new JLabel("");
         lineeServite.setBackground(rossoScuro);
 
@@ -119,11 +119,12 @@ public class InformazioniFermata
         pannello.repaint();
     }
 
-    // Il parametro "f" serve solo per capire se inserire o meno il label "prossimo arrivo";
+    // Il parametro "daComboBox" serve solo per capire se inserire o meno il label "prossimo arrivo"
+    // (e per evitare che le linee vengano cancellate quando NON necessario);
     // infatti questo label non è necessario se il metodo viene richiamato dal frame (tramite combo
     // box per cercare una linea - quindi nessuna fermata è selezionata direttamente, e non si può
     // prevedere un prossimo arrivo)
-    public void mostraInfoLinea(String id, boolean f)
+    /*public void mostraInfoLinea(String id, boolean daComboBox)
     {
         infoLinea.removeAll();
         CustomWaypoint fermata = GestoreWaypoint.ultimaFermata;
@@ -143,7 +144,13 @@ public class InformazioniFermata
 
         infoLinea.add(testoLinea);
         infoLinea.add(tipoMezzo);
-        if (!f) infoLinea.add(prossimoArrivo);
+        if (!daComboBox)
+        {
+            chiamataDaComboBox = false;
+            infoLinea.add(prossimoArrivo);
+        }
+        else
+            chiamataDaComboBox = true;
         //infoLinea.add(direzione);
 
         pannello.scrollRectToVisible(new Rectangle(infoLinea.getBounds()));
@@ -264,6 +271,147 @@ public class InformazioniFermata
             infoLinea.revalidate();
             infoLinea.repaint();
         }, 0, 5, TimeUnit.SECONDS);
+    }*/
+
+    public void mostraInfoLinea(String routeId, boolean daComboBox)
+    {
+        Route linea = StaticGTFS.getLinea(routeId);
+        CustomWaypoint fermata = GestoreWaypoint.ultimaFermata;
+
+        if (linea == null) return;
+        infoLinea.removeAll();
+
+        //Forse da sostituire con switch?
+        if (linea.getTipo() == 0) tipoMezzoSelezionato = "Tram";
+        else if (linea.getTipo() == 1) tipoMezzoSelezionato = "Metropolitana";
+        else if (linea.getTipo() == 3) tipoMezzoSelezionato = "Autobus";
+
+        JLabel testoLinea = new JLabel("Linea selezionata: " + routeId);
+        JLabel tipoMezzo = new JLabel("Tipo mezzo: " + tipoMezzoSelezionato);
+        JLabel prossimoArrivo = new JLabel("");
+
+        infoLinea.add(testoLinea);
+        infoLinea.add(tipoMezzo);
+
+        chiamataDaComboBox = daComboBox; //forse?
+
+        if (!StaticGTFS.lineaDellaMetro(routeId) && !daComboBox) // && non proviene da combobox
+        {
+            prossimoArrivo.setText("<html>Calcolo del prossimo arrivo<br> in corso...</html>");
+            infoLinea.add(prossimoArrivo);
+        }
+
+        pannello.add(mostraMezzi);
+        pannello.scrollRectToVisible(new Rectangle(infoLinea.getBounds()));
+
+        if (task != null) task.cancel(true);
+
+        task = scheduler.scheduleAtFixedRate(() ->
+        {
+            // Se la linea selezionata è una linea metropolitana, allora non serve calcolare
+            // orari di arrivo/ritardi.
+            // (in realtà non è proprio possibile, vista la struttura di stop_times.txt)
+            //TODO: controllare anche che il metodo non sia stato chiamato dal frame
+            if (!StaticGTFS.lineaDellaMetro(routeId) && !daComboBox)
+            {
+                String tempo = DynamicGTFS.getTripUpdate(routeId, fermata.getId());
+
+                // Se non è stato possibile calcolare il tempo dinamicamente (stringa vuota),
+                // allora si prova a calcolarlo staticamente (tramite gli orari previsti su
+                // stop_times.txt)
+                if (tempo.isBlank())
+                {
+                    System.out.println("DEBUG: Connesso a internet, ma orario calcolato staticamente");
+                    tempo = StaticGTFS.getTripUpdate(fermata.getId(), routeId);
+
+                    // Se per una seconda volta non è stato possibile calcolare il tempo, allora
+                    // per il momento non è possibile calcolare l'orario
+                    if (tempo.isBlank())
+                    {
+                        prossimoArrivo.setText("<html>Impossibile calcolare l'orario<br>di arrivo.</html>");
+                    }
+                    else
+                    {
+                        // TODO: forse al posto di farlo come oggetto lo si può creare qui (magari anche anonimamente)?
+                        avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
+                        infoLinea.add(avvisoPrevisione);
+                        prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
+                        // TODO: non mi piace che questa istr. si ripeta due volte, qui...
+                    }
+                }
+                else
+                {
+                    prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
+                    //TODO: ...e qui
+
+                    // Se la stringa del tempo non è vuota, allora il tempo è stato calcolato
+                    // dinamicamente; questo vuol dire che è anche possibile ottenere lo stato della
+                    // corsa (programmata, in ritardo, cancellata...) e l'eventuale ritardo/anticipo
+                    statoCorsa.setText("Stato corsa: " + DynamicGTFS.getStato(DynamicGTFS.getUltimoTripDescriptor()));
+
+                    int ritardo = DynamicGTFS.getRitardo(DynamicGTFS.getUltimoTripUpdate());
+                    if (ritardo < 0) // In anticipo
+                        ritardoCorsa.setText("Anticipo stimato: " + ritardo * -1 + " minuti.");
+                    else             // In ritardo
+                        ritardoCorsa.setText("Ritardo stimato: " + ritardo + " minuti.");
+
+                    infoLinea.add(statoCorsa);
+                    infoLinea.add(ritardoCorsa);
+                }
+            }
+
+            if (tracciamentoAttivo) {
+                // Ottiene una lista delle coordinate di tutti i veicoli in circolazione
+                // sulla linea selezionata
+                ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(routeId);
+
+                // Se la lista è vuota prova a fare una stima della posizione dei mezzi (tramite
+                // dati statici). Il controllo viene saltato se la linea selezionata è una linea
+                // della metro, in quanto non è mai possibile stimare dinamicamente la posizione
+                // dei mezzi. Si potrebbe tracciarli staticamente, ma per semplicità dell'interfaccia
+                // è stato scelto di non mostrarli comunque, disegnando solo la linea
+                //TODO: problema -> non viene mostrato alcun messaggio per far capire all'utente
+                // che non siamo riusciti a stimare la posizione dei mezzi. se metti la seconda
+                // condizione di questo if nell'if annidato dentro, comunque i mezzi vengono tracciati
+                // quindi forse si deve mettere un ulteriore if qui dentro, per evitare che la
+                // lista venga calcolata (?)
+                if (lista.isEmpty() && !StaticGTFS.lineaDellaMetro(routeId))
+                {
+                    System.out.println("DEBUG: Tentativo di tracciamento statico");
+                    lista = StaticGTFS.getPosizioneVeicolo(routeId);
+
+                    // Se la lista dei veicoli è ancora vuota, allora non è stato possibile tracciare
+                    // alcun veicolo; la linea viene comunque disegnata sulla mappa (sotto)
+                    if (lista.isEmpty())
+                    {
+                        avvisoTracciamento.setText("<html><u><i>Attenzione: non è stato<br> possibile tracciare alcun mezzo.</i></u></html>");
+                        infoLinea.add(avvisoTracciamento);
+                    }
+                }
+
+                CustomWaypointPainter.setPosizioniMezzi(lista);
+                CustomWaypointPainter.setTracciamentoAttivo(true);
+
+                List<GeoPosition> percorso = StaticGTFS.getPercorso(routeId);
+                Mappa.disegnaLinea(percorso);
+
+                Mappa.getMapViewer().repaint();
+            }
+
+            // Controla (in tempo reale) se ci sono problemi segnalati da Roma Mobilità sulla
+            // linea selezionata
+            String problema = DynamicGTFS.getServiceAlert(routeId);
+            if (!problema.isBlank() && !avvisoMostrato)
+            {
+                avvisoMostrato = true;
+                padre.mostraAvviso(problema);
+                //TODO: forse al posto di mostrare una finestra andrebbe proprio lasciato
+                // scritto da qualche parte nel pannello/sulla mappa?
+            }
+
+            infoLinea.revalidate();
+            infoLinea.repaint();
+        }, 0, 5, TimeUnit.SECONDS);
     }
 
     public void tracciaMezzi()
@@ -273,14 +421,21 @@ public class InformazioniFermata
             tracciamentoAttivo = false;
             mostraMezzi.setText("  Mostra mezzi sulla linea  ");
             CustomWaypointPainter.setTracciamentoAttivo(false);
-            Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
-            Mappa.getMapViewer().repaint();
+
+            //forse?
+            if (!chiamataDaComboBox)
+            {
+                Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
+                //Mappa.getMapViewer().repaint();
+            }
         }
         else
         {
             tracciamentoAttivo = true;
             mostraMezzi.setText("Nascondi mezzi sulla linea");
         }
+
+        Mappa.getMapViewer().repaint();
     }
 
     public void resetPannello()
