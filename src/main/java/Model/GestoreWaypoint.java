@@ -17,7 +17,6 @@ import java.util.HashSet;
 
 public class GestoreWaypoint {
     private final static WaypointPainter<CustomWaypoint> waypointPainter = new CustomWaypointPainter();
-
     private static CustomWaypoint ultimaFermata;
 
     // Questo metodo, oltre a posizionare le fermate sulla mappa (richiamando il CustomWaypointPainter),
@@ -39,9 +38,6 @@ public class GestoreWaypoint {
 
                 Point puntoClick = e.getPoint();
                 Rectangle viewport = mappa.getViewportBounds();
-
-                //if (ultimaFermata != null)
-                //    ultimaFermata.deseleziona();
 
                 for (CustomWaypoint wp : StaticGTFS.stops) {
                     Point2D punto = mappa.getTileFactory().geoToPixel(wp.getPosition(), mappa.getZoom());
