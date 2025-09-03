@@ -270,7 +270,7 @@ public class InformazioniFermata
     public void mostraInfoLinea(String routeId, boolean daComboBox)
     {
         Route linea = StaticGTFS.getLinea(routeId);
-        CustomWaypoint fermata = GestoreWaypoint.ultimaFermata;
+        CustomWaypoint fermata = GestoreWaypoint.getUltimaFermata();
 
         if (linea == null) return;
         infoLinea.removeAll();

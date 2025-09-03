@@ -10,25 +10,21 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 // Questa classe gestisce le fermate - tranne nel caso siano cercate tramite comboBox; in quel
 // caso vengono gestite dal frame stesso
 
 public class GestoreWaypoint {
-    public final static ArrayList<CustomWaypoint> listaFermate = new ArrayList<>();
-    public static WaypointPainter<CustomWaypoint> waypoint_painter = new CustomWaypointPainter();
+    private final static WaypointPainter<CustomWaypoint> waypointPainter = new CustomWaypointPainter();
 
-    public static CustomWaypoint ultimaFermata;
-
-    //DATI GTFS Statici
+    private static CustomWaypoint ultimaFermata;
 
     // Questo metodo, oltre a posizionare le fermate sulla mappa (richiamando il CustomWaypointPainter),
     // si occupa anche di associare un MouseListener per rendere interattivi i vari waypoint
     public static void posizionaFermate() {
-        waypoint_painter.setWaypoints(new HashSet<>(StaticGTFS.stops));
-        Mappa.setPainter(waypoint_painter);
+        waypointPainter.setWaypoints(new HashSet<>(StaticGTFS.stops));
+        Mappa.setPainter(waypointPainter);
 
         CustomMouseListener(Mappa.getMapViewer());
     }
@@ -67,7 +63,7 @@ public class GestoreWaypoint {
 
                         wp.seleziona();
                         ultimaFermata = wp;
-                        mappa.setOverlayPainter(waypoint_painter);
+                        mappa.setOverlayPainter(waypointPainter);
                         break;
                     }
                 }
@@ -77,6 +73,16 @@ public class GestoreWaypoint {
 
     public static WaypointPainter<CustomWaypoint> getWaypointPainter()
     {
-        return waypoint_painter;
+        return waypointPainter;
+    }
+
+    public static CustomWaypoint getUltimaFermata()
+    {
+        return ultimaFermata;
+    }
+
+    public static void setUltimaFermata(CustomWaypoint fermata)
+    {
+        ultimaFermata = fermata;
     }
 }

@@ -129,8 +129,8 @@ public class Frame extends JFrame{
         String nomeFermata = testoFermata.getSelectedItem().toString();
 
         //la fermata precedentemente selezionata (se è presente) non serve più
-        if (GestoreWaypoint.ultimaFermata != null)
-            GestoreWaypoint.ultimaFermata.deseleziona();
+        if (GestoreWaypoint.getUltimaFermata() != null)
+            GestoreWaypoint.getUltimaFermata().deseleziona();
 
         //cerca la fermata dentro la lista fermate;
         for (CustomWaypoint f : StaticGTFS.stops)
@@ -138,7 +138,8 @@ public class Frame extends JFrame{
             if (f.getNome().equals(nomeFermata)) //fermata trovata
             {
                 mappa.impostaPosizione(f.getLatitudine(), f.getLongitudine());
-                GestoreWaypoint.ultimaFermata = f;
+                //GestoreWaypoint.ultimaFermata = f;
+                GestoreWaypoint.setUltimaFermata(f);
                 f.seleziona();
                 //mostraInformazioni(f);
                 break;
