@@ -19,6 +19,8 @@ public class Main
 
         DatabaseManager.createUsersTable();
         DatabaseManager.createPreferencesTables();
+
+        //per debugging
         DatabaseManager.printAllUsers();
         FavoritesManager.addFavoriteLine("ciaociao", "71");
         FavoritesManager.addFavoriteLine("ciaociao", "70");
