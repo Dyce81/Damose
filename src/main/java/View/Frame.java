@@ -2,6 +2,9 @@ package View;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -42,7 +45,14 @@ public class Frame extends JFrame{
         JPanel pannelloSuperiore = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
 
         testoFermata.setEditable(true);
-        testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
+        //testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
+        testoFermata.addActionListener(e -> {
+            if (e.getModifiers() > 0)
+                cercaFermata();
+            // Se si modifica la JComboBox con la tastiera (digitando qualcosa), i Modifiers saranno
+            // sempre pari a 0.
+            // TODO: trovare una soluzione più robusta
+        });
         testoFermata.setRenderer(new StopsComboBoxRenderer());
         testoFermata.setMaximumRowCount(5);
 
@@ -77,24 +87,24 @@ public class Frame extends JFrame{
         profileButton.setBorder(null);
         profileButton.setPreferredSize(new Dimension(50, 50));
 
-        //accesso alla pagina
+        //accesso alla pagina di login
         profileButton.addActionListener(e -> new LoginPage());
 
-        //tasto per accesso ai preferiti
-        ImageIcon favoritesIcon = new ImageIcon("assets/favorite.png");
-        JButton favorites = new JButton();
-        favorites.setIcon(favoritesIcon);
-        favorites.setContentAreaFilled(false);
-        favorites.setBorder(null);
-        favorites.setPreferredSize(new Dimension(50, 50));
+        //tasto per accesso alle impostazioni
+        ImageIcon settingsIcon = new ImageIcon("assets/settings.png");
+        JButton settings = new JButton();
+        settings.setIcon(settingsIcon);
+        settings.setContentAreaFilled(false);
+        settings.setBorder(null);
+        settings.setPreferredSize(new Dimension(50, 50));
 
-        //accesso alla pagina
-        favorites.addActionListener(e -> new FavoritesPage());
+        //accesso alla pagina delle impostazioni
+        settings.addActionListener(e -> new SettingsPage());
 
         pannelloSuperiore.add(profileButton);
         pannelloSuperiore.add(testoLinea);
         pannelloSuperiore.add(testoFermata);
-        pannelloSuperiore.add(favorites);
+        pannelloSuperiore.add(settings);
         pannelloSuperiore.setBackground(new Color(175, 62, 62));
 
         frame.add(pannelloSuperiore, BorderLayout.PAGE_START);
@@ -122,14 +132,14 @@ public class Frame extends JFrame{
     }
 
     //la ricerca delle fermate è gestita dal frame tramite questo metodo
-    private void cercaFermata(ActionEvent e)
+    private void cercaFermata()
     {
         if (testoFermata.getSelectedItem() == null) return; //magari con codice di errore
         String nomeFermata = testoFermata.getSelectedItem().toString();
 
         //la fermata precedentemente selezionata (se è presente) non serve più
-        if (GestoreWaypoint.ultimaFermata != null)
-            GestoreWaypoint.ultimaFermata.deseleziona();
+        if (GestoreWaypoint.getUltimaFermata() != null)
+            GestoreWaypoint.getUltimaFermata().deseleziona();
 
         //cerca la fermata dentro la lista fermate;
         for (CustomWaypoint f : StaticGTFS.stops)
@@ -137,7 +147,8 @@ public class Frame extends JFrame{
             if (f.getNome().equals(nomeFermata)) //fermata trovata
             {
                 mappa.impostaPosizione(f.getLatitudine(), f.getLongitudine());
-                GestoreWaypoint.ultimaFermata = f;
+                //GestoreWaypoint.ultimaFermata = f;
+                GestoreWaypoint.setUltimaFermata(f);
                 f.seleziona();
                 //mostraInformazioni(f);
                 break;
@@ -196,9 +207,7 @@ public class Frame extends JFrame{
         JDialog avviso = new JDialog(frame, "Problema sulla linea!", false);
         avviso.setSize(600, 200);
         avviso.setLocationRelativeTo(frame);
-        JLabel labelTesto = new JLabel(testo);
-        labelTesto.setAlignmentX(Component.CENTER_ALIGNMENT);
-        avviso.add(labelTesto);
+        avviso.add(new JLabel(testo));
         avviso.addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent e) { finestraAvvisoAperta = true; }

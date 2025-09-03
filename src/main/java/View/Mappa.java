@@ -32,7 +32,7 @@ public class Mappa
     private static final TileFactory offlineTileFactory = new DefaultTileFactory(offlineInfo);
 
     //costruttore
-    Mappa(JFrame frame)
+    public Mappa(JFrame frame)
     {
         mappa = new JXMapViewer();
 
