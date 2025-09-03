@@ -12,24 +12,31 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
 
-// Questa classe gestisce le fermate - tranne nel caso siano cercate tramite comboBox; in quel
-// caso vengono gestite dal frame stesso
+// Questa classe gestisce le fermate:
+// Si occupa di posizionarle nella mappa, e associa loro il MouseListener per rendere possibile
+// l'interazione. Questa classe genera e mantiene inoltre il WaypointPainter, ovvero il painter
+// che disegna sulla mappa solo le fermate (senza linee). Infine questa classe memorizza anche
+// la fermata attualmente selezionata (nel campo "ultimaFermata")
 
-public class GestoreWaypoint {
+public class GestoreWaypoint
+{
     private final static WaypointPainter<CustomWaypoint> waypointPainter = new CustomWaypointPainter();
     private static CustomWaypoint ultimaFermata;
 
     // Questo metodo, oltre a posizionare le fermate sulla mappa (richiamando il CustomWaypointPainter),
     // si occupa anche di associare un MouseListener per rendere interattivi i vari waypoint
-    public static void posizionaFermate() {
+    public static void posizionaFermate()
+    {
         waypointPainter.setWaypoints(new HashSet<>(StaticGTFS.stops));
         Mappa.setPainter(waypointPainter);
 
         CustomMouseListener(Mappa.getMapViewer());
     }
 
-    //Collega alla mappa un mouse listener per poter interagire con i singoli waypoint (che sono immagini)
-    private static void CustomMouseListener(JXMapViewer mappa) {
+    // Collega alla mappa un mouse listener per poter interagire con i singoli waypoint
+    // (che sono delle semplici immagini)
+    private static void CustomMouseListener(JXMapViewer mappa)
+    {
         mappa.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -46,7 +53,8 @@ public class GestoreWaypoint {
                     Rectangle bordi = new Rectangle(x - 8, y - 8, 17, 17); //TODO: rivedere i bordi
                     //8 sopra è un po' un numero magico - in questo caso la metà (-.5) di 17, ovvero
                     //la metà della grandezza dell'icona delle fermate
-                    if (bordi.contains(puntoClick)) {
+                    if (bordi.contains(puntoClick))
+                    {
                         if (wp.selezionato)
                         {
                             wp.deseleziona();
