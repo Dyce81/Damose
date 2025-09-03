@@ -45,6 +45,31 @@ public class DatabaseManager {
         }
     }
 
+    public static void createPreferencesTables() {
+        String createStopsTableSQL = "CREATE TABLE IF NOT EXISTS favorite_stops (" +
+                "id INT AUTO_INCREMENT PRIMARY KEY," +
+                "user_id INT NOT NULL," +
+                "stop_name VARCHAR(255) NOT NULL," +
+                "UNIQUE(user_id, stop_name)," +
+                "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)";
+
+        String createLinesTableSQL = "CREATE TABLE IF NOT EXISTS favorite_lines (" +
+                "id INT AUTO_INCREMENT PRIMARY KEY," +
+                "user_id INT NOT NULL," +
+                "line_name VARCHAR(255) NOT NULL," +
+                "UNIQUE(user_id, line_name)," +
+                "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)";
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(createStopsTableSQL);
+            stmt.execute(createLinesTableSQL);
+            System.out.println("Tabelle preferiti create o già esistenti.");
+        } catch (SQLException e) {
+            System.err.println("Errore durante la creazione delle tabelle preferiti: " + e.getMessage());
+        }
+    }
+
     // Metodo per hashare la password
     public static String hashPassword(String plainTextPassword)
     {
@@ -198,7 +223,7 @@ public class DatabaseManager {
     }
 
     // Recupera e stampa tutti gli utenti
-    public void printAllUsers()
+    public static void printAllUsers()
     {
         String selectSQL = "SELECT id, username, password_hash FROM users";
         try (Connection conn = getConnection();

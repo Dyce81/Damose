@@ -36,3 +36,9 @@ java.sql.SQLClientInfoException: Client info name 'ApplicationName' not supporte
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
+2025-09-03 18:32:32.299594+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FAVORITE_LINES" not found; SQL statement:
+INSERT INTO favorite_lines (user_id, line_name) VALUES (?, ?) [42102-232]
+2025-09-03 18:32:32.354549+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FAVORITE_LINES" not found; SQL statement:
+INSERT INTO favorite_lines (user_id, line_name) VALUES (?, ?) [42102-232]

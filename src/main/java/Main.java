@@ -1,6 +1,4 @@
-import Controller.DatabaseManager;
-import Controller.StaticGTFS;
-import Controller.WiFi;
+import Controller.*;
 import Model.CustomWaypoint;
 import Model.GestoreWaypoint;
 import View.Frame;
@@ -20,6 +18,10 @@ public class Main
         loadingScreen.setVisible(true);
 
         DatabaseManager.createUsersTable();
+        DatabaseManager.createPreferencesTables();
+        DatabaseManager.printAllUsers();
+        FavoritesManager.addFavoriteLine("ciaociao", "71");
+        FavoritesManager.addFavoriteLine("ciaociao", "70");
 
         StaticGTFS.inizializzaDati();
         WiFi.inizializza();

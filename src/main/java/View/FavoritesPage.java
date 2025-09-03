@@ -20,7 +20,8 @@ public class FavoritesPage extends Page
         page.setLayout(null);
 
         JPanel panel = new JPanel();
-        panel.setBounds(68, 20, 450, 210);
+        panel.setBounds(0, 10, 450, 270);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         if (LoginManager.logged) {creaIfLogged(panel);}
         else {creaIfNotLogged(panel);}
@@ -31,19 +32,56 @@ public class FavoritesPage extends Page
 
     public void creaIfLogged(JPanel panel)
     {
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setPreferredSize(new Dimension(450, Integer.MAX_VALUE));
+        JPanel scrollPanel = new JPanel();
+        scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.Y_AXIS));
+
+        JScrollPane scrollPane = new JScrollPane(scrollPanel);
+        scrollPane.setPreferredSize(new Dimension(420, Integer.MAX_VALUE));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setLayout(new BoxLayout(scrollPane, BoxLayout.Y_AXIS));
-        List<String> fermate = FavoritesManager.getFavoriteStops(LoginManager.username);
-        List<String> linee = FavoritesManager.getFavoriteLines(LoginManager.username);
+
+        JButton lineeFermate = new JButton("Mostra Linee");
+        lineeFermate.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(lineeFermate);
+        lineeFermate.addActionListener(e -> {
+            scrollPanel.removeAll();
+            scrollPanel.repaint();
+            if (lineeFermate.getText().equals("Mostra Linee"))
+            {
+                List<String> linee = FavoritesManager.getFavoriteLines(LoginManager.username);
+                lineeFermate.setText("Mostra Fermate");
+
+                for (String linea : linee)
+                {
+                    JPanel miniPanel = new JPanel();
+                    miniPanel.setPreferredSize(new Dimension(420, 50));
+                    miniPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+                    miniPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+                    JButton rimuovi = new JButton("");
+                    rimuovi.setIcon(new ImageIcon("assets/favorite2.png"));
+                    miniPanel.add(rimuovi);
+                    rimuovi.addActionListener(e2 -> {
+                        rimuovi.setIcon(new ImageIcon("assets/favorite.png"));
+                        FavoritesManager.removeFavoriteLine(LoginManager.username, linea);
+                    });
+                    miniPanel.add(new JLabel(linea.toUpperCase()));
+
+                    scrollPanel.add(miniPanel);
+                }
+            }
+            else if (lineeFermate.getText().equals("Mostra Fermate"))
+            {
+                lineeFermate.setText("Mostra Linee");
+                List<String> fermate = FavoritesManager.getFavoriteStops(LoginManager.username);
+            }
+        });
+
+        panel.add(scrollPane);
+
     }
 
     public void creaIfNotLogged(JPanel panel)
     {
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
         panel.add(Box.createVerticalStrut(50));
 
         JLabel loggati = new JLabel("DEVI EFFETTUARE IL LOGIN");
