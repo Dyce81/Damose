@@ -2,6 +2,8 @@ package View;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
@@ -43,7 +45,14 @@ public class Frame extends JFrame{
         JPanel pannelloSuperiore = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
 
         testoFermata.setEditable(true);
-        testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
+        //testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
+        testoFermata.addActionListener(e -> {
+            if (e.getModifiers() > 0)
+                cercaFermata();
+            // Se si modifica la JComboBox con la tastiera (digitando qualcosa), i Modifiers saranno
+            // sempre pari a 0.
+            // TODO: trovare una soluzione più robusta
+        });
         testoFermata.setRenderer(new StopsComboBoxRenderer());
         testoFermata.setMaximumRowCount(5);
 
@@ -123,7 +132,7 @@ public class Frame extends JFrame{
     }
 
     //la ricerca delle fermate è gestita dal frame tramite questo metodo
-    private void cercaFermata(ActionEvent e)
+    private void cercaFermata()
     {
         if (testoFermata.getSelectedItem() == null) return; //magari con codice di errore
         String nomeFermata = testoFermata.getSelectedItem().toString();
