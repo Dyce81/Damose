@@ -12,8 +12,6 @@ import Controller.WiFi;
 import Model.*;
 import org.jxmapviewer.viewer.GeoPosition;
 
-//TODO: la classe inizia ad essere un po' troppo lunga, quindi più tardi sarebbe meglio scomporre in varie classi il frame
-
 public class Frame extends JFrame{
     private final JFrame frame;
     private final Mappa mappa;
