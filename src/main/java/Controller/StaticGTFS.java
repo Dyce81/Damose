@@ -208,7 +208,7 @@ public class StaticGTFS
             case "249" -> "Linea B (Laurentina-Rebibbia)";
             case "305" -> "Linea B1 (Laurentina-Jonio)";
             case "342" -> "Linea C";
-            default -> "";
+            default -> routeId;
         };
     }
 
