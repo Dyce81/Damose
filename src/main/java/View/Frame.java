@@ -2,9 +2,6 @@ package View;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -130,7 +127,6 @@ public class Frame extends JFrame{
         testoLinea.hidePopup();
     }
 
-    //la ricerca delle fermate è gestita dal frame tramite questo metodo
     private void cercaFermata()
     {
         if (testoFermata.getSelectedItem() == null) return;
