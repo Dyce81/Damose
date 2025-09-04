@@ -234,10 +234,11 @@ public class InformazioniFermata
                 // condizione di questo if nell'if annidato dentro, comunque i mezzi vengono tracciati
                 // quindi forse si deve mettere un ulteriore if qui dentro, per evitare che la
                 // lista venga calcolata (?)
-                if (lista.isEmpty() && !StaticGTFS.lineaDellaMetro(routeId))
+                if (lista.isEmpty()) //&& !StaticGTFS.lineaDellaMetro(routeId))
                 {
                     System.out.println("DEBUG: Tentativo di tracciamento statico");
-                    lista = StaticGTFS.getPosizioneVeicolo(routeId);
+                    if (!StaticGTFS.lineaDellaMetro(routeId))
+                        lista = StaticGTFS.getPosizioneVeicolo(routeId);
 
                     // Se la lista dei veicoli è ancora vuota, allora non è stato possibile tracciare
                     // alcun veicolo; la linea viene comunque disegnata sulla mappa (sotto)
@@ -247,6 +248,8 @@ public class InformazioniFermata
                         infoLinea.add(avvisoTracciamento);
                     }
                 }
+                else
+                    infoLinea.remove(avvisoTracciamento);
 
                 CustomWaypointPainter.setPosizioniMezzi(lista);
                 CustomWaypointPainter.setTracciamentoAttivo(true);
@@ -280,6 +283,7 @@ public class InformazioniFermata
             tracciamentoAttivo = false;
             mostraMezzi.setText("  Mostra mezzi sulla linea  ");
             CustomWaypointPainter.setTracciamentoAttivo(false);
+            infoLinea.remove(avvisoTracciamento);
 
             // Se il metodo mostraInfoLinea è stato chiamato dalla combo box delle linee, allora
             // la linea deve rimanere visibile anche quando il tracciamento non è attivo. La linea
