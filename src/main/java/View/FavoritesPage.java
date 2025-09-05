@@ -50,7 +50,7 @@ public class FavoritesPage extends Page
             {
                 List<String> linee = FavoritesManager.getFavoriteLines(LoginManager.username);
                 lineeFermate.setText("Mostra Fermate");
-                disegnaPreferiti(linee, scrollPanel);
+                disegnaPreferiti(linee, scrollPanel, false);
 
 
             }
@@ -58,7 +58,7 @@ public class FavoritesPage extends Page
             {
                 lineeFermate.setText("Mostra Linee");
                 List<String> fermate = FavoritesManager.getFavoriteStops(LoginManager.username);
-                disegnaPreferiti(fermate, scrollPanel);
+                disegnaPreferiti(fermate, scrollPanel, true);
             }
         });
 
@@ -89,7 +89,7 @@ public class FavoritesPage extends Page
 
     }
 
-    void disegnaPreferiti(List<String> preferiti, JPanel scrollPanel)
+    void disegnaPreferiti(List<String> preferiti, JPanel scrollPanel, boolean fermata)
     {
         for (String linea : preferiti)
         {
@@ -103,7 +103,8 @@ public class FavoritesPage extends Page
             miniPanel.add(rimuovi);
             rimuovi.addActionListener(e2 -> {
                 rimuovi.setIcon(new ImageIcon("assets/favorite.png"));
-                FavoritesManager.removeFavoriteLine(LoginManager.username, linea);
+                if (fermata) {FavoritesManager.removeFavoriteStop(LoginManager.username, linea);}
+                else {FavoritesManager.removeFavoriteLine(LoginManager.username, linea);}
             });
             miniPanel.add(new JLabel(linea.toUpperCase()));
 
