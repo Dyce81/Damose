@@ -101,7 +101,7 @@ public class Mappa
 
     public static void disegnaLinea(List<GeoPosition> percorso)
     {
-        // Viene creato un painter con la route disegnate + il painter attualmente utilizzato
+        // Viene creato un painter con la route disegnata + il painter attualmente utilizzato
         // (quello con i waypoint)
 
         //TODO: il campo compound è commentato perché non ricordo cosa fa - comunque per adesso
