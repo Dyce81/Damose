@@ -8,6 +8,7 @@ import java.util.List;
 // Questa classe è stata realizzata praticamente copiando
 // https://stackoverflow.com/questions/27753375/jcombobox-search-list
 
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class FilteredComboBox<T> extends JComboBox<T>
 {
     private final List<T> entries;

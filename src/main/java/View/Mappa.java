@@ -71,7 +71,6 @@ public class Mappa
 
     public void impostaPosizione(double latitude, double longitude)
     {
-        //imposta la posizione effettiva
         GeoPosition posizione = new GeoPosition(latitude, longitude);
         mappa.setAddressLocation(posizione);
         mappa.setZoom(2);

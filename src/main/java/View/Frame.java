@@ -195,7 +195,7 @@ public class Frame extends JFrame{
     {
         if (finestraAvvisoAperta) return;
 
-        JDialog avviso = new JDialog(frame, "Problema sulla linea!", false);
+        JDialog avviso = new JDialog(frame, "Avviso", false);
         avviso.setSize(600, 200);
         avviso.setLocationRelativeTo(frame);
         avviso.add(new JLabel(testo));

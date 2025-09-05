@@ -27,7 +27,7 @@ public class CustomWaypoint extends DefaultWaypoint
     private static final Image iconaMetro = new ImageIcon("assets/metro_icona.png").getImage().getScaledInstance(17, 17, Image.SCALE_SMOOTH);
     private static final Image iconaSelezionata = new ImageIcon("assets/fermata-selezionata.png").getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
 
-    private static InformazioniFermata pannelloInformazioni; // E' l'observer in questo caso
+    private static InformazioniFermata pannelloInformazioni;
 
     public CustomWaypoint(String id, String nome, GeoPosition coords)
     {
@@ -81,14 +81,6 @@ public class CustomWaypoint extends DefaultWaypoint
         selezionato = true;
         icona = iconaSelezionata;
         trovaLinee();
-
-        //TODO: commento inutile da cancellare più tardi perché ho paura che in realtà serva \/
-
-        // qui praticamente si deve ridefinire da zero il corpo di un metodo già presente in "Frame"
-        // (mostraInformazioni()); se possibile, vedere se ci si può riferire direttamente a quello
-        // (forse rendendo il pannello dentro frame statico?)
-        ////pannelloInformazioni.setNome(this.nome);
-        //pannelloInformazioni.setTipoMezzo();
 
         pannelloInformazioni.impostaNome(this);
         Mappa.getMapViewer().repaint();

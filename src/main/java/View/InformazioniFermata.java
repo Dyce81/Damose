@@ -149,6 +149,7 @@ public class InformazioniFermata
         infoLinea.add(tipoMezzo);
 
         chiamataDaComboBox = daComboBox; //forse?
+        avvisoMostrato = false;
 
         if (!StaticGTFS.lineaDellaMetro(routeId) && !daComboBox)
         {
@@ -248,14 +249,15 @@ public class InformazioniFermata
             }
 
             // Controlla (in tempo reale) se ci sono problemi segnalati da Roma Mobilità sulla
-            // linea selezionata
+            // linea selezionata. Visto che questo metodo viene eseguito una volta ogni
+            // TODO: cambiare la quantità di secondi
+            // 5 secondi, se l'avviso è stato già mostrato (si capisce tramite il campo avvisoMostrato)
+            // non vieno mostrato di nuovo;
             String problema = DynamicGTFS.getServiceAlert(routeId);
             if (!problema.isBlank() && !avvisoMostrato)
             {
                 avvisoMostrato = true;
                 padre.mostraAvviso(problema);
-                //TODO: forse al posto di mostrare una finestra andrebbe proprio lasciato
-                // scritto da qualche parte nel pannello/sulla mappa?
             }
 
             infoLinea.revalidate();
