@@ -149,11 +149,10 @@ public class DynamicGTFS
                             orarioValidita = "Valido dalle " + stringaInizioTempo + " alle " + stringaFineTempo;
                         }
 
-                        String causa = "<html><i>Causa indicata:</i><br>" +
-                                allerta.getDescriptionText().getTranslation(0).getText() +
-                                "</html>";
+                        String causa = "<i>Messaggio da RomaMobilità:</i><br>" +
+                                allerta.getDescriptionText().getTranslation(0).getText();
 
-                        return "<html>Problema sulla linea:<br><br>" + causa + "<br><br><i>" + orarioValidita + "</i></html>";
+                        return "<html><u>Problema sulla linea</u><br>" + causa + "<br><i>" + orarioValidita + "</i></html>";
                     }
                 }
             }

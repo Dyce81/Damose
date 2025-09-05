@@ -2,9 +2,6 @@ package View;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -14,8 +11,6 @@ import Controller.StaticGTFS;
 import Controller.WiFi;
 import Model.*;
 import org.jxmapviewer.viewer.GeoPosition;
-
-//TODO: la classe inizia ad essere un po' troppo lunga, quindi più tardi sarebbe meglio scomporre in varie classi il frame
 
 public class Frame extends JFrame{
     private final JFrame frame;
@@ -44,8 +39,6 @@ public class Frame extends JFrame{
         //Casella testo e pulsante per la ricerca delle fermate
         JPanel pannelloSuperiore = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 5));
 
-        testoFermata.setEditable(true);
-        //testoFermata.addActionListener(this::cercaFermata); //imposta actionListener della comboBox (quando viene selezionata un elemento)
         testoFermata.addActionListener(e -> {
             if (e.getModifiers() > 0)
                 cercaFermata();
@@ -56,8 +49,10 @@ public class Frame extends JFrame{
         testoFermata.setRenderer(new StopsComboBoxRenderer());
         testoFermata.setMaximumRowCount(5);
 
-        testoLinea.setEditable(true);
-        testoLinea.addActionListener(this::cercaLinea);
+        testoLinea.addActionListener(e -> {
+            if (e.getModifiers() > 0)
+                cercaLinea();
+        });
         testoLinea.setRenderer(new RoutesComboBoxRenderer());
         testoLinea.setMaximumRowCount(5);
 
@@ -72,7 +67,6 @@ public class Frame extends JFrame{
         pannello.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         pannello.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 0, new Color(143, 51, 51)));
         frame.add(pannello, BorderLayout.WEST);
-        //forse?
 
         testoWiFi = new JLabel("WiFi", SwingConstants.CENTER);
         testoWiFi.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -131,32 +125,29 @@ public class Frame extends JFrame{
         testoLinea.hidePopup();
     }
 
-    //la ricerca delle fermate è gestita dal frame tramite questo metodo
     private void cercaFermata()
     {
-        if (testoFermata.getSelectedItem() == null) return; //magari con codice di errore
+        if (testoFermata.getSelectedItem() == null) return;
         String nomeFermata = testoFermata.getSelectedItem().toString();
 
-        //la fermata precedentemente selezionata (se è presente) non serve più
+        // La fermata precedentemente selezionata (se è presente) non serve più
         if (GestoreWaypoint.getUltimaFermata() != null)
             GestoreWaypoint.getUltimaFermata().deseleziona();
 
-        //cerca la fermata dentro la lista fermate;
+        // Cerca la fermata dentro la lista fermate (StaticGTFS.stops)
         for (CustomWaypoint f : StaticGTFS.stops)
         {
             if (f.getNome().equals(nomeFermata)) //fermata trovata
             {
                 mappa.impostaPosizione(f.getLatitudine(), f.getLongitudine());
-                //GestoreWaypoint.ultimaFermata = f;
                 GestoreWaypoint.setUltimaFermata(f);
                 f.seleziona();
-                //mostraInformazioni(f);
                 break;
             }
         }
     }
 
-    private void cercaLinea(ActionEvent e)
+    private void cercaLinea()
     {
         if (testoLinea.getSelectedItem() == null) return;
         String nomeLinea = testoLinea.getSelectedItem().toString();
@@ -204,7 +195,7 @@ public class Frame extends JFrame{
     {
         if (finestraAvvisoAperta) return;
 
-        JDialog avviso = new JDialog(frame, "Problema sulla linea!", false);
+        JDialog avviso = new JDialog(frame, "Avviso", false);
         avviso.setSize(600, 200);
         avviso.setLocationRelativeTo(frame);
         avviso.add(new JLabel(testo));

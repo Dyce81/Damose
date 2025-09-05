@@ -28,7 +28,6 @@ public class InformazioniFermata
     private final JLabel statoCorsa;
     private final JLabel ritardoCorsa;
     private final JLabel avvisoPrevisione;
-    private final JLabel direzione;
 
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture<?> task;
@@ -47,7 +46,6 @@ public class InformazioniFermata
 
         pannello = new JPanel();
         pannello.setBackground(rossoScuro);
-        //pannello.setPreferredSize(new Dimension(200, pannello.getPreferredSize().height)); //forse? (non proprio responsive)
 
         nome = new JLabel("Seleziona una fermata.");
         lineeServite = new JLabel("");
@@ -68,7 +66,6 @@ public class InformazioniFermata
         ritardoCorsa = new JLabel("");
         avvisoPrevisione = new JLabel("");
         avvisoTracciamento = new JLabel("");
-        direzione = new JLabel("");
 
         pannello.setLayout(new BoxLayout(pannello, BoxLayout.Y_AXIS));
         pannello.add(new JLabel("Fermata selezionata:"));
@@ -93,19 +90,14 @@ public class InformazioniFermata
         pulsantiLinee.removeAll();
 
         for (Route r : linee) {
-            JButton pulsanteLinea = new JButton(r.getId());
+            // Viene usato il metodo getNomeRealeMetro perché se l'id non corrisponde a nessuna
+            // linea della metro, viene restituito lo stesso id passato come parametro
+            JButton pulsanteLinea = new JButton(StaticGTFS.getNomeRealeMetro(r.getId()));
             pulsanteLinea.setBorderPainted(false);
             pulsanteLinea.setBackground(rossoScuro);
             pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
 
             pulsanteLinea.addActionListener(e -> mostraInfoLinea(r.getId(), false));
-
-            //TODO: vabbe qui potrebbe essere gestito meglio:
-            // l'unico motivo per cui non viene creato un pulsante vuoto con testo messo poi (in queste righe)
-            // è perché altrimenti, per alcuni pulsanti, il testo non viene mostrato correttamente
-            if (StaticGTFS.lineaDellaMetro(r.getId()))
-                pulsanteLinea.setText(StaticGTFS.getNomeRealeMetro(r.getId()));
-
             pulsantiLinee.add(pulsanteLinea);
         }
 
@@ -157,6 +149,7 @@ public class InformazioniFermata
         infoLinea.add(tipoMezzo);
 
         chiamataDaComboBox = daComboBox; //forse?
+        avvisoMostrato = false;
 
         if (!StaticGTFS.lineaDellaMetro(routeId) && !daComboBox)
         {
@@ -197,6 +190,7 @@ public class InformazioniFermata
                         System.out.println("DEBUG: Calcolato");
                         avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
                         infoLinea.add(avvisoPrevisione);
+                        prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
                     }
                 }
                 else
@@ -214,9 +208,8 @@ public class InformazioniFermata
 
                     infoLinea.add(statoCorsa);
                     infoLinea.add(ritardoCorsa);
+                    prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
                 }
-
-                prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
             }
 
             if (tracciamentoAttivo) {
@@ -229,15 +222,11 @@ public class InformazioniFermata
                 // della metro, in quanto non è mai possibile stimare dinamicamente la posizione
                 // dei mezzi. Si potrebbe tracciarli staticamente, ma per semplicità dell'interfaccia
                 // è stato scelto di non mostrarli comunque, disegnando solo la linea
-                //TODO: problema -> non viene mostrato alcun messaggio per far capire all'utente
-                // che non siamo riusciti a stimare la posizione dei mezzi. se metti la seconda
-                // condizione di questo if nell'if annidato dentro, comunque i mezzi vengono tracciati
-                // quindi forse si deve mettere un ulteriore if qui dentro, per evitare che la
-                // lista venga calcolata (?)
-                if (lista.isEmpty() && !StaticGTFS.lineaDellaMetro(routeId))
+                if (lista.isEmpty()) //&& !StaticGTFS.lineaDellaMetro(routeId))
                 {
                     System.out.println("DEBUG: Tentativo di tracciamento statico");
-                    lista = StaticGTFS.getPosizioneVeicolo(routeId);
+                    if (!StaticGTFS.lineaDellaMetro(routeId))
+                        lista = StaticGTFS.getPosizioneVeicolo(routeId);
 
                     // Se la lista dei veicoli è ancora vuota, allora non è stato possibile tracciare
                     // alcun veicolo; la linea viene comunque disegnata sulla mappa (sotto)
@@ -247,6 +236,8 @@ public class InformazioniFermata
                         infoLinea.add(avvisoTracciamento);
                     }
                 }
+                else
+                    infoLinea.remove(avvisoTracciamento);
 
                 CustomWaypointPainter.setPosizioniMezzi(lista);
                 CustomWaypointPainter.setTracciamentoAttivo(true);
@@ -258,14 +249,15 @@ public class InformazioniFermata
             }
 
             // Controlla (in tempo reale) se ci sono problemi segnalati da Roma Mobilità sulla
-            // linea selezionata
+            // linea selezionata. Visto che questo metodo viene eseguito una volta ogni
+            // TODO: cambiare la quantità di secondi
+            // 5 secondi, se l'avviso è stato già mostrato (si capisce tramite il campo avvisoMostrato)
+            // non vieno mostrato di nuovo;
             String problema = DynamicGTFS.getServiceAlert(routeId);
             if (!problema.isBlank() && !avvisoMostrato)
             {
                 avvisoMostrato = true;
                 padre.mostraAvviso(problema);
-                //TODO: forse al posto di mostrare una finestra andrebbe proprio lasciato
-                // scritto da qualche parte nel pannello/sulla mappa?
             }
 
             infoLinea.revalidate();
@@ -280,6 +272,7 @@ public class InformazioniFermata
             tracciamentoAttivo = false;
             mostraMezzi.setText("  Mostra mezzi sulla linea  ");
             CustomWaypointPainter.setTracciamentoAttivo(false);
+            infoLinea.remove(avvisoTracciamento);
 
             // Se il metodo mostraInfoLinea è stato chiamato dalla combo box delle linee, allora
             // la linea deve rimanere visibile anche quando il tracciamento non è attivo. La linea
