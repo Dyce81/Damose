@@ -50,29 +50,15 @@ public class FavoritesPage extends Page
             {
                 List<String> linee = FavoritesManager.getFavoriteLines(LoginManager.username);
                 lineeFermate.setText("Mostra Fermate");
+                disegnaPreferiti(linee, scrollPanel);
 
-                for (String linea : linee)
-                {
-                    JPanel miniPanel = new JPanel();
-                    miniPanel.setPreferredSize(new Dimension(420, 50));
-                    miniPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-                    miniPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-                    JButton rimuovi = new JButton("");
-                    rimuovi.setIcon(new ImageIcon("assets/favorite2.png"));
-                    miniPanel.add(rimuovi);
-                    rimuovi.addActionListener(e2 -> {
-                        rimuovi.setIcon(new ImageIcon("assets/favorite.png"));
-                        FavoritesManager.removeFavoriteLine(LoginManager.username, linea);
-                    });
-                    miniPanel.add(new JLabel(linea.toUpperCase()));
 
-                    scrollPanel.add(miniPanel);
-                }
             }
             else if (lineeFermate.getText().equals("Mostra Fermate"))
             {
                 lineeFermate.setText("Mostra Linee");
                 List<String> fermate = FavoritesManager.getFavoriteStops(LoginManager.username);
+                disegnaPreferiti(fermate, scrollPanel);
             }
         });
 
@@ -103,6 +89,26 @@ public class FavoritesPage extends Page
 
     }
 
+    void disegnaPreferiti(List<String> preferiti, JPanel scrollPanel)
+    {
+        for (String linea : preferiti)
+        {
+            JPanel miniPanel = new JPanel();
+            miniPanel.setPreferredSize(new Dimension(420, 55));
+            miniPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+            miniPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+            JButton rimuovi = new JButton("");
+            rimuovi.setPreferredSize(new Dimension(50, 50));
+            rimuovi.setIcon(new ImageIcon("assets/favorite2.png"));
+            miniPanel.add(rimuovi);
+            rimuovi.addActionListener(e2 -> {
+                rimuovi.setIcon(new ImageIcon("assets/favorite.png"));
+                FavoritesManager.removeFavoriteLine(LoginManager.username, linea);
+            });
+            miniPanel.add(new JLabel(linea.toUpperCase()));
 
+            scrollPanel.add(miniPanel);
+        }
+    }
 }
 
