@@ -24,6 +24,8 @@ public class Main
         DatabaseManager.printAllUsers();
         FavoritesManager.addFavoriteLine("ciaociao", "71");
         FavoritesManager.addFavoriteLine("ciaociao", "70");
+        FavoritesManager.addFavoriteStop("ciaociao", "Anagnina");
+        FavoritesManager.addFavoriteStop("ciaociao", "Piazza di Spagna");
 
         StaticGTFS.inizializzaDati();
         WiFi.inizializza();

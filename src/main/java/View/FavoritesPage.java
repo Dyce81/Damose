@@ -32,6 +32,9 @@ public class FavoritesPage extends Page
 
     public void creaIfLogged(JPanel panel)
     {
+        List<String> linee = FavoritesManager.getFavoriteLines(LoginManager.username);
+        List<String> fermate = FavoritesManager.getFavoriteStops(LoginManager.username);
+
         JPanel scrollPanel = new JPanel();
         scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.Y_AXIS));
 
@@ -43,12 +46,14 @@ public class FavoritesPage extends Page
         JButton lineeFermate = new JButton("Mostra Linee");
         lineeFermate.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(lineeFermate);
+
+        disegnaPreferiti(fermate, scrollPanel, true);
+
         lineeFermate.addActionListener(e -> {
             scrollPanel.removeAll();
             scrollPanel.repaint();
             if (lineeFermate.getText().equals("Mostra Linee"))
             {
-                List<String> linee = FavoritesManager.getFavoriteLines(LoginManager.username);
                 lineeFermate.setText("Mostra Fermate");
                 disegnaPreferiti(linee, scrollPanel, false);
 
@@ -57,7 +62,6 @@ public class FavoritesPage extends Page
             else if (lineeFermate.getText().equals("Mostra Fermate"))
             {
                 lineeFermate.setText("Mostra Linee");
-                List<String> fermate = FavoritesManager.getFavoriteStops(LoginManager.username);
                 disegnaPreferiti(fermate, scrollPanel, true);
             }
         });
@@ -97,7 +101,14 @@ public class FavoritesPage extends Page
             miniPanel.setPreferredSize(new Dimension(420, 55));
             miniPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
             miniPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-            JButton rimuovi = new JButton("");
+            JButton vedi = new JButton();
+            vedi.setPreferredSize(new Dimension(50, 50));
+            vedi.setIcon((new ImageIcon("assets/fermata-selezionata50x50.png")));
+            miniPanel.add(vedi);
+            vedi.addActionListener(e -> {
+                //da aggiungere metodo che inquadra e seleziona la fermata sulla mappa
+            });
+            JButton rimuovi = new JButton();
             rimuovi.setPreferredSize(new Dimension(50, 50));
             rimuovi.setIcon(new ImageIcon("assets/favorite2.png"));
             miniPanel.add(rimuovi);
