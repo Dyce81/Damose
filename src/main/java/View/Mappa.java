@@ -38,8 +38,6 @@ public class Mappa
 
         if (WiFi.connesso())
         {
-            //TileFactoryInfo info = new OSMTileFactoryInfo();
-            //DefaultTileFactory tileFactory = new DefaultTileFactory(info);
             mappa.setTileFactory(tileFactory);
 
             tileFactory.setThreadPoolSize(8);
@@ -50,8 +48,6 @@ public class Mappa
         }
         else
         {
-            //TileFactoryInfo info = new OSMTileFactoryInfo("offline", System.getProperty("user.home") + File.separator + ".jxmapviewer2/tile.openstreetmap");
-            //TileFactory tileFactory = new DefaultTileFactory(info);
             mappa.setTileFactory(offlineTileFactory);
         }
 
@@ -78,8 +74,8 @@ public class Mappa
 
     public static void setPainter(Painter<JXMapViewer> p)
     {
-        if (compound) return;
-        if (painter == null) painter = p; //se painter non è già stato definito, impostalo correttamente
+        //if (compound) return;
+        if (painter == null) painter = p;
 
         mappa.setOverlayPainter(p);
     }
@@ -105,14 +101,20 @@ public class Mappa
 
     public static void disegnaLinea(List<GeoPosition> percorso)
     {
+        // Viene creato un painter con la route disegnate + il painter attualmente utilizzato
+        // (quello con i waypoint)
+
+        //TODO: il campo compound è commentato perché non ricordo cosa fa - comunque per adesso
+        // non pare influenzare nulla, quindi continuiamo ad usare il programma, e se non accade
+        // niente di male, lo togliamo
         RoutePainter rPainter = new RoutePainter(percorso);
         List<Painter<JXMapViewer>> painters = new ArrayList<>();
         painters.add(painter);
         painters.add(rPainter);
         CompoundPainter<JXMapViewer> painter = new CompoundPainter<>(painters);
-        compound = false;
+        //compound = false;
         setPainter(painter);
-        compound = true;
+        //compound = true;
 
         //mappa.zoomToBestFit(new HashSet<>(percorso), 0.7);
     }
