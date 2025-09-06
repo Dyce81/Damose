@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.Trip;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.transit.realtime.GtfsRealtime.*;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -191,6 +192,5 @@ public class DynamicGTFS
             case "NEW" -> "AGGIUNTIVA";
             default -> "PROGRAMMATA"; //forse?
         };
-
     }
 }

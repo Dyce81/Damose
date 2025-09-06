@@ -33,7 +33,7 @@ public class RoutesComboBoxRenderer extends JLabel implements ListCellRenderer<R
             setForeground(list.getForeground());
         }
 
-        setText(value.getNome());
+        setText(value.nome());
 
         return this;
     }

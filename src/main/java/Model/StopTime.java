@@ -9,14 +9,12 @@ public class StopTime
     private final String tripId;
     private final String stopId;
     private final LocalTime orarioArrivo;
-    private final LocalTime orarioPartenza;
 
-    public StopTime(String tripId, String stopId, String orarioArrivo, String orarioPartenza)
+    public StopTime(String tripId, String stopId, String orarioArrivo)
     {
         this.tripId = tripId;
         this.stopId = stopId;
         this.orarioArrivo = StaticGTFS.parseTimeCorretto(orarioArrivo);
-        this.orarioPartenza = StaticGTFS.parseTimeCorretto(orarioPartenza);
     }
 
     public String getTripId() {
@@ -29,15 +27,5 @@ public class StopTime
 
     public LocalTime getOrarioArrivo() {
         return orarioArrivo;
-    }
-
-    public LocalTime getOrarioPartenza() {
-        return orarioPartenza;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.tripId + " " + this.stopId + " " + this.orarioPartenza + " " + this.orarioArrivo;
     }
 }

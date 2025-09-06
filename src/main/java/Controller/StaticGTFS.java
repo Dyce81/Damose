@@ -28,10 +28,6 @@ public class StaticGTFS
 
     public static void inizializzaDati()
     {
-        //TODO: (forse) creare un metodo unico che prenda in input il percorso del file da leggere e
-        // sia in grado di capire in automatica quale lista popolare (magari un solo for con dentro uno
-        // switch?)
-
         ArrayList<String[]> provvisorio = leggiCSV("data/rome_static_gtfs/stops.txt");
 
         for (String[] lista : provvisorio)
@@ -89,7 +85,7 @@ public class StaticGTFS
 
         for (String[] lista : provvisorio)
         {
-            StopTime aggiungi = new StopTime(lista[0], lista[3], lista[1], lista[2]);
+            StopTime aggiungi = new StopTime(lista[0], lista[3], lista[1]);
             stopTimes.add(aggiungi);
         }
         LoadingScreen.updateProgress(56, 75, LoadingScreen.progressBar);
@@ -116,14 +112,14 @@ public class StaticGTFS
             boolean lineaTrovata = false;
             for (String linea : lineeMetro)
             {
-                if (aggiungi.getRouteId().equals(linea))
+                if (aggiungi.routeId().equals(linea))
                 {
                     lineaTrovata = true;
                     break;
                 }
             }
 
-            if (!lineaTrovata) lineeMetro.add(aggiungi.getRouteId());
+            if (!lineaTrovata) lineeMetro.add(aggiungi.routeId());
         }
         LoadingScreen.updateProgress(96, 100, LoadingScreen.progressBar);
     }
@@ -137,12 +133,12 @@ public class StaticGTFS
         LocalTime adesso = LocalTime.now();
 
         List<Trip> viaggiTrovati = trips.stream()
-                .filter(t -> t.getRouteId().equals(routeId))
+                .filter(t -> t.routeId().equals(routeId))
                 .toList();
 
         List<StopTime> orariFermate = stopTimes.stream()
                 .filter(st -> st.getOrarioArrivo().truncatedTo(ChronoUnit.MINUTES).equals(adesso.truncatedTo(ChronoUnit.MINUTES)))
-                .filter(st -> viaggiTrovati.stream().anyMatch(t -> t.getId().equals(st.getTripId())))
+                .filter(st -> viaggiTrovati.stream().anyMatch(t -> t.id().equals(st.getTripId())))
                 .toList();
 
         List<CustomWaypoint> fermate = stops.stream()
@@ -160,13 +156,12 @@ public class StaticGTFS
     public static String getTripUpdate(String stopId, String routeId)
     {
         List<Trip> viaggiTrovati = trips.stream()
-                .filter(t -> t.getRouteId().equals(routeId))
+                .filter(t -> t.routeId().equals(routeId))
                 .toList();
 
-        //questo qui sotto è temporaneo
         List<StopTime> orariFermate = stopTimes.stream()
                 .filter(st -> st.getStopId().equals(stopId))
-                .filter(st -> viaggiTrovati.stream().anyMatch(t -> t.getId().equals(st.getTripId())))
+                .filter(st -> viaggiTrovati.stream().anyMatch(t -> t.id().equals(st.getTripId())))
                 .toList();
 
         LocalTime adesso = LocalTime.now();
@@ -196,10 +191,9 @@ public class StaticGTFS
     }
 
     // Questo metodo serve per le linee delle metropolitane: queste infatti hanno id come le altre
-    // linee, ma è più comodo usare il loro nome commerciale (linea A, B...). Tuttavia questo
-    // controllo deve essere fatto a mano perché nei file GTFS non è incluso il nome commerciale
-    // delle linee (o comunque non per le metropolitane)
-    //TODO: fare qualcosa per i nomi della linea B (non c'entrano) [magari rendere i pulsanti responsive?]
+    // linee, ma è più comodo usare il loro nome commerciale (linea A, B...). Questo
+    // controllo deve essere fatto "manualmente" perché nei file GTFS non è incluso il nome
+    // commerciale delle linee (o comunque non per le metropolitane)
     public static String getNomeRealeMetro(String routeId)
     {
         return switch (routeId)
@@ -247,7 +241,7 @@ public class StaticGTFS
     public static Route getLinea(String routeId)
     {
         for (Route r : routes)
-            if (r.getId().equals(routeId))
+            if (r.id().equals(routeId))
                 return r;
 
         return null; //alquanto improbabile che venga restituito null
@@ -256,7 +250,7 @@ public class StaticGTFS
     public static List<GeoPosition> getPercorso(String routeId)
     {
         ArrayList<Trip> viaggi = trips.stream()
-                .filter(trip -> trip.getRouteId().equals(routeId)).collect(Collectors.toCollection(ArrayList::new));
+                .filter(trip -> trip.routeId().equals(routeId)).collect(Collectors.toCollection(ArrayList::new));
 
         if (viaggi.isEmpty())
         {
@@ -266,18 +260,25 @@ public class StaticGTFS
         Trip viaggioSelezionato = viaggi.getFirst();
 
         return shapes.stream()
-                .filter(sp -> sp.getId().equals(viaggioSelezionato.getShapeId()))
+                .filter(sp -> sp.getId().equals(viaggioSelezionato.shapeId()))
                 .sorted(Comparator.comparingInt(PuntoShape::getSequenza))
                 .map(sp -> new GeoPosition(sp.getLatitudine(), sp.getLongitudine()))
                 .toList();
     }
 
-    public static Trip getTrip(String id)
+    public static String getUltimoTripIdCalcolato()
+    {
+        return ultimoTripIdCalcolato;
+    }
+
+    // Sfrutta l'ultimo trip id calcolato (da getTripUpdate) per ottenere l'headsign del viaggio
+    // calcolato (e capire la direzione del mezzo selezionato)
+    public static String getHeadsign()
     {
         for (Trip trip : trips)
-            if (trip.getId().equals(id))
-                return trip;
+            if (trip.id().equals(ultimoTripIdCalcolato))
+                return trip.headsign();
 
-        return null;
+        return "";
     }
 }
