@@ -112,13 +112,13 @@ public class CustomWaypoint extends DefaultWaypoint
         if (id.startsWith("ITO"))
         {
             List<CollegamentoMetro> collegamentiTrovati = StaticGTFS.collegamentiMetro.stream()
-                    .filter(c -> c.getStopId().equals(id))
+                    .filter(c -> c.stopId().equals(id))
                     .toList();
 
             for (Route r : StaticGTFS.routes)
-                if (r.getTipo() == 1)
+                if (r.tipo() == 1)
                     for (CollegamentoMetro c : collegamentiTrovati)
-                        if (c.getRouteId().equals(r.getId()))
+                        if (c.routeId().equals(r.id()))
                             lineeTrovate.add(r);
 
             //TODO: attualmente c'è un file fatto da noi per verificare quali linee della metro
@@ -135,11 +135,11 @@ public class CustomWaypoint extends DefaultWaypoint
 
             Set<String> routeIds = new HashSet<>();
             for (Trip t : StaticGTFS.trips)
-                if (tripIds.contains(t.getId()))
-                    routeIds.add(t.getRouteId());
+                if (tripIds.contains(t.id()))
+                    routeIds.add(t.routeId());
 
             for (Route r : StaticGTFS.routes)
-                if (routeIds.contains(r.getId()))
+                if (routeIds.contains(r.id()))
                     lineeTrovate.add(r);
         }
 

@@ -92,12 +92,12 @@ public class InformazioniFermata
         for (Route r : linee) {
             // Viene usato il metodo getNomeRealeMetro perché se l'id non corrisponde a nessuna
             // linea della metro, viene restituito lo stesso id passato come parametro
-            JButton pulsanteLinea = new JButton(StaticGTFS.getNomeRealeMetro(r.getId()));
+            JButton pulsanteLinea = new JButton(StaticGTFS.getNomeRealeMetro(r.id()));
             pulsanteLinea.setBorderPainted(false);
             pulsanteLinea.setBackground(rossoScuro);
             pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
 
-            pulsanteLinea.addActionListener(e -> mostraInfoLinea(r.getId(), false));
+            pulsanteLinea.addActionListener(e -> mostraInfoLinea(r.id(), false));
             pulsantiLinee.add(pulsanteLinea);
         }
 
@@ -111,7 +111,7 @@ public class InformazioniFermata
     // viene chiamato dalla combo box delle linee, allora non serve mostrare il "prossimo arrivo",
     // in quanto è utile solo se è selezionata una fermata (non possibile se la linea è stata
     // selezionata dalla combo box); in secondo luogo, questo parametro viene assegnato al campo
-    // "chiamatoDaComboBox", che serve a capire se, una volta disegnata, la linea debba essere
+    // "chiamatoDaComboBox", che serve a capire se la linea, una volta disegnata, debba essere
     // cancellata o meno dalla mappa (il tracciamento, una volta terminato, cerca di cancellare
     // in automatico la linea sulla mappa; questa cosa viene impedita proprio dal
     // campo "chiamatoDaComboBox").
@@ -124,7 +124,7 @@ public class InformazioniFermata
         infoLinea.removeAll();
 
         JLabel tipoMezzo = new JLabel("");
-        switch (linea.getTipo())
+        switch (linea.tipo())
         {
             case 0:
                 tipoMezzo.setText("Tipo mezzo: Tram");
@@ -190,7 +190,14 @@ public class InformazioniFermata
                         System.out.println("DEBUG: Calcolato");
                         avvisoPrevisione.setText("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
                         infoLinea.add(avvisoPrevisione);
-                        prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
+
+                        // Prova a ottenere la direzione del prossimo mezzo in arrivo
+                        String headsign = StaticGTFS.getHeadsign();
+                        if (!headsign.isBlank())
+                            prossimoArrivo.setText("<html>Prossimo arrivo previsto: " + tempo
+                                    + "<br>Direzione: " + headsign + "</html>");
+                        else
+                            prossimoArrivo.setText("Prossimo arrivo previsto: " + tempo);
                     }
                 }
                 else
@@ -250,9 +257,8 @@ public class InformazioniFermata
 
             // Controlla (in tempo reale) se ci sono problemi segnalati da Roma Mobilità sulla
             // linea selezionata. Visto che questo metodo viene eseguito una volta ogni
-            // TODO: cambiare la quantità di secondi
-            // 5 secondi, se l'avviso è stato già mostrato (si capisce tramite il campo avvisoMostrato)
-            // non vieno mostrato di nuovo;
+            // 15 secondi, se l'avviso è stato già mostrato (si capisce tramite il campo avvisoMostrato)
+            // non viene mostrato di nuovo;
             String problema = DynamicGTFS.getServiceAlert(routeId);
             if (!problema.isBlank() && !avvisoMostrato)
             {
@@ -262,7 +268,7 @@ public class InformazioniFermata
 
             infoLinea.revalidate();
             infoLinea.repaint();
-        }, 0, 5, TimeUnit.SECONDS);
+        }, 0, 15, TimeUnit.SECONDS);
     }
 
     public void tracciaMezzi()

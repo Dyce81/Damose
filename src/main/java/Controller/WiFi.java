@@ -18,9 +18,11 @@ public class WiFi
         riferimentoMappa = mappa;
     }
 
+    // Questo metodo inizializza il timer del WiFi, che controlla (ogni 30 secondi) se lo stato della
+    // connessione è cambiato. Se è cambiato, allora chiama dei metodi del Frame per cambiare la parte
+    // grafica della finestra che notifica l'utente della connessione al WiFi
     public static void inizializza()
     {
-        //questa cosa non mi convice al 100% - probabilmente da rivedere
         Timer timer = new Timer();
         TimerTask task = new TimerTask()
         {
@@ -45,7 +47,7 @@ public class WiFi
         {
             URL url = new URI("https://www.google.com/").toURL();
             URLConnection conn = url.openConnection();
-            conn.setConnectTimeout(5000); //Non so se sono necessari? (forse meglio averli comunque?)
+            conn.setConnectTimeout(5000);
             conn.setReadTimeout(3000);
             conn.connect();
         }

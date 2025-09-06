@@ -44,7 +44,6 @@ public class Frame extends JFrame{
                 cercaFermata();
             // Se si modifica la JComboBox con la tastiera (digitando qualcosa), i Modifiers saranno
             // sempre pari a 0.
-            // TODO: trovare una soluzione più robusta
         });
         testoFermata.setRenderer(new StopsComboBoxRenderer());
         testoFermata.setMaximumRowCount(5);
@@ -160,7 +159,6 @@ public class Frame extends JFrame{
         //Questo controllo è molto sbarazzino
         if (!nomeLinea.equals("- Seleziona una linea -"))
         {
-            //TODO: invocare altri metodi (non so quali) [CONTINUA DA QUI!!!]
             pannelloInformazioni.mostraInfoLinea(nomeLinea, true);
         }
     }
