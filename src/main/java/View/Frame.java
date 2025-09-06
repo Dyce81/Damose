@@ -7,6 +7,8 @@ import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
+import Controller.GestoreInformazioni;
+import Controller.GestoreWaypoint;
 import Controller.StaticGTFS;
 import Controller.WiFi;
 import Model.*;
@@ -19,7 +21,8 @@ public class Frame extends JFrame{
     private final FilteredComboBox<CustomWaypoint> testoFermata = new FilteredComboBox<>();
     private final FilteredComboBox<Route> testoLinea = new FilteredComboBox<>();
 
-    private final InformazioniFermata pannelloInformazioni;
+    private final PannelloInformazioni pannelloInformazioni;
+    private GestoreInformazioni gestoreInformazioni;
     private final JLabel testoWiFi;
 
     private boolean finestraAvvisoAperta = false;
@@ -59,7 +62,7 @@ public class Frame extends JFrame{
         mappa = new Mappa(frame);
 
         //Pannello informazioni laterale per le fermate
-        pannelloInformazioni = new InformazioniFermata(this);
+        pannelloInformazioni = new PannelloInformazioni();
         JScrollPane pannello = new JScrollPane(pannelloInformazioni.getPannello());
         pannello.setPreferredSize(new Dimension(200, Integer.MAX_VALUE));
         pannello.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -131,8 +134,8 @@ public class Frame extends JFrame{
         String nomeFermata = testoFermata.getSelectedItem().toString();
 
         // La fermata precedentemente selezionata (se è presente) non serve più
-        if (GestoreWaypoint.getUltimaFermata() != null)
-            GestoreWaypoint.getUltimaFermata().deseleziona();
+        if (gestoreInformazioni.getUltimaFermata() != null)
+            gestoreInformazioni.getUltimaFermata().deseleziona();
 
         // Cerca la fermata dentro la lista fermate (StaticGTFS.stops)
         for (CustomWaypoint f : StaticGTFS.stops)
@@ -140,7 +143,7 @@ public class Frame extends JFrame{
             if (f.getNome().equals(nomeFermata)) //fermata trovata
             {
                 mappa.impostaPosizione(f.getLatitudine(), f.getLongitudine());
-                GestoreWaypoint.setUltimaFermata(f);
+                gestoreInformazioni.selezionaFermata(f);
                 f.seleziona();
                 break;
             }
@@ -161,7 +164,7 @@ public class Frame extends JFrame{
         if (!nomeLinea.equals("- Seleziona una linea -"))
         {
             //TODO: invocare altri metodi (non so quali) [CONTINUA DA QUI!!!]
-            pannelloInformazioni.mostraInfoLinea(nomeLinea, true);
+            pannelloInformazioni.mostraInfoLineaUI(nomeLinea, true);
         }
     }
 
@@ -186,9 +189,13 @@ public class Frame extends JFrame{
         return mappa;
     }
 
-    public InformazioniFermata getPannelloInformazioni()
+    public PannelloInformazioni getPannelloInformazioni()
     {
         return this.pannelloInformazioni;
+    }
+
+    public void setGestoreInformazioni(GestoreInformazioni gestore) {
+        this.gestoreInformazioni = gestore;
     }
 
     public void mostraAvviso(String testo)

@@ -1,8 +1,9 @@
 import Controller.*;
 import Model.CustomWaypoint;
-import Model.GestoreWaypoint;
+import Controller.GestoreWaypoint;
 import View.Frame;
 import View.LoadingScreen;
+import View.PannelloInformazioni;
 
 import javax.swing.*;
 
@@ -35,8 +36,14 @@ public class Main
         SwingUtilities.invokeLater(() -> {
             Frame frame = new Frame(600, 800, "Damose");
 
-            GestoreWaypoint.posizionaFermate();
-            CustomWaypoint.setPannello(frame.getPannelloInformazioni());
+            PannelloInformazioni pannelloInformazioni = frame.getPannelloInformazioni();
+
+            GestoreInformazioni gestoreInformazioni = new GestoreInformazioni(frame, pannelloInformazioni);
+            frame.setGestoreInformazioni(gestoreInformazioni);
+
+            GestoreWaypoint gestoreWaypoint = new GestoreWaypoint(gestoreInformazioni);
+            gestoreWaypoint.posizionaFermate();
+
             frame.impostaComboBox(); //se questa riga viene spostata sopra, la combobox NON funziona,
             //quindi più tardi questa cosa è da aggiustare perché è indecente :(
 
