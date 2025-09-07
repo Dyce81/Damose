@@ -1,9 +1,9 @@
 import Controller.*;
-import Model.CustomWaypoint;
 import Controller.GestoreWaypoint;
 import View.Frame;
 import View.LoadingScreen;
 import View.PannelloInformazioni;
+import Controller.WiFi;
 
 import javax.swing.*;
 
@@ -23,10 +23,6 @@ public class Main
 
         //per debugging
         DatabaseManager.printAllUsers();
-        FavoritesManager.addFavoriteLine("ciaociao", "71");
-        FavoritesManager.addFavoriteLine("ciaociao", "70");
-        FavoritesManager.addFavoriteStop("ciaociao", "Anagnina");
-        FavoritesManager.addFavoriteStop("ciaociao", "Piazza di Spagna");
 
         StaticGTFS.inizializzaDati();
         WiFi.inizializza();

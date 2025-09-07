@@ -210,17 +210,37 @@ public class DatabaseManager {
         }
     }
 
-    // Svuota completamente la tabella degli utenti
-    public void deleteUsersTable() {
-        String truncateSQL = "TRUNCATE TABLE users";
-        try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement()) {
-            stmt.execute(truncateSQL);
-            System.out.println("La tabella 'users' è stata svuotata con successo.");
-        } catch (SQLException e) {
-            System.err.println("Errore durante lo svuotamento della tabella: " + e.getMessage());
+        // Metodo per svuotare le tabelle e risolvere l'errore di integrità referenziale
+        public static void deleteUsersTable() {
+            String truncateFavoriteLinesSQL = "TRUNCATE TABLE favorite_lines";
+            String truncateFavoriteStopsSQL = "TRUNCATE TABLE favorite_stops";
+            String truncateUsersSQL = "TRUNCATE TABLE users";
+
+            try (Connection conn = getConnection();
+                 Statement stmt = conn.createStatement()) {
+
+                // Disattiva l'integrità referenziale temporaneamente per garantire che il TRUNCATE funzioni
+                // Questa è una soluzione potente ma va usata con cautela
+                stmt.execute("SET REFERENTIAL_INTEGRITY FALSE");
+
+                // Svuota prima le tabelle che hanno le chiavi esterne
+                stmt.executeUpdate(truncateFavoriteLinesSQL);
+                System.out.println("Tabella favorite_lines svuotata con successo.");
+
+                stmt.executeUpdate(truncateFavoriteStopsSQL);
+                System.out.println("Tabella favorite_stops svuotata con successo.");
+
+                // Ora svuota la tabella 'users'
+                stmt.executeUpdate(truncateUsersSQL);
+                System.out.println("Tabella users svuotata con successo.");
+
+                // Riaattiva l'integrità referenziale
+                stmt.execute("SET REFERENTIAL_INTEGRITY TRUE");
+
+            } catch (SQLException e) {
+                System.err.println("Errore durante lo svuotamento delle tabelle: " + e.getMessage());
+            }
         }
-    }
 
     // Recupera e stampa tutti gli utenti
     public static void printAllUsers()

@@ -7,6 +7,7 @@ import View.Frame;
 import View.PannelloInformazioni;
 import org.jxmapviewer.viewer.GeoPosition;
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +16,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
+import static View.Frame.rosso;
+import static java.awt.Component.CENTER_ALIGNMENT;
 
 public class GestoreInformazioni {
 
@@ -34,7 +38,13 @@ public class GestoreInformazioni {
         this.pannelloInformazioni = pannelloInformazioni;
 
         mostraMezzi = new JButton("  Mostra mezzi sulla linea  ");
+        mostraMezzi.setPreferredSize(new Dimension(185, 30));
+        mostraMezzi.setMaximumSize(new Dimension(185, mostraMezzi.getPreferredSize().height));
         mostraMezzi.addActionListener(e -> tracciaMezzi());
+        mostraMezzi.setBackground(new Color(175, 62, 62));
+        mostraMezzi.setForeground(Color.WHITE);
+        mostraMezzi.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        mostraMezzi.setBorderPainted(true);
     }
 
     //metodo che riceve il waypoint selezionato
@@ -51,7 +61,8 @@ public class GestoreInformazioni {
         ultimaFermataSelezionata = fermata;
 
         // Aggiorna il pannello
-        pannelloInformazioni.impostaNome(fermata);
+        pannelloInformazioni.impostaFermata(fermata);
+
         ArrayList<Route> lineeTrovate = trovaLineePerFermata(fermata.getId());
         pannelloInformazioni.setLineeServite(lineeTrovate, this);
 
@@ -127,7 +138,7 @@ public class GestoreInformazioni {
         CustomWaypoint fermata = this.getUltimaFermata();
         if (linea == null) return;
 
-        pannelloInformazioni.updateLineaInfo(routeId, getTipoMezzoString(linea.tipo()), "Calcolo del prossimo arrivo in corso...");
+        pannelloInformazioni.updateLineaInfo(routeId, getTipoMezzoString(linea.tipo()), "<html>Calcolo del prossimo arrivo in corso...</html>");
         pannelloInformazioni.mostraInfoLineaUI(routeId, daComboBox);
         chiamataDaComboBox = daComboBox;
         avvisoMostrato = false;
@@ -151,10 +162,10 @@ public class GestoreInformazioni {
         if (tempo.isBlank()) {
             tempo = StaticGTFS.getTripUpdate(fermata.getId(), routeId);
             if (tempo.isBlank()) {
-                pannelloInformazioni.setProssimoArrivo("Impossibile calcolare l'orario di arrivo.");
+                pannelloInformazioni.setProssimoArrivo("<html>Impossibile calcolare l'orario di arrivo.</html>");
             } else {
                 pannelloInformazioni.setAvvisoPrevisione("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
-                pannelloInformazioni.setProssimoArrivo("Prossimo arrivo previsto: " + tempo);
+                pannelloInformazioni.setProssimoArrivo("<html>Prossimo arrivo previsto: " + tempo + "</html>");
             }
         } else {
             String stato = DynamicGTFS.getStato(DynamicGTFS.getUltimoTripDescriptor());
@@ -165,7 +176,10 @@ public class GestoreInformazioni {
         }
     }
 
-    private void gestisciTracciamento(String routeId) {
+    private void gestisciTracciamento(String routeId)
+    {
+        pannelloInformazioni.setAvvisoTracciamento("");
+
         ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(routeId);
         if (lista.isEmpty() && !StaticGTFS.lineaDellaMetro(routeId)) {
             lista = StaticGTFS.getPosizioneVeicolo(routeId);

@@ -11,9 +11,16 @@ public class FavoritesManager
 {
     // Aggiungi una fermata preferita
     public static void addFavoriteStop(String username, String stopName) {
+        // Ottieni l'ID utente una sola volta e gestisci il caso in cui sia nullo
         Integer userId = DatabaseManager.getUserId(username);
         if (userId == null) {
-            System.err.println("Errore: utente non trovato.");
+            System.err.println("Errore: Utente non trovato nel database per il nome: " + username);
+            return;
+        }
+
+        // Controlla se la fermata è già presente prima di aggiungerla
+        if (isFavoriteStopPresent(userId, stopName)) {
+            System.out.println("La fermata '" + stopName + "' è già nei preferiti.");
             return;
         }
 
@@ -29,7 +36,79 @@ public class FavoritesManager
         }
     }
 
-    // Rimuovi una fermata preferita
+    // Aggiungi una linea preferita
+    public static void addFavoriteLine(String username, String lineName) {
+        // Ottieni l'ID utente una sola volta e gestisci il caso in cui sia nullo
+        Integer userId = DatabaseManager.getUserId(username);
+        if (userId == null) {
+            System.err.println("Errore: Utente non trovato nel database per il nome: " + username);
+            return;
+        }
+
+        // Controlla se la linea è già presente prima di aggiungerla
+        if (isFavoriteLinePresent(userId, lineName)) {
+            System.out.println("La linea '" + lineName + "' è già nei preferiti.");
+            return;
+        }
+
+        String sql = "INSERT INTO favorite_lines (user_id, line_name) VALUES (?, ?)";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            pstmt.setString(2, lineName);
+            pstmt.executeUpdate();
+            System.out.println("Linea '" + lineName + "' aggiunta ai preferiti di " + username + ".");
+        } catch (SQLException e) {
+            System.err.println("Errore nell'aggiungere la linea preferita: " + e.getMessage());
+        }
+    }
+
+    // ---
+
+    // Metodo per controllare se una fermata è già nel database
+    // NOTA: Ora riceve l'ID utente direttamente, evitando una seconda chiamata al database
+    public static boolean isFavoriteStopPresent(Integer userId, String stopName) {
+        String sql = "SELECT COUNT(*) FROM favorite_stops WHERE user_id = ? AND stop_name = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId);
+            pstmt.setString(2, stopName);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nel controllo della fermata preferita: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Metodo per controllare se una linea è già nel database
+    // NOTA: Ora riceve l'ID utente direttamente
+    public static boolean isFavoriteLinePresent(Integer userId, String lineName) {
+        String sql = "SELECT COUNT(*) FROM favorite_lines WHERE user_id = ? AND line_name = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId);
+            pstmt.setString(2, lineName);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Errore nel controllo della linea preferita: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // ----------------------------------------------------
+    // Gli altri metodi rimangono invariati
+    // ----------------------------------------------------
+
     public static void removeFavoriteStop(String username, String stopName) {
         Integer userId = DatabaseManager.getUserId(username);
         if (userId == null) {
@@ -53,7 +132,6 @@ public class FavoritesManager
         }
     }
 
-    // Ottieni tutte le fermate preferite di un utente
     public static List<String> getFavoriteStops(String username) {
         List<String> stops = new ArrayList<>();
         Integer userId = DatabaseManager.getUserId(username);
@@ -75,27 +153,6 @@ public class FavoritesManager
         return stops;
     }
 
-    // Aggiungi una linea preferita
-    public static void addFavoriteLine(String username, String lineName) {
-        Integer userId = DatabaseManager.getUserId(username);
-        if (userId == null) {
-            System.err.println("Errore: utente non trovato.");
-            return;
-        }
-
-        String sql = "INSERT INTO favorite_lines (user_id, line_name) VALUES (?, ?)";
-        try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, userId);
-            pstmt.setString(2, lineName);
-            pstmt.executeUpdate();
-            System.out.println("Linea '" + lineName + "' aggiunta ai preferiti di " + username + ".");
-        } catch (SQLException e) {
-            System.err.println("Errore nell'aggiungere la linea preferita: " + e.getMessage());
-        }
-    }
-
-    // Rimuovi una linea preferita
     public static void removeFavoriteLine(String username, String lineName) {
         Integer userId = DatabaseManager.getUserId(username);
         if (userId == null) {
@@ -119,7 +176,6 @@ public class FavoritesManager
         }
     }
 
-    // Ottieni tutte le linee preferite di un utente
     public static List<String> getFavoriteLines(String username) {
         List<String> lines = new ArrayList<>();
         Integer userId = DatabaseManager.getUserId(username);

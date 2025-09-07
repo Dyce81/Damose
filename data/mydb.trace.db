@@ -42,3 +42,18 @@ INSERT INTO favorite_lines (user_id, line_name) VALUES (?, ?) [42102-232]
 2025-09-03 18:32:32.354549+02:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FAVORITE_LINES" not found; SQL statement:
 INSERT INTO favorite_lines (user_id, line_name) VALUES (?, ?) [42102-232]
+2025-09-07 16:44:34.271301+02:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Cannot truncate "PUBLIC.USERS"; SQL statement:
+TRUNCATE TABLE users [90106-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:644)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.command.ddl.TruncateTable.update(TruncateTable.java:42)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:139)
+	at org.h2.command.Command.executeUpdate(Command.java:304)
+	at org.h2.command.Command.executeUpdate(Command.java:248)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:262)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
+	at Controller.DatabaseManager.deleteUsersTable(DatabaseManager.java:218)
+	at Main.main(Main.java:21)
