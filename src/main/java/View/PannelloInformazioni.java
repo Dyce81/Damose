@@ -33,8 +33,6 @@ public class PannelloInformazioni {
         pannello.setAlignmentX(Component.LEFT_ALIGNMENT);
         pannello.setPreferredSize(new Dimension(200, 750));
         pannello.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
-        // Rimuovi la dimensione preferita fissa per permettere lo scroll
-        // pannello.setPreferredSize(new Dimension(200, 800));
 
         nome = new JLabel("Seleziona una fermata.");
         nome.setForeground(Color.WHITE);
@@ -131,7 +129,6 @@ public class PannelloInformazioni {
             }
         });
 
-        // Imposta il testo iniziale del pulsante
         String user = LoginManager.username;
         boolean presente = FavoritesManager.isFavoriteStopPresent(DatabaseManager.getUserId(user), nomeFermata);
         if (presente) {
@@ -161,7 +158,7 @@ public class PannelloInformazioni {
     }
 
     public void mostraInfoLineaUI(String routeId, boolean daComboBox) {
-        infoLinea.removeAll(); // Pulisci il pannello delle informazioni della linea
+        infoLinea.removeAll();
         infoLinea.add(testoLinea);
         infoLinea.add(tipoMezzo);
         infoLinea.add(prossimoArrivo);
@@ -172,7 +169,7 @@ public class PannelloInformazioni {
         infoLinea.revalidate();
         infoLinea.repaint();
 
-        // Rimuovi il pulsante dei mezzi prima di aggiungerlo
+        // Rimuove il pulsante dei mezzi prima di aggiungerlo
         if (GestoreInformazioni.getMostraMezziButton().getParent() != null) {
             GestoreInformazioni.getMostraMezziButton().getParent().remove(GestoreInformazioni.getMostraMezziButton());
         }
