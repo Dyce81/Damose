@@ -73,12 +73,12 @@ public class PannelloInformazioni {
     public void setLineeServite(ArrayList<Route> linee, GestoreInformazioni gestore) {
         pulsantiLinee.removeAll();
         for (Route r : linee) {
-            JButton pulsanteLinea = new JButton(StaticGTFS.getNomeRealeMetro(r.getId()));
+            JButton pulsanteLinea = new JButton(StaticGTFS.getNomeRealeMetro(r.id()));
             pulsanteLinea.setBorderPainted(false);
             pulsanteLinea.setBackground(rossoScuro);
             pulsanteLinea.setForeground(Color.WHITE);
             pulsanteLinea.setMaximumSize(new Dimension(Integer.MAX_VALUE, pulsanteLinea.getPreferredSize().height));
-            pulsanteLinea.addActionListener(e -> gestore.mostraInfoLinea(r.getId(), false));
+            pulsanteLinea.addActionListener(e -> gestore.mostraInfoLinea(r.id(), false));
             pulsantiLinee.add(pulsanteLinea);
         }
         lineeServite.setText("Linee servite:");

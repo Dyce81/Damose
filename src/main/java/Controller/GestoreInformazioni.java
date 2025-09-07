@@ -72,15 +72,15 @@ public class GestoreInformazioni {
         // Se la fermata è della metropolitana, usiamo la logica specifica
         if (stopId.startsWith("ITO")) {
             List<CollegamentoMetro> collegamentiTrovati = StaticGTFS.collegamentiMetro.stream()
-                    .filter(c -> c.getStopId().equals(stopId))
+                    .filter(c -> c.stopId().equals(stopId))
                     .toList();
 
             for (Route r : StaticGTFS.routes) {
                 // Controlla se la linea è una metropolitana (tipo 1)
-                if (r.getTipo() == 1) {
+                if (r.tipo() == 1) {
                     for (CollegamentoMetro c : collegamentiTrovati) {
                         // Controlla se il routeId del collegamento corrisponde a quello della linea
-                        if (c.getRouteId().equals(r.getId())) {
+                        if (c.routeId().equals(r.id())) {
                             lineeTrovate.add(r);
                         }
                     }
@@ -89,7 +89,7 @@ public class GestoreInformazioni {
         } else {
             // Logica per autobus e altri mezzi
 
-            // Trova tutti gli ID dei "trip" (corse) che si fermano a questo "stopId"
+            //Trova tutti gli ID dei "trip" (corse) che si fermano a questo "stopId"
             Set<String> tripIds = new HashSet<>();
             for (StopTime st : StaticGTFS.stopTimes) {
                 if (st.getStopId().equals(stopId)) {
@@ -97,17 +97,17 @@ public class GestoreInformazioni {
                 }
             }
 
-            // Usa gli ID dei "trip" per trovare gli ID delle "route" (linee) corrispondenti
+            //Usa gli ID dei "trip" per trovare gli ID delle "route" (linee) corrispondenti
             Set<String> routeIds = new HashSet<>();
             for (Trip t : StaticGTFS.trips) {
-                if (tripIds.contains(t.getId())) {
-                    routeIds.add(t.getRouteId());
+                if (tripIds.contains(t.id())) {
+                    routeIds.add(t.routeId());
                 }
             }
 
-            // Infine, usa gli ID delle "route" per trovare gli oggetti "Route" completi
+            //usa gli ID delle "route" per trovare gli oggetti "Route" completi
             for (Route r : StaticGTFS.routes) {
-                if (routeIds.contains(r.getId())) {
+                if (routeIds.contains(r.id())) {
                     lineeTrovate.add(r);
                 }
             }
@@ -127,7 +127,7 @@ public class GestoreInformazioni {
         CustomWaypoint fermata = this.getUltimaFermata();
         if (linea == null) return;
 
-        pannelloInformazioni.updateLineaInfo(routeId, getTipoMezzoString(linea.getTipo()), "Calcolo del prossimo arrivo in corso...");
+        pannelloInformazioni.updateLineaInfo(routeId, getTipoMezzoString(linea.tipo()), "Calcolo del prossimo arrivo in corso...");
         pannelloInformazioni.mostraInfoLineaUI(routeId, daComboBox);
         chiamataDaComboBox = daComboBox;
         avvisoMostrato = false;
