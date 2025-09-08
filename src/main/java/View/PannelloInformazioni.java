@@ -22,7 +22,8 @@ public class PannelloInformazioni {
     private final JLabel tipoMezzo;
     private final JLabel testoLinea;
     private final JLabel prossimoArrivo;
-    private final JButton tastoPref;
+    private final JButton tastoFermataPref;
+    private final JButton tastoLineaPref;
     private static final Color rossoScuro = new Color(143, 51, 51);
     private static final Color rosso = new Color(175, 62, 62);
 
@@ -53,14 +54,23 @@ public class PannelloInformazioni {
         infoLinea.setPreferredSize(new Dimension(210, infoLinea.getPreferredSize().height));
         infoLinea.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        tastoPref = new JButton();
-        tastoPref.setVisible(false);
-        tastoPref.setPreferredSize(new Dimension(185, 30));
-        tastoPref.setMaximumSize(new Dimension(185, tastoPref.getPreferredSize().height));
-        tastoPref.setBackground(rosso);
-        tastoPref.setForeground(Color.WHITE);
-        tastoPref.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-        tastoPref.setBorderPainted(true);
+        tastoFermataPref = new JButton();
+        tastoFermataPref.setVisible(false);
+        tastoFermataPref.setPreferredSize(new Dimension(185, 30));
+        tastoFermataPref.setMaximumSize(new Dimension(185, tastoFermataPref.getPreferredSize().height));
+        tastoFermataPref.setBackground(rosso);
+        tastoFermataPref.setForeground(Color.WHITE);
+        tastoFermataPref.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        tastoFermataPref.setBorderPainted(true);
+
+        tastoLineaPref = new JButton();
+        tastoLineaPref.setVisible(false);
+        tastoLineaPref.setPreferredSize(new Dimension(185, 30));
+        tastoLineaPref.setMaximumSize(new Dimension(185, tastoFermataPref.getPreferredSize().height));
+        tastoLineaPref.setBackground(rosso);
+        tastoLineaPref.setForeground(Color.WHITE);
+        tastoLineaPref.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        tastoLineaPref.setBorderPainted(true);
 
         tipoMezzo = new JLabel("");
         tipoMezzo.setForeground(Color.WHITE);
@@ -90,7 +100,7 @@ public class PannelloInformazioni {
         pannello.add(fermataSelez);
         pannello.add(nome);
         pannello.add(Box.createVerticalStrut(5));
-        pannello.add(tastoPref);
+        pannello.add(tastoFermataPref);
         pannello.add(Box.createVerticalStrut(5));
         pannello.add(lineeServite);
         pannello.add(pulsantiLinee);
@@ -104,37 +114,55 @@ public class PannelloInformazioni {
     public void impostaFermata(CustomWaypoint fermata) {
         nome.setText(fermata.getNome());
         if (LoginManager.logged) {
-            tastoPref.setVisible(true);
+            tastoFermataPref.setVisible(true);
             impostaFermataPref(fermata.getNome());
         } else {
-            tastoPref.setVisible(false);
+            tastoFermataPref.setVisible(false);
         }
     }
 
     public void impostaFermataPref(String nomeFermata) {
-        for (var al : tastoPref.getActionListeners()) {
-            tastoPref.removeActionListener(al);
+        for (var al : tastoFermataPref.getActionListeners()) {
+            tastoFermataPref.removeActionListener(al);
         }
-
-        tastoPref.addActionListener(e -> {
-            String user = LoginManager.username;
-            boolean presente = FavoritesManager.isFavoriteStopPresent(DatabaseManager.getUserId(user), nomeFermata);
-
-            if (presente) {
-                FavoritesManager.removeFavoriteStop(user, nomeFermata);
-                tastoPref.setText("Aggiungi ai preferiti");
-            } else {
-                FavoritesManager.addFavoriteStop(user, nomeFermata);
-                tastoPref.setText("Rimuovi dai preferiti");
-            }
-        });
-
         String user = LoginManager.username;
         boolean presente = FavoritesManager.isFavoriteStopPresent(DatabaseManager.getUserId(user), nomeFermata);
+        tastoFermataPref.addActionListener(e -> {
+            if (presente) {
+                FavoritesManager.removeFavoriteStop(user, nomeFermata);
+                tastoFermataPref.setText("Aggiungi ai preferiti");
+            } else {
+                FavoritesManager.addFavoriteStop(user, nomeFermata);
+                tastoFermataPref.setText("Rimuovi dai preferiti");
+            }
+        });
         if (presente) {
-            tastoPref.setText("Rimuovi dai preferiti");
+            tastoFermataPref.setText("Rimuovi dai preferiti");
         } else {
-            tastoPref.setText("Aggiungi ai preferiti");
+            tastoFermataPref.setText("Aggiungi ai preferiti");
+        }
+    }
+
+    public void impostaLineaPref(String nomeLinea)
+    {
+        for (var al : tastoLineaPref.getActionListeners()) {
+            tastoLineaPref.removeActionListener(al);
+        }
+        String user = LoginManager.username;
+        boolean presente = FavoritesManager.isFavoriteLinePresent(DatabaseManager.getUserId(user), testoLinea.getText());
+        tastoLineaPref.addActionListener(e -> {
+            if (presente) {
+                FavoritesManager.removeFavoriteLine(user, nomeLinea);
+                tastoLineaPref.setText("Aggiungi ai preferiti");
+            } else {
+                FavoritesManager.addFavoriteLine(user, nomeLinea);
+                tastoLineaPref.setText("Rimuovi dai preferiti");
+            }
+        });
+        if (presente) {
+            tastoLineaPref.setText("Rimuovi dai preferiti");
+        } else {
+            tastoLineaPref.setText("Aggiungi ai preferiti");
         }
     }
 
@@ -160,6 +188,13 @@ public class PannelloInformazioni {
     public void mostraInfoLineaUI(String routeId, boolean daComboBox) {
         infoLinea.removeAll();
         infoLinea.add(testoLinea);
+        infoLinea.add(tastoLineaPref);
+        if (LoginManager.logged) {
+            tastoLineaPref.setVisible(true);
+            impostaLineaPref(testoLinea.getText());
+        } else {
+            tastoLineaPref.setVisible(false);
+        }
         infoLinea.add(tipoMezzo);
         infoLinea.add(prossimoArrivo);
         infoLinea.add(statoCorsa);
@@ -214,7 +249,7 @@ public class PannelloInformazioni {
         infoLinea.repaint();
 
         // Rimuovi anche il pulsante preferiti e quello dei mezzi
-        tastoPref.setVisible(false);
+        tastoFermataPref.setVisible(false);
         if (GestoreInformazioni.getMostraMezziButton().getParent() != null) {
             pannello.remove(GestoreInformazioni.getMostraMezziButton());
         }
