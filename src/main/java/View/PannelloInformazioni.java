@@ -191,7 +191,7 @@ public class PannelloInformazioni {
         infoLinea.add(tastoLineaPref);
         if (LoginManager.logged) {
             tastoLineaPref.setVisible(true);
-            impostaLineaPref(testoLinea.getText());
+            impostaLineaPref(routeId);
         } else {
             tastoLineaPref.setVisible(false);
         }

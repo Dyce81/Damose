@@ -20,7 +20,7 @@ public class FavoritesPage extends Page
         page.setLayout(null);
 
         JPanel panel = new JPanel();
-        panel.setBounds(0, 10, 450, 270);
+        panel.setBackground(rossoscuro);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         if (LoginManager.logged) {creaIfLogged(panel);}
@@ -32,38 +32,42 @@ public class FavoritesPage extends Page
 
     public void creaIfLogged(JPanel panel)
     {
-        List<String> linee = FavoritesManager.getFavoriteLines(LoginManager.username);
-        List<String> fermate = FavoritesManager.getFavoriteStops(LoginManager.username);
+        panel.setBounds(0, 0, 450, 240);
+        page.setBackground(rossoscuro);
 
         JPanel scrollPanel = new JPanel();
         scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.Y_AXIS));
 
         JScrollPane scrollPane = new JScrollPane(scrollPanel);
-        scrollPane.setPreferredSize(new Dimension(420, Integer.MAX_VALUE));
+        scrollPane.setPreferredSize(new Dimension(420, scrollPanel.getPreferredSize().height));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         JButton lineeFermate = new JButton("Mostra Linee");
-        lineeFermate.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lineeFermate.setPreferredSize(new Dimension(120, 30));
+        lineeFermate.setMaximumSize(new Dimension(120, 30));
+        impostaButton(lineeFermate);
+        panel.add(Box.createVerticalStrut(5));
         panel.add(lineeFermate);
+        panel.add(Box.createVerticalStrut(5));
 
-        disegnaPreferiti(fermate, scrollPanel, true);
+        disegnaPreferiti(FavoritesManager.getFavoriteStops(LoginManager.username), scrollPanel, true);
 
         lineeFermate.addActionListener(e -> {
             scrollPanel.removeAll();
-            scrollPanel.repaint();
+            List<String> linee = FavoritesManager.getFavoriteLines(LoginManager.username);
+            List<String> fermate = FavoritesManager.getFavoriteStops(LoginManager.username);
             if (lineeFermate.getText().equals("Mostra Linee"))
             {
                 lineeFermate.setText("Mostra Fermate");
                 disegnaPreferiti(linee, scrollPanel, false);
-
-
             }
             else if (lineeFermate.getText().equals("Mostra Fermate"))
             {
                 lineeFermate.setText("Mostra Linee");
                 disegnaPreferiti(fermate, scrollPanel, true);
             }
+            scrollPanel.repaint();
         });
 
         panel.add(scrollPane);
@@ -72,11 +76,14 @@ public class FavoritesPage extends Page
 
     public void creaIfNotLogged(JPanel panel)
     {
-        panel.add(Box.createVerticalStrut(50));
+        panel.setBounds(0, 0, 450, 280);
+        panel.add(Box.createVerticalStrut(75));
 
         JLabel loggati = new JLabel("DEVI EFFETTUARE IL LOGIN");
+        loggati.setForeground(Color.WHITE);
         loggati.setAlignmentX(Component.CENTER_ALIGNMENT);
         JLabel loggati2 = new JLabel("PER VEDERE I TUI PREFERITI");
+        loggati2.setForeground(Color.WHITE);
         loggati2.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(loggati);
         panel.add(loggati2);
@@ -84,7 +91,9 @@ public class FavoritesPage extends Page
         panel.add(Box.createVerticalStrut(20));
 
         JButton apriLogin = new JButton("APRI PAGINA LOGIN");
-        apriLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
+        apriLogin.setPreferredSize(new Dimension(125, 30));
+        apriLogin.setMaximumSize(new Dimension(125, 30));
+        impostaButton(apriLogin);
         panel.add(apriLogin);
         apriLogin.addActionListener(e -> {
             chiudiPagina(this.page, false, 0);
@@ -95,15 +104,21 @@ public class FavoritesPage extends Page
 
     void disegnaPreferiti(List<String> preferiti, JPanel scrollPanel, boolean fermata)
     {
-        for (String linea : preferiti)
+        if (preferiti.isEmpty())
+        {
+            scrollPanel.setBackground(rossoscuro);
+        }
+        for (String preferito : preferiti)
         {
             JPanel miniPanel = new JPanel();
             miniPanel.setPreferredSize(new Dimension(420, 55));
             miniPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
             miniPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+            miniPanel.setBackground(rossoscuro);
             JButton vedi = new JButton();
             vedi.setPreferredSize(new Dimension(50, 50));
             vedi.setIcon((new ImageIcon("assets/fermata-selezionata50x50.png")));
+            impostaButton(vedi);
             miniPanel.add(vedi);
             vedi.addActionListener(e -> {
                 //da aggiungere metodo che inquadra e seleziona la fermata sulla mappa
@@ -111,13 +126,18 @@ public class FavoritesPage extends Page
             JButton rimuovi = new JButton();
             rimuovi.setPreferredSize(new Dimension(50, 50));
             rimuovi.setIcon(new ImageIcon("assets/favorite2.png"));
+            impostaButton(rimuovi);
             miniPanel.add(rimuovi);
             rimuovi.addActionListener(e2 -> {
                 rimuovi.setIcon(new ImageIcon("assets/favorite.png"));
-                if (fermata) {FavoritesManager.removeFavoriteStop(LoginManager.username, linea);}
-                else {FavoritesManager.removeFavoriteLine(LoginManager.username, linea);}
+                if (fermata) {FavoritesManager.removeFavoriteStop(LoginManager.username, preferito);}
+                else {FavoritesManager.removeFavoriteLine(LoginManager.username, preferito);}
             });
-            miniPanel.add(new JLabel(linea.toUpperCase()));
+            JLabel testoPref = new JLabel();
+            if (fermata)  {testoPref.setText(preferito.toUpperCase());}
+            else {testoPref.setText("LINEA " + preferito.toUpperCase());}
+            testoPref.setForeground(Color.WHITE);
+            miniPanel.add(testoPref);
 
             scrollPanel.add(miniPanel);
         }
