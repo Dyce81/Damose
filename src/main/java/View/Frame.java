@@ -2,6 +2,7 @@ package View;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -108,19 +109,52 @@ public class Frame extends JFrame {
 
     //Fa esattamente quello che sembra
     public void impostaComboBox() {
+        testoFermata.setPreferredSize(new Dimension(330, 30));
+        testoLinea.setPreferredSize(new Dimension(160, 30));
+
+        DefaultListCellRenderer renderer = new DefaultListCellRenderer();
+        renderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
+        testoFermata.setRenderer(renderer);
+        testoLinea.setRenderer(renderer);
+
         for (CustomWaypoint f : StaticGTFS.stops) {
             testoFermata.addItem(f);
         }
         testoFermata.filtra("");
-        testoFermata.setSelectedItem("- Seleziona una fermata -");
+        testoFermata.setSelectedItem("Seleziona una fermata");
         testoFermata.hidePopup();
+        JTextField editor = (JTextField) testoFermata.getEditor().getEditorComponent();
+        editor.setHorizontalAlignment(SwingConstants.CENTER);
+        JTextComponent editor1 = (JTextComponent) testoFermata.getEditor().getEditorComponent();
+        editor1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                editor.selectAll();}
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                editor.setText("Seleziona una fermata");
+            }
+        });
 
         for (Route l : StaticGTFS.routes) {
             testoLinea.addItem(l);
         }
         testoLinea.filtra("");
-        testoLinea.setSelectedItem("- Seleziona una linea -");
+        testoLinea.setSelectedItem("Seleziona una linea");
         testoLinea.hidePopup();
+        JTextField editor3 = (JTextField) testoLinea.getEditor().getEditorComponent();
+        editor3.setHorizontalAlignment(SwingConstants.CENTER);
+        JTextComponent editor2 = (JTextComponent) testoLinea.getEditor().getEditorComponent();
+        editor2.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                editor2.selectAll();}
+            @Override
+            public void focusLost(FocusEvent e) {
+                editor.setText("Seleziona una linea");
+            }
+        });
     }
 
     private void cercaFermata() {

@@ -71,7 +71,7 @@ public class LoadingScreen extends JDialog {
         loadingText.setForeground(Color.WHITE);
         panelInterno.add(loadingText);
 
-        panelInterno.add(Box.createVerticalStrut(75));
+        panelInterno.add(Box.createVerticalStrut(85));
 
         JLabel funFact = new JLabel("", SwingConstants.CENTER);
         funFact.setFont(new Font("Arial", Font.BOLD, 18));
