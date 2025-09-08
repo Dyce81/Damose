@@ -149,7 +149,7 @@ public class FavoritesPage extends Page
                     Mappa.disegnaLinea(percorso);
                     Mappa.getMapViewer().zoomToBestFit(new HashSet<>(percorso), 0.7);
                     if (lineaSelez != null) {
-                        gestoreInformazioni.mostraInfoLinea(lineaSelez.id(), false);
+                        gestoreInform.mostraInfoLinea(lineaSelez.id(), true);
                     }
                 }
             });

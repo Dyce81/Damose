@@ -252,8 +252,9 @@ public class PannelloInformazioni {
         infoLinea.revalidate();
         infoLinea.repaint();
 
-        // Rimuovi anche il pulsante preferiti e quello dei mezzi
+
         tastoFermataPref.setVisible(false);
+        prossimoArrivo.setText("");
         if (GestoreInformazioni.getMostraMezziButton().getParent() != null) {
             pannello.remove(GestoreInformazioni.getMostraMezziButton());
         }

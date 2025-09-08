@@ -221,6 +221,7 @@ public class Frame extends JFrame {
         chiudiButton.setForeground(Color.WHITE);
         chiudiButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         chiudiButton.setBorderPainted(true);
+        chiudiButton.setFocusPainted(false);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(new Color(143, 51, 51));

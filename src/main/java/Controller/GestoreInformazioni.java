@@ -142,7 +142,6 @@ public class GestoreInformazioni {
 
         pannelloInformazioni.updateLineaInfo(routeId, getTipoMezzoString(linea.tipo()), "<html>Calcolo del prossimo arrivo in corso...</html>");
         pannelloInformazioni.mostraInfoLineaUI(routeId, daComboBox);
-        chiamataDaComboBox = daComboBox;
         avvisoMostrato = false;
 
         if (task != null) task.cancel(true);
@@ -243,6 +242,7 @@ public class GestoreInformazioni {
         deselezionaLinea();
         tracciamentoAttivo = false;
         mostraMezzi.setText("  Mostra mezzi sulla linea  ");
+        pannelloInformazioni.setAvvisoPrevisione("");
         pannelloInformazioni.resetPannello();
     }
 }
