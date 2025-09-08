@@ -17,9 +17,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import static View.Frame.rosso;
-import static java.awt.Component.CENTER_ALIGNMENT;
-
 public class GestoreInformazioni {
 
     private final Frame padre;
@@ -77,10 +74,15 @@ public class GestoreInformazioni {
         }
     }
 
+    public void deselezionaLinea() {
+        Mappa.disegnaLinea(new ArrayList<>());
+        Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
+        Mappa.getMapViewer().repaint();
+    }
+
     private ArrayList<Route> trovaLineePerFermata(String stopId) {
         ArrayList<Route> lineeTrovate = new ArrayList<>();
 
-        // Se la fermata è della metropolitana, usiamo la logica specifica
         if (stopId.startsWith("ITO")) {
             List<CollegamentoMetro> collegamentiTrovati = StaticGTFS.collegamentiMetro.stream()
                     .filter(c -> c.stopId().equals(stopId))
@@ -168,6 +170,7 @@ public class GestoreInformazioni {
                 pannelloInformazioni.setProssimoArrivo("<html>Prossimo arrivo previsto: " + tempo + "</html>");
             }
         } else {
+            pannelloInformazioni.setAvvisoPrevisione("");
             String stato = DynamicGTFS.getStato(DynamicGTFS.getUltimoTripDescriptor());
             int ritardo = DynamicGTFS.getRitardo(DynamicGTFS.getUltimoTripUpdate());
             String ritardoTesto = (ritardo < 0) ? "Anticipo stimato: " + (ritardo * -1) + " minuti." : "Ritardo stimato: " + ritardo + " minuti.";
@@ -237,8 +240,7 @@ public class GestoreInformazioni {
     public void resetGestore() {
         if (task != null) task.cancel(true);
         CustomWaypointPainter.setTracciamentoAttivo(false);
-        Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
-        Mappa.getMapViewer().repaint();
+        deselezionaLinea();
         tracciamentoAttivo = false;
         mostraMezzi.setText("  Mostra mezzi sulla linea  ");
         pannelloInformazioni.resetPannello();

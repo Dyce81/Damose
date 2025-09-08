@@ -1,17 +1,26 @@
 package View;
 
 import Controller.FavoritesManager;
+import Controller.GestoreInformazioni;
 import Controller.LoginManager;
+import Controller.StaticGTFS;
+import Model.CustomWaypoint;
 import Model.Page;
+import Model.Route;
+import org.jxmapviewer.viewer.GeoPosition;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashSet;
 import java.util.List;
 
 public class FavoritesPage extends Page
 {
-    public FavoritesPage()
+    private final GestoreInformazioni gestoreInformazioni;
+
+    public FavoritesPage(GestoreInformazioni gestoreInform)
     {
+        gestoreInformazioni = gestoreInform;
         page = new JDialog();
         page.setSize(450, 280);
         page.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -51,7 +60,7 @@ public class FavoritesPage extends Page
         panel.add(lineeFermate);
         panel.add(Box.createVerticalStrut(5));
 
-        disegnaPreferiti(FavoritesManager.getFavoriteStops(LoginManager.username), scrollPanel, true);
+        disegnaPreferiti(FavoritesManager.getFavoriteStops(LoginManager.username), scrollPanel, true, gestoreInformazioni);
 
         lineeFermate.addActionListener(e -> {
             scrollPanel.removeAll();
@@ -60,12 +69,12 @@ public class FavoritesPage extends Page
             if (lineeFermate.getText().equals("Mostra Linee"))
             {
                 lineeFermate.setText("Mostra Fermate");
-                disegnaPreferiti(linee, scrollPanel, false);
+                disegnaPreferiti(linee, scrollPanel, false, gestoreInformazioni);
             }
             else if (lineeFermate.getText().equals("Mostra Fermate"))
             {
                 lineeFermate.setText("Mostra Linee");
-                disegnaPreferiti(fermate, scrollPanel, true);
+                disegnaPreferiti(fermate, scrollPanel, true, gestoreInformazioni);
             }
             scrollPanel.repaint();
         });
@@ -102,7 +111,7 @@ public class FavoritesPage extends Page
 
     }
 
-    void disegnaPreferiti(List<String> preferiti, JPanel scrollPanel, boolean fermata)
+    void disegnaPreferiti(List<String> preferiti, JPanel scrollPanel, boolean fermata, GestoreInformazioni gestoreInform)
     {
         if (preferiti.isEmpty())
         {
@@ -121,7 +130,28 @@ public class FavoritesPage extends Page
             impostaButton(vedi);
             miniPanel.add(vedi);
             vedi.addActionListener(e -> {
-                //da aggiungere metodo che inquadra e seleziona la fermata sulla mappa
+                gestoreInform.deselezionaFermata();
+                gestoreInform.deselezionaLinea();
+                if (fermata)
+                {
+                    chiudiPagina(page, false, 100);
+                    String idFermataSelez = StaticGTFS.getIdFermata(preferito);
+                    CustomWaypoint fermataSelez = StaticGTFS.getFermata(idFermataSelez);
+                    gestoreInformazioni.selezionaFermata(fermataSelez);
+                    if (fermataSelez != null) {
+                        Mappa.impostaPosizione(fermataSelez.getLatitudine(), fermataSelez.getLongitudine());
+                    }
+                }
+                else {
+                    chiudiPagina(page, false, 100);
+                    List<GeoPosition> percorso = StaticGTFS.getPercorso(preferito);
+                    Route lineaSelez = StaticGTFS.getLinea(preferito);
+                    Mappa.disegnaLinea(percorso);
+                    Mappa.getMapViewer().zoomToBestFit(new HashSet<>(percorso), 0.7);
+                    if (lineaSelez != null) {
+                        gestoreInformazioni.mostraInfoLinea(lineaSelez.id(), false);
+                    }
+                }
             });
             JButton rimuovi = new JButton();
             rimuovi.setPreferredSize(new Dimension(50, 50));

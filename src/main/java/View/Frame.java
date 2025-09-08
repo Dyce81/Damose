@@ -8,7 +8,6 @@ import java.util.*;
 import java.util.List;
 
 import Controller.GestoreInformazioni;
-import Controller.GestoreWaypoint;
 import Controller.StaticGTFS;
 import Controller.WiFi;
 import Model.*;
@@ -95,7 +94,7 @@ public class Frame extends JFrame {
         favorites.setPreferredSize(new Dimension(50, 50));
 
         //accesso alla pagina delle impostazioni
-        favorites.addActionListener(e -> new FavoritesPage());
+        favorites.addActionListener(e -> new FavoritesPage(gestoreInformazioni));
 
         pannelloSuperiore.add(profileButton);
         pannelloSuperiore.add(testoLinea);
@@ -136,7 +135,9 @@ public class Frame extends JFrame {
         for (CustomWaypoint f : StaticGTFS.stops) {
             if (f.getNome().equals(nomeFermata)) //fermata trovata
             {
-                mappa.impostaPosizione(f.getLatitudine(), f.getLongitudine());
+                Mappa.impostaPosizione(f.getLatitudine(), f.getLongitudine());
+                gestoreInformazioni.deselezionaLinea();
+                gestoreInformazioni.resetGestore();
                 gestoreInformazioni.selezionaFermata(f);
                 f.seleziona();
                 break;
@@ -151,8 +152,14 @@ public class Frame extends JFrame {
         pannelloInformazioni.resetPannello();
 
         List<GeoPosition> percorso = StaticGTFS.getPercorso(nomeLinea);
+        gestoreInformazioni.deselezionaFermata();
+        Route linea = StaticGTFS.getLinea(nomeLinea);
+        if (linea != null) {
+            gestoreInformazioni.mostraInfoLinea(linea.id(), true);
+        }
         Mappa.disegnaLinea(percorso);
         Mappa.getMapViewer().zoomToBestFit(new HashSet<>(percorso), 0.7);
+
         //Questo controllo è molto sbarazzino
         if (!nomeLinea.equals("- Seleziona una linea -")) {
             //TODO: invocare altri metodi (non so quali) [CONTINUA DA QUI!!!]

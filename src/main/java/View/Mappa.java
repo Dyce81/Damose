@@ -65,7 +65,7 @@ public class Mappa
         mappa.addKeyListener(new PanKeyListener(mappa));
     }
 
-    public void impostaPosizione(double latitude, double longitude)
+    public static void impostaPosizione(double latitude, double longitude)
     {
         GeoPosition posizione = new GeoPosition(latitude, longitude);
         mappa.setAddressLocation(posizione);

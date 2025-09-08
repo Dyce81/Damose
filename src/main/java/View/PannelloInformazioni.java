@@ -51,7 +51,7 @@ public class PannelloInformazioni {
         infoLinea.setLayout(new BoxLayout(infoLinea, BoxLayout.Y_AXIS));
         infoLinea.setBackground(rosso);
         infoLinea.setForeground(Color.WHITE);
-        infoLinea.setPreferredSize(new Dimension(210, infoLinea.getPreferredSize().height));
+        infoLinea.setPreferredSize(new Dimension(pannello.getWidth(), infoLinea.getPreferredSize().height));
         infoLinea.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         tastoFermataPref = new JButton();
@@ -196,11 +196,15 @@ public class PannelloInformazioni {
             tastoLineaPref.setVisible(false);
         }
         infoLinea.add(tipoMezzo);
-        infoLinea.add(prossimoArrivo);
-        infoLinea.add(statoCorsa);
-        infoLinea.add(ritardoCorsa);
-        infoLinea.add(avvisoPrevisione);
-        infoLinea.add(avvisoTracciamento);
+        infoLinea.add(new JLabel("                                                                 "));
+        if (!daComboBox)
+        {
+            infoLinea.add(prossimoArrivo);
+            infoLinea.add(statoCorsa);
+            infoLinea.add(ritardoCorsa);
+            infoLinea.add(avvisoPrevisione);
+            infoLinea.add(avvisoTracciamento);
+        }
         infoLinea.revalidate();
         infoLinea.repaint();
 

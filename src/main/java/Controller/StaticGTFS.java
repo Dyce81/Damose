@@ -247,6 +247,24 @@ public class StaticGTFS
         return null; //alquanto improbabile che venga restituito null
     }
 
+    public static CustomWaypoint getFermata(String stopId)
+    {
+        for (CustomWaypoint f : stops)
+            if (f.getId().equals(stopId))
+                return f;
+
+        return null;
+    }
+
+    public static String getIdFermata(String nomeFermata) {
+        for (CustomWaypoint stop : stops) {
+            if (stop.getNome().equals(nomeFermata)) {
+                return stop.getId();
+            }
+        }
+        return null;
+    }
+
     public static List<GeoPosition> getPercorso(String routeId)
     {
         ArrayList<Trip> viaggi = trips.stream()

@@ -49,7 +49,6 @@ public class GestoreWaypoint {
                             // Delega la deselezione al GestoreInformazioni
                             gestoreInformazioni.deselezionaFermata();
                         } else {
-                            // Delega la selezione al GestoreInformazioni
                             gestoreInformazioni.selezionaFermata(wp);
                         }
                         break;
