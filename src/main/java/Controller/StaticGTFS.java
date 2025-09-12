@@ -21,9 +21,6 @@ public class StaticGTFS
     public static ArrayList<PuntoShape> shapes = new ArrayList<>();
     public static ArrayList<CollegamentoMetro> collegamentiMetro = new ArrayList<>();
 
-    //public static ArrayList<Calendar> calendars = new ArrayList<>();
-
-    private static String ultimoTripIdCalcolato;
     private static final List<String> lineeMetro = new ArrayList<>();
 
     public static void inizializzaDati()
@@ -170,13 +167,7 @@ public class StaticGTFS
                 .filter(st -> parseTimeCorretto(st.getOrarioArrivo().toString()).isAfter(adesso))
                 .min(Comparator.comparing(st -> parseTimeCorretto(st.getOrarioArrivo().toString())));
 
-        if (prossimoArrivo.isPresent())
-        {
-            ultimoTripIdCalcolato = prossimoArrivo.get().getTripId();
-            return prossimoArrivo.get().getOrarioArrivo().format(DateTimeFormatter.ofPattern("HH:mm"));
-        }
-        else
-            return "";
+        return prossimoArrivo.map(stopTime -> stopTime.getOrarioArrivo().format(DateTimeFormatter.ofPattern("HH:mm"))).orElse("");
     }
 
     // Controlla se la linea passata come parametro è una linea della metropolitana.
@@ -212,7 +203,8 @@ public class StaticGTFS
 
         try (CSVReader reader = new CSVReader(new FileReader(path)))
         {
-            String[] linea = reader.readNext(); //Ignora la prima linea
+            reader.readNext();
+            String[] linea; //Ignora la prima linea
             while ((linea = reader.readNext()) != null)
             {
                 valori.add(linea);
@@ -282,21 +274,5 @@ public class StaticGTFS
                 .sorted(Comparator.comparingInt(PuntoShape::getSequenza))
                 .map(sp -> new GeoPosition(sp.getLatitudine(), sp.getLongitudine()))
                 .toList();
-    }
-
-    public static String getUltimoTripIdCalcolato()
-    {
-        return ultimoTripIdCalcolato;
-    }
-
-    // Sfrutta l'ultimo trip id calcolato (da getTripUpdate) per ottenere l'headsign del viaggio
-    // calcolato (e capire la direzione del mezzo selezionato)
-    public static String getHeadsign()
-    {
-        for (Trip trip : trips)
-            if (trip.id().equals(ultimoTripIdCalcolato))
-                return trip.headsign();
-
-        return "";
     }
 }
