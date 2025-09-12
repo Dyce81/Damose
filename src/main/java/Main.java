@@ -9,10 +9,6 @@ import javax.swing.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//disclaimer: il progetto potrebbe essere organizzato meglio - magari separando ulteriormente la logica
-//della creazione delle fermate, creando un'altra classe WaypointManager che si occupa di piazzare
-//i vari waypoint - volendo può anche essere istanziata e usata da Mappa.java
-
 public class Main
 {
     public static void main(String[] args)
