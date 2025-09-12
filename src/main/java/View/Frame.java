@@ -108,8 +108,8 @@ public class Frame extends JFrame {
 
     //Fa esattamente quello che sembra
     public void impostaComboBox() {
-        testoFermata.setPreferredSize(new Dimension(330, 40));
-        testoLinea.setPreferredSize(new Dimension(160, 40));
+        testoFermata.setPreferredSize(new Dimension(330, 30));
+        testoLinea.setPreferredSize(new Dimension(160, 30));
 
         for (CustomWaypoint f : StaticGTFS.stops)
             testoFermata.addItem(f);
@@ -139,7 +139,7 @@ public class Frame extends JFrame {
         testoLinea.setSelectedItem("Seleziona una linea");
         testoLinea.hidePopup();
 
-        /*JTextField editor3 = (JTextField) testoLinea.getEditor().getEditorComponent();
+        JTextField editor3 = (JTextField) testoLinea.getEditor().getEditorComponent();
         editor3.setHorizontalAlignment(SwingConstants.CENTER);
         JTextComponent editor2 = (JTextComponent) testoLinea.getEditor().getEditorComponent();
         editor2.addFocusListener(new FocusAdapter() {
@@ -150,7 +150,7 @@ public class Frame extends JFrame {
             public void focusLost(FocusEvent e) {
                 editor.setText("Seleziona una linea");
             }
-        });*/
+        });
     }
 
     private void cercaFermata() {
