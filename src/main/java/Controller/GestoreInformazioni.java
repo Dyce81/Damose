@@ -122,11 +122,6 @@ public class GestoreInformazioni {
         return lineeTrovate;
     }
 
-
-    public JButton getMostraMezziButton() {
-        return mostraMezzi;
-    }
-
     public void mostraInfoLinea(String routeId, boolean daComboBox)
     {
         Route linea = StaticGTFS.getLinea(routeId);
