@@ -21,7 +21,7 @@ public class GestoreInformazioni {
 
     private final Frame padre;
     private final PannelloInformazioni pannelloInformazioni;
-    private static JButton mostraMezzi;
+    private final JButton mostraMezzi;
     private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private static ScheduledFuture<?> task;
     private boolean tracciamentoAttivo = false;
@@ -33,15 +33,7 @@ public class GestoreInformazioni {
     {
         this.padre = padre;
         this.pannelloInformazioni = pannelloInformazioni;
-
-        mostraMezzi = new JButton("  Mostra mezzi sulla linea  ");
-        mostraMezzi.setPreferredSize(new Dimension(185, 30));
-        mostraMezzi.setMaximumSize(new Dimension(185, mostraMezzi.getPreferredSize().height));
-        mostraMezzi.addActionListener(e -> tracciaMezzi());
-        mostraMezzi.setBackground(new Color(175, 62, 62));
-        mostraMezzi.setForeground(Color.WHITE);
-        mostraMezzi.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-        mostraMezzi.setBorderPainted(true);
+        mostraMezzi = pannelloInformazioni.getMostraMezziButton();
     }
 
     //metodo che riceve il waypoint selezionato
@@ -127,11 +119,6 @@ public class GestoreInformazioni {
         }
 
         return lineeTrovate;
-    }
-
-
-    public static JButton getMostraMezziButton() {
-        return mostraMezzi;
     }
 
     public void mostraInfoLinea(String routeId, boolean daComboBox)
@@ -224,16 +211,17 @@ public class GestoreInformazioni {
     public void tracciaMezzi() {
         if (tracciamentoAttivo) {
             tracciamentoAttivo = false;
-            mostraMezzi.setText("  Mostra mezzi sulla linea  ");
+            mostraMezzi.setText(" Mostra mezzi sulla linea ");
             CustomWaypointPainter.setTracciamentoAttivo(false);
-            if (!chiamataDaComboBox) {
-                Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
-            }
-        } else {
+            Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
+        }
+        else {
             tracciamentoAttivo = true;
             mostraMezzi.setText("Nascondi mezzi sulla linea");
         }
+
         Mappa.getMapViewer().repaint();
+
     }
 
     public void resetGestore() {
