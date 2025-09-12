@@ -84,9 +84,10 @@ public class LoadingScreen extends JDialog {
         add(panel);
     }
 
+    //questo metodo riempie la barra di caricamento
     public static void updateProgress(int value1, int value2, JProgressBar progressBar)
     {
-        if (progressBar.equals(null)) return;
+        if (progressBar == null) return;
 
         if (value1 >= 0 && value2 <= 100)
         {for (int i = value1; i <= value2; i++) {
