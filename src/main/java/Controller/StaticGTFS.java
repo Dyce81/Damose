@@ -17,11 +17,29 @@ import java.util.stream.Collectors;
  */
 public class StaticGTFS
 {
+    /**
+     * Una lista di tutti i CustomWaypoint generati dal file stops.txt.
+     */
     public static ArrayList<CustomWaypoint> stops = new ArrayList<>();
+    /**
+     * Una lista di tutti le Route generate dal file routes.txt.
+     */
     public static ArrayList<Route> routes = new ArrayList<>();
+    /**
+     * Una lista di tutti i Trip generati dal file trips.txt.
+     */
     public static ArrayList<Trip> trips = new ArrayList<>();
+    /**
+     * Una lista di tutti gli oggetti StopTime generati dal file stop_times.txt.
+     */
     public static ArrayList<StopTime> stopTimes = new ArrayList<>();
+    /**
+     * Una lista di tutti gli oggetti ShapePoint generati dal file shapes.txt.
+     */
     public static ArrayList<PuntoShape> shapes = new ArrayList<>();
+    /**
+     * Una lista di tutti gli oggetti CollegamentoMetro generati dal file collegamenti_metro.txt.
+     */
     public static ArrayList<CollegamentoMetro> collegamentiMetro = new ArrayList<>();
 
     private static final List<String> lineeMetro = new ArrayList<>();
