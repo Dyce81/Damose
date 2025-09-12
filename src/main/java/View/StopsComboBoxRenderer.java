@@ -11,9 +11,6 @@ public class StopsComboBoxRenderer extends JLabel implements ListCellRenderer<Cu
     private static final Image iconaAutobus = new ImageIcon("assets/autobus_icona.png").getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
     private static final Image iconaMetro = new ImageIcon("assets/metro_icona.png").getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
 
-    //TODO: forse usare questo al posto di creare una nuova ImageIcon ogni volta???? Vedere sotto
-    private static final ImageIcon imgIconAutobus = new ImageIcon(iconaMetro);
-
     public StopsComboBoxRenderer()
     {
         setOpaque(true);
@@ -45,7 +42,7 @@ public class StopsComboBoxRenderer extends JLabel implements ListCellRenderer<Cu
             setIcon(null);
         } else {
             if (value.getId().startsWith("ITO"))
-                setIcon(new ImageIcon(iconaMetro)); //TODO: questa creazione ogni volta di un oggetto non è proprio carina, vedere se si può risolvere in modo carino
+                setIcon(new ImageIcon(iconaMetro));
             else
                 setIcon(new ImageIcon(iconaAutobus));
         }
