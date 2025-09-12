@@ -207,7 +207,7 @@ public class GestoreInformazioni {
         }
     }
 
-    private String getTipoMezzoString(int tipo) {
+    public String getTipoMezzoString(int tipo) {
         return switch (tipo) {
             case 0 -> "Tram";
             case 1 -> "Metropolitana";

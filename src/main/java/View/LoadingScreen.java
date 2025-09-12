@@ -92,7 +92,7 @@ public class LoadingScreen extends JDialog {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Errore nel caricamento");
             }
         }}
     }

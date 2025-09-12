@@ -20,4 +20,6 @@ class GestoreInformazioniTest
         var gestore = new GestoreInformazioni(new Frame(0,0, "test"), new PannelloInformazioni());
         assertEquals("Autobus", gestore.getTipoMezzoString(3));
     }
+
+
 }
