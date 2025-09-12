@@ -18,7 +18,7 @@ public class Page
             pagina.dispose();
             if (riapri)
             {
-                LoginPage loginPage = new LoginPage();
+                new LoginPage();
             }
         });
         timer.setRepeats(false);
