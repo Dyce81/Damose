@@ -12,6 +12,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Gestisce i dati statici GTFS e definisce i metodi per manipolarli.
+ */
 public class StaticGTFS
 {
     public static ArrayList<CustomWaypoint> stops = new ArrayList<>();
@@ -23,6 +26,9 @@ public class StaticGTFS
 
     private static final List<String> lineeMetro = new ArrayList<>();
 
+    /**
+     * Legge i file di testo (dei dati statici GTFS) e popola le liste di oggetti {@link CustomWaypoint}, {@link Route}, {@link Trip}, {@link StopTime}, {@link PuntoShape} e {@link CollegamentoMetro}.
+     */
     public static void inizializzaDati()
     {
         ArrayList<String[]> provvisorio = leggiCSV("data/rome_static_gtfs/stops.txt");
@@ -121,10 +127,13 @@ public class StaticGTFS
         LoadingScreen.updateProgress(96, 100, LoadingScreen.progressBar);
     }
 
-    //Tracciamento statico dei mezzi
-    //Non so se questo metodo va bene: è molto rigido, mostra molti mezzi in circolazione (ignora
-    //eventuali disservizi, corse cancellate, festività eccetera) e mostra i mezzi solo in fermata
-    //ignorando il percorso tra le fermate. quindi probabilmente questo metodo è da rifare completamente
+    /**
+     * Ottiene staticamente la posizione dei veicoli. Per la linea specificata, trova il viaggio più
+     * vicino all'orario reale in cui viene richiesto l'aggiornamento, e per ogni fermata controlla
+     * se un mezzo dovrebbe (in base agli orari programmati) essere presente.
+     * @param routeId il codice identificativo della linea.
+     * @return un ArrayList di coordinate di ciascun mezzo presente sulla linea.
+     */
     public static ArrayList<GeoPosition> getPosizioneVeicolo(String routeId)
     {
         LocalTime adesso = LocalTime.now();
@@ -150,6 +159,13 @@ public class StaticGTFS
         return coordinateMezzi;
     }
 
+    /**
+     * Ottiene l'orario di arrivo del prossimo viaggio - rispetto l'orario attuale e rispetto
+     * alla fermata e alla linea passate come parametri.
+     * @param stopId il codice identificativo della fermata selezionata.
+     * @param routeId il codice identificativo della linea selezionata.
+     * @return stringa rappresentante l'orario di arrivo del prossimo mezzo in questa fermata. Formato "HH:mm".
+     */
     public static String getTripUpdate(String stopId, String routeId)
     {
         List<Trip> viaggiTrovati = trips.stream()
@@ -170,8 +186,12 @@ public class StaticGTFS
         return prossimoArrivo.map(stopTime -> stopTime.getOrarioArrivo().format(DateTimeFormatter.ofPattern("HH:mm"))).orElse("");
     }
 
-    // Controlla se la linea passata come parametro è una linea della metropolitana.
-    // La lista delle linee viene popolata in automatico in "inizializzaDati()"
+    /**
+     * Controlla se la linea passata come parametro è una linea della metropolitana.
+     * La lista delle linee viene popolata in automatico in "inizializzaDati()".
+     * @param routeId il codice identificativo della linea interessata.
+     * @return true se la linea specificata dall'id è una linea della metropolitana, false altrimenti.
+     */
     public static boolean lineaDellaMetro(String routeId)
     {
         for (String id : lineeMetro)
@@ -181,10 +201,14 @@ public class StaticGTFS
         return false;
     }
 
-    // Questo metodo serve per le linee delle metropolitane: queste infatti hanno id come le altre
-    // linee, ma è più comodo usare il loro nome commerciale (linea A, B...). Questo
-    // controllo deve essere fatto "manualmente" perché nei file GTFS non è incluso il nome
-    // commerciale delle linee (o comunque non per le metropolitane)
+    /**
+     * Questo metodo serve per le linee delle metropolitane: queste infatti hanno id come le altre
+     * linee, ma è più comodo usare il loro nome commerciale (linea A, B...). Questo
+     * controllo deve essere fatto "manualmente" perché nei file GTFS non è incluso il nome
+     * commerciale delle linee (o comunque non per le metropolitane)
+     * @param routeId il codice identificativo della linea interessata.
+     * @return il nome commerciale della linea specificata dall'id.
+     */
     public static String getNomeRealeMetro(String routeId)
     {
         return switch (routeId)
@@ -197,6 +221,11 @@ public class StaticGTFS
         };
     }
 
+    /**
+     * Legge un file di testo e divide il testo usando come separatore il carattere ',' (virgola).
+     * @param path il percorso del file di testo da leggere.
+     * @return un ArrayList di stringhe ottenute dal file.
+     */
     public static ArrayList<String[]> leggiCSV(String path)
     {
         ArrayList<String[]> valori = new ArrayList<>();
@@ -218,6 +247,11 @@ public class StaticGTFS
         return valori;
     }
 
+    /**
+     * Converte una stringa (formato "HH:mm:ss") in un oggetto di tipo LocalTime.
+     * @param tempo la stringa da convertire in LocalTime.
+     * @return l'oggetto LocalTime ottenuto.
+     */
     public static LocalTime parseTimeCorretto(String tempo)
     {
         String[] parti = tempo.split(":");
@@ -230,15 +264,25 @@ public class StaticGTFS
         return LocalTime.of(ore, minuti, secondi);
     }
 
+    /**
+     * Cerca (nell'ArrayList "routes") l'oggetto Route il cui id è quello passato come parametro.
+     * @param routeId il codice identificato dell'oggetto Route da trovare.
+     * @return l'oggetto Route trovato.
+     */
     public static Route getLinea(String routeId)
     {
         for (Route r : routes)
             if (r.id().equals(routeId))
                 return r;
 
-        return null; //alquanto improbabile che venga restituito null
+        return null; // Improbabile che venga restituito null
     }
 
+    /**
+     * Cerca (nell'ArrayList "stops") l'oggetto CustomWaypoint il cui id è quello passato come parametro.
+     * @param stopId il codice identificato dell'oggetto CustomWaypoint da trovare.
+     * @return l'oggetto CustomWaypoint trovato.
+     */
     public static CustomWaypoint getFermata(String stopId)
     {
         for (CustomWaypoint f : stops)
@@ -248,15 +292,27 @@ public class StaticGTFS
         return null;
     }
 
-    public static String getIdFermata(String nomeFermata) {
+    /**
+     * Cerca l'id di una fermata partendo solo dal suo nome.
+     * @param nomeFermata il nome della fermata di cui si vuole ottenere l'id.
+     * @return l'id del CustomWaypoint cercato.
+     */
+    public static String getIdFermata(String nomeFermata)
+    {
         for (CustomWaypoint stop : stops) {
             if (stop.getNome().equals(nomeFermata)) {
                 return stop.getId();
             }
         }
+
         return null;
     }
 
+    /**
+     * Ottiene il percorso di una linea passata come parametro.
+     * @param routeId il codice identificativo della linea interessata.
+     * @return una lista di coordinate che specificano il percorso della linea interessata.
+     */
     public static List<GeoPosition> getPercorso(String routeId)
     {
         ArrayList<Trip> viaggi = trips.stream()
