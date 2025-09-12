@@ -110,7 +110,6 @@ public class PannelloInformazioni {
         mostraMezzi = new JButton("  Mostra mezzi sulla linea  ");
         mostraMezzi.setPreferredSize(new Dimension(185, 30));
         mostraMezzi.setMaximumSize(new Dimension(185, mostraMezzi.getPreferredSize().height));
-        mostraMezzi.addActionListener(e -> tracciaMezzi());
         mostraMezzi.setBackground(new Color(175, 62, 62));
         mostraMezzi.setForeground(Color.WHITE);
         mostraMezzi.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));

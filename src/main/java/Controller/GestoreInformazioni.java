@@ -34,6 +34,7 @@ public class GestoreInformazioni {
         this.padre = padre;
         this.pannelloInformazioni = pannelloInformazioni;
         mostraMezzi = pannelloInformazioni.getMostraMezziButton();
+        mostraMezzi.addActionListener(e -> tracciaMezzi());
     }
 
     //metodo che riceve il waypoint selezionato
@@ -122,7 +123,7 @@ public class GestoreInformazioni {
     }
 
 
-    public static JButton getMostraMezziButton() {
+    public JButton getMostraMezziButton() {
         return mostraMezzi;
     }
 
