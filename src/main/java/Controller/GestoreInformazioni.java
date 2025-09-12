@@ -212,7 +212,8 @@ public class GestoreInformazioni {
         Mappa.getMapViewer().repaint();
     }
 
-    private void gestisciAvvisi(String routeId) {
+    private void gestisciAvvisi(String routeId)
+    {
         String problema = DynamicGTFS.getServiceAlert(routeId);
         if (!problema.isBlank() && !avvisoMostrato)
         {
