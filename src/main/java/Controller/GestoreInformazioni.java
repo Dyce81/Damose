@@ -16,8 +16,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class GestoreInformazioni {
-
+/**
+ * GestoreInformazioni si occupa di gestire tutte le informazioni richieste sulle linee e le fermate.
+ * Le informazioni reperite qui vengono poi mostrate da PannelloInformazioni.
+ */
+public class GestoreInformazioni
+{
     private final Frame padre;
     private final PannelloInformazioni pannelloInformazioni;
     private final JButton mostraMezzi;
@@ -28,6 +32,11 @@ public class GestoreInformazioni {
     private boolean chiamataDaComboBox = false;
     private CustomWaypoint ultimaFermataSelezionata;
 
+    /**
+     * Il costruttore di GestoreInformazioni.
+     * @param padre il Frame dentro cui è si trova la mappa e il pannello informazioni. Questo campo viene usato per mostrare l'avvisi su eventuali problemi sulla linea.
+     * @param pannelloInformazioni il pannello che mostra le informazioni ottenute in questa classe.
+     */
     public GestoreInformazioni(Frame padre, PannelloInformazioni pannelloInformazioni)
     {
         this.padre = padre;
@@ -36,10 +45,15 @@ public class GestoreInformazioni {
         mostraMezzi.addActionListener(e -> tracciaMezzi());
     }
 
-    //metodo che riceve il waypoint selezionato
-    public void selezionaFermata(CustomWaypoint fermata) {
+    /**
+     * Ottiene le informazioni relative alla fermata passata come parametro. In questo metodo vengono anche calcolate le linee che passano per questa fermata.
+     * @param fermata la fermata di cui si vogliono conoscere le informazioni.
+     */
+    public void selezionaFermata(CustomWaypoint fermata)
+    {
         // Deseleziona la fermata precedente se esiste
-        if (ultimaFermataSelezionata != null) {
+        if (ultimaFermataSelezionata != null)
+        {
             ultimaFermataSelezionata.deseleziona();
             // Resetta il gestore precedente, inclusa la UI
             resetGestore();
@@ -58,21 +72,31 @@ public class GestoreInformazioni {
         Mappa.getMapViewer().repaint();
     }
 
-    public void deselezionaFermata() {
-        if (ultimaFermataSelezionata != null) {
+    /**
+     * Deseleziona la fermata attualmente selezionata.
+     */
+    public void deselezionaFermata()
+    {
+        if (ultimaFermataSelezionata != null)
+        {
             ultimaFermataSelezionata.deseleziona();
             resetGestore();
             ultimaFermataSelezionata = null;
         }
     }
 
-    public void deselezionaLinea() {
+    /**
+     * Deseleziona la linea attualmente selezionata.
+     */
+    public void deselezionaLinea()
+    {
         Mappa.disegnaLinea(new ArrayList<>());
         Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
         Mappa.getMapViewer().repaint();
     }
 
-    private ArrayList<Route> trovaLineePerFermata(String stopId) {
+    private ArrayList<Route> trovaLineePerFermata(String stopId)
+    {
         ArrayList<Route> lineeTrovate = new ArrayList<>();
 
         if (stopId.startsWith("ITO")) {
@@ -91,7 +115,9 @@ public class GestoreInformazioni {
                     }
                 }
             }
-        } else {
+        }
+        else
+        {
             // Logica per autobus e altri mezzi
 
             //Trova tutti gli ID dei "trip" (corse) che si fermano a questo "stopId"
@@ -121,6 +147,11 @@ public class GestoreInformazioni {
         return lineeTrovate;
     }
 
+    /**
+     * Calcola il tipo di linea e avvia un timer che ogni 30 secondi cerca di ottenere un aggiornamento sulla linea (prossimo arrivo, eventuale ritardo ecc.).
+     * @param routeId il codice identificativo della linea per la quale si desidera ottenere un aggiornamento.
+     * @param daComboBox boolean che specifica se il metodo è stato invocato da una ComboBox o dal GestoreInformazioni stesso.
+     */
     public void mostraInfoLinea(String routeId, boolean daComboBox)
     {
         Route linea = StaticGTFS.getLinea(routeId);
@@ -222,6 +253,11 @@ public class GestoreInformazioni {
         }
     }
 
+    /**
+     * Restituisce una stringa che specifica quale mezzo è identificato dal numero passato come parametro.
+     * @param tipo int che specifica un tipo di mezzo.
+     * @return stringa con il nome del mezzo ottenuto.
+     */
     public String getTipoMezzoString(int tipo)
     {
         return switch (tipo) {
@@ -233,11 +269,18 @@ public class GestoreInformazioni {
         };
     }
 
-    public CustomWaypoint getUltimaFermata() {
+    /**
+     * Restituisce l'ultima fermata selezionata.
+     * @return CustomWaypoint che specifica la fermata attualmente selezionata.
+     */
+    public CustomWaypoint getUltimaFermata()
+    {
         return ultimaFermataSelezionata;
     }
 
-    // Metodo invocato dal pulsante per cambiare lo stato del tracciamento (attivo o disattivato)
+    /**
+     * Metodo invocato dal pulsante per cambiare lo stato del tracciamento (attivo o inattivo).
+     */
     public void tracciaMezzi()
     {
         if (tracciamentoAttivo)
@@ -264,7 +307,12 @@ public class GestoreInformazioni {
 
     }
 
-    public void resetGestore() {
+    /**
+     * Effettua il reset del GestoreInformazioni, annullando l'eventuale tracciamento e smettendo
+     * di cercare aggiornamenti sulla linea o fermata precedentemente specificata.
+     */
+    public void resetGestore()
+    {
         if (task != null) task.cancel(true);
         CustomWaypointPainter.setTracciamentoAttivo(false);
         deselezionaLinea();
