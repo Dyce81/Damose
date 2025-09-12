@@ -17,8 +17,6 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
         setCacheable(false);
     }
 
-    //Se l'icona si trova fuori dai confini della mappa oltre questo offset, non sarà disegnata
-    private final int offsetVisibilita = 30;
     private static boolean tracciamentoAttivo = false;
     private static ArrayList<GeoPosition> posizioniMezzi = new ArrayList<>();
 
@@ -66,6 +64,8 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
             int y = (int)(punto.getY() - viewport.getY());
 
             //Se l'icona è fuori dallo schermo, non la disegnare
+            //Se l'icona si trova fuori dai confini della mappa oltre questo offset, non sarà disegnata
+            int offsetVisibilita = 30;
             if (x < -offsetVisibilita || x > larghezza + offsetVisibilita || y < -offsetVisibilita
                     || y > altezza + offsetVisibilita) continue;
 
