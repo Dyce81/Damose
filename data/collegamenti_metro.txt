@@ -1,0 +1,77 @@
+stop_id,stop_name,route_id
+ITO88,Barberini,248
+ITO111,Lucio Sestio,248
+ITO130,Cavour,249
+ITO105,Monti Tiburtini,249
+ITO92,Quintiliani,249
+ITO77,Tiburtina,249
+ITO107,Bologna,249
+ITO96,Policlinico,249
+ITO115,Laurentina,249
+ITO100,Pietralata,249
+ITO134,EUR Fermi,249
+ITO137,Circo Massimo,249
+ITO123,Borghesiana,342
+ITO101,Parco di Centocelle,342
+ITO126,Due Leoni/Fontana Candida,342
+ITO74,Torre Gaia,342
+ITO121,Giardinetti,342
+ITO72,Torre Spaccata,342
+ITO67,Alessandrino,342
+ITO106,Mirti,342
+ITO110,Malatesta,342
+ITO99,Pigneto,342
+ITO82,San Giovanni,248
+ITO125,Furio Camillo,248
+ITO90,Re di Roma,248
+ITO109,Manzoni,248
+ITO135,Cipro,248
+ITO133,Cinecittà,248
+ITO89,Rebibbia,248
+ITO78,Termini,248
+ITO78,Termini,249
+ITO78,Termini,305
+ITO97,Battistini,248
+ITO87,Repubblica,248
+ITO69,Vittorio Emanuele,248
+ITO86,S. Giovanni,248
+ITO136,Cornelia,248
+ITO80,Subaugusta,248
+ITO93,Porta Furba - Quadraro,248
+ITO104,Numidio Quadrato,248
+ITO68,Anagnina,248
+ITO84,Baldo degli Ubaldi,248
+ITO70,Valle Aurelia,248
+ITO103,Ottaviano,248
+ITO139,Colli Albani,248
+ITO95,Ponte Lungo,248
+ITO81,Spagna,248
+ITO127,Castro Pretorio,249
+ITO98,Piramide,249
+ITO124,Garbatella,249
+ITO91,Basilica San Paolo,249
+ITO108,Marconi,249
+ITO94,Ponte Mammolo,249
+ITO131,EUR Palasport,249
+ITO85,S. Agnese/Annibaliano,305
+ITO113,Libia,305
+ITO83,Santa Maria del Soccorso,249
+ITO129,Finocchio,342
+ITO140,Colosseo,249
+ITO138,Conca d'Oro,305
+ITO118,Graniti,342
+ITO71,Torrenova,342
+ITO132,EUR Magliana,249
+ITO117,Grotte Celoni,342
+ITO79,Teano,342
+ITO76,Arco di Travertino,248
+ITO119,Giulio Agricola,248
+ITO114,Lepanto,248
+ITO128,Flaminio,248
+ITO116,Jonio,305
+ITO102,Monte Compatri/Pantano,342
+ITO120,Bolognetta,342
+ITO75,Torre Angela,342
+ITO73,Torre Maura,342
+ITO122,Gardenie,342
+ITO112,Lodi,342

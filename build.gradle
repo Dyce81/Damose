@@ -1,0 +1,42 @@
+// Applica il plugin di Gradle per jar eseguibili
+plugins {
+    id 'java'
+    id 'application'
+}
+
+// Definisce il gruppo e la versione del progetto
+group 'com.Damose' // Sostituisci con il tuo gruppo
+version '1.0'
+
+// Specifica la versione del JDK che il progetto deve usare
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21) // Sostituisci con la tua versione JDK
+    }
+}
+
+repositories {
+    // Gradle cerca le dipendenze in questi repository
+    mavenCentral()
+    google()
+}
+
+// Definisce le dipendenze del progetto
+dependencies {
+    implementation 'org.jxmapviewer:jxmapviewer2:2.8'
+    implementation 'com.h2database:h2:2.3.232'
+    implementation 'com.google.transit:gtfs-realtime-bindings:0.0.4'
+    implementation 'org.mindrot:jbcrypt:0.4'
+    implementation 'com.opencsv:opencsv:5.9'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// Configurazione per il plugin per JAR eseguibile
+application {
+    mainClass = 'com.Damose.Main'
+}
