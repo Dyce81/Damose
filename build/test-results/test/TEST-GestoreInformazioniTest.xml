@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="GestoreInformazioniTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-09-12T14:25:04" hostname="DESKTOP-JBN4HND" time="0.82">
-  <properties/>
-  <testcase name="ZeroShouldReturnTram()" classname="GestoreInformazioniTest" time="0.725"/>
-  <testcase name="ThreeShouldReturnAutobus()" classname="GestoreInformazioniTest" time="0.093"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
