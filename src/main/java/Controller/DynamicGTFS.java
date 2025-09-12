@@ -1,6 +1,5 @@
 package Controller;
 
-import Model.Trip;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.transit.realtime.GtfsRealtime.*;
 import org.jxmapviewer.viewer.GeoPosition;
@@ -93,11 +92,10 @@ public class DynamicGTFS
 
             if (tripIdCercato != null)
             {
-                String tempo = Instant.ofEpochSecond(prossimoArrivo)
+
+                return Instant.ofEpochSecond(prossimoArrivo)
                         .atZone(ZoneId.systemDefault())
                         .format(DateTimeFormatter.ofPattern("HH:mm"));
-
-                return tempo;
             } else return "";
         }
         catch (InvalidProtocolBufferException e)
