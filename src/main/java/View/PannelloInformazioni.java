@@ -24,6 +24,7 @@ public class PannelloInformazioni {
     private final JLabel prossimoArrivo;
     private final JButton tastoFermataPref;
     private final JButton tastoLineaPref;
+    private final JButton mostraMezzi;
     private static final Color rossoScuro = new Color(143, 51, 51);
     private static final Color rosso = new Color(175, 62, 62);
 
@@ -105,6 +106,14 @@ public class PannelloInformazioni {
         pannello.add(lineeServite);
         pannello.add(pulsantiLinee);
         pannello.add(infoLinea);
+
+        mostraMezzi = new JButton("  Mostra mezzi sulla linea  ");
+        mostraMezzi.setPreferredSize(new Dimension(185, 30));
+        mostraMezzi.setMaximumSize(new Dimension(185, mostraMezzi.getPreferredSize().height));
+        mostraMezzi.setBackground(new Color(175, 62, 62));
+        mostraMezzi.setForeground(Color.WHITE);
+        mostraMezzi.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        mostraMezzi.setBorderPainted(true);
     }
 
     public JPanel getPannello() {
@@ -166,6 +175,8 @@ public class PannelloInformazioni {
         }
     }
 
+    public JButton getMostraMezziButton() {return mostraMezzi;}
+
     public void setLineeServite(ArrayList<Route> linee, GestoreInformazioni gestore) {
         pulsantiLinee.removeAll();
         for (Route r : linee) {
@@ -209,10 +220,10 @@ public class PannelloInformazioni {
         infoLinea.repaint();
 
         // Rimuove il pulsante dei mezzi prima di aggiungerlo
-        if (GestoreInformazioni.getMostraMezziButton().getParent() != null) {
-            GestoreInformazioni.getMostraMezziButton().getParent().remove(GestoreInformazioni.getMostraMezziButton());
+        if (mostraMezzi.getParent() != null) {
+            mostraMezzi.getParent().remove(mostraMezzi);
         }
-        pannello.add(GestoreInformazioni.getMostraMezziButton());
+        pannello.add(mostraMezzi);
         pannello.revalidate();
         pannello.repaint();
     }
@@ -255,8 +266,8 @@ public class PannelloInformazioni {
 
         tastoFermataPref.setVisible(false);
         prossimoArrivo.setText("");
-        if (GestoreInformazioni.getMostraMezziButton().getParent() != null) {
-            pannello.remove(GestoreInformazioni.getMostraMezziButton());
+        if (mostraMezzi != null) {
+            pannello.remove(mostraMezzi);
         }
 
         pannello.revalidate();
