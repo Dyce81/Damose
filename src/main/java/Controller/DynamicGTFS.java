@@ -11,6 +11,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/**
+ * La classe DynamicGTFS contiene tutti i metodi atti ad ottenere dati in tempo reale sul traffico
+ * dei mezzi pubblici della città di Roma (dati specificati da RomaMobilità).
+ */
 public class DynamicGTFS
 {
     private final static String tripUpdateUrl = "https://romamobilita.it/sites/default/files/rome_rtgtfs_trip_updates_feed.pb";
@@ -20,8 +24,13 @@ public class DynamicGTFS
     private static TripUpdate ultimoTripUpdate;
     private static TripDescriptor ultimoTripDescriptor;
 
-    //Ottiene le coordinate dei mezzi in movimento, le mette in un arraylist e lo restituisce
-    //alla funzione chiamante, che si occuperà poi di disegnare i mezzi
+    /**
+     * Ottiene le coordinate di ogni singolo mezzo presente in questo momento sulla linea
+     * specifica tramite routeId, le mette in un arraylist e lo restituisce
+     * alla funzione chiamante, che si occuperà poi di disegnare i mezzi.
+     * @param routeId codice identificativo della linea.
+     * @return lista di coordinate di ciascun mezzo tracciato.
+     */
     public static ArrayList<GeoPosition> getVehiclePosition(String routeId)
     {
         try (InputStream input = new URI(vehicleUrl).toURL().openStream())
@@ -52,6 +61,13 @@ public class DynamicGTFS
         return new ArrayList<>();
     }
 
+    /**
+     * Ottiene un TripUpdate della linea specificata e della fermata, per poi calcolare
+     * il tempo di arrivo del mezzo più vicino alla fermata passata come parametro.
+     * @param routeId codice identificativo della linea.
+     * @param stopId codice identificativo della fermata.
+     * @return stringa rappresentante l'orario di arrivo del prossimo mezzo.
+     */
     public static String getTripUpdate(String routeId, String stopId)
     {
         if (!WiFi.connesso()) return "";
@@ -92,11 +108,12 @@ public class DynamicGTFS
 
             if (tripIdCercato != null)
             {
-
                 return Instant.ofEpochSecond(prossimoArrivo)
                         .atZone(ZoneId.systemDefault())
                         .format(DateTimeFormatter.ofPattern("HH:mm"));
-            } else return "";
+            }
+            else
+                return "";
         }
         catch (InvalidProtocolBufferException e)
         {
@@ -110,7 +127,12 @@ public class DynamicGTFS
         return "";
     }
 
-    // Controlla se c'è qualche avviso relativo alla linea selezionata (passata come parametro qui)
+    /**
+     * Controlla se c'è qualche avviso diffuso da Roma Mobilità per quanto riguarda la linea
+     * selezionata.
+     * @param routeId codice identificativo della linea selezionata.
+     * @return una stringa con l'eventuale avviso diffuso da Roma Mobilità.
+     */
     public static String getServiceAlert(String routeId)
     {
         if (!WiFi.connesso()) return "";
@@ -126,9 +148,6 @@ public class DynamicGTFS
                 {
                     if (entitySelector.getRouteId().equals(routeId))
                     {
-                        //System.out.println(entita);
-                        //TODO: cambiare i nomi dei campi qui sotto
-
                         long adesso = Instant.now().getEpochSecond();
                         long tempoInizio = allerta.getActivePeriod(0).getStart();
                         long tempoFine = allerta.getActivePeriod(0).getEnd();
@@ -164,10 +183,23 @@ public class DynamicGTFS
         return "";
     }
 
+    /**
+     * Restituisce l'ultimo TripUpdate calcolato (dinamicamente tramite getTripUpdate).
+     * @return l'ultimo trip update calcolato.
+     */
     public static TripUpdate getUltimoTripUpdate() { return ultimoTripUpdate; }
 
+    /**
+     * Restituisce l'ultimo TripDescriptor calcolato (dinamicamente tramite getTripUpdate).
+     * @return l'ultimo trip descriptor calcolato.
+     */
     public static TripDescriptor getUltimoTripDescriptor() { return ultimoTripDescriptor; }
 
+    /**
+     * Calcola il ritardo totale sulla corsa (passata nel TripUpdate) e lo restituisce.
+     * @param trip il TripUpdate di cui si vuole conoscere il ritardo.
+     * @return ritardo sulla corsa interessata (in secondi).
+     */
     public static int getRitardo(TripUpdate trip)
     {
         if (!WiFi.connesso() || !trip.isInitialized()) return 0;
@@ -176,6 +208,11 @@ public class DynamicGTFS
         return (trip.getDelay() % 3600) / 60;
     }
 
+    /**
+     * Ottiene lo stato della corsa passata come parametro (tramite TripDescriptor).
+     * @param trip il TripDescriptor del viaggio di cui si vuole conoscere lo stato.
+     * @return una stringa che specifica se la corsa è in orario, cancellata, ecc.
+     */
     public static String getStato(TripDescriptor trip)
     {
         if (!WiFi.connesso() || !trip.isInitialized()) return "";

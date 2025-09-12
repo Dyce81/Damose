@@ -38,8 +38,7 @@ public class Main
             GestoreWaypoint gestoreWaypoint = new GestoreWaypoint(gestoreInformazioni);
             gestoreWaypoint.posizionaFermate();
 
-            frame.impostaComboBox(); //se questa riga viene spostata sopra, la combobox NON funziona,
-            //quindi più tardi questa cosa è da aggiustare perché è indecente :(
+            frame.impostaComboBox();
 
             WiFi.impostaFrame(frame, frame.getMappa());
         });
