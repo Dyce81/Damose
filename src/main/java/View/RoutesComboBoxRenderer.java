@@ -5,7 +5,8 @@ import Model.Route;
 import javax.swing.*;
 import java.awt.*;
 
-public class RoutesComboBoxRenderer extends JLabel implements ListCellRenderer<Route>
+
+class RoutesComboBoxRenderer extends JLabel implements ListCellRenderer<Route>
 {
     public RoutesComboBoxRenderer()
     {

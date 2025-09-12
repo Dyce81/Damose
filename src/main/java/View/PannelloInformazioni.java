@@ -8,6 +8,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * Questa classe popola il pannello laterale delle informazioni.
+ */
 public class PannelloInformazioni {
 
     private final JPanel pannello;
@@ -28,6 +31,9 @@ public class PannelloInformazioni {
     private static final Color rossoScuro = new Color(143, 51, 51);
     private static final Color rosso = new Color(175, 62, 62);
 
+    /**
+     * Costruttore.
+     */
     public PannelloInformazioni() {
         pannello = new JPanel();
         pannello.setBackground(rossoScuro);
@@ -116,10 +122,13 @@ public class PannelloInformazioni {
         mostraMezzi.setBorderPainted(true);
     }
 
-    public JPanel getPannello() {
+    JPanel getPannello() {
         return this.pannello;
     }
 
+    /**
+     * Imposta la fermata visualizzata nel pannello.
+     */
     public void impostaFermata(CustomWaypoint fermata) {
         nome.setText(fermata.getNome());
         if (LoginManager.logged) {
@@ -130,7 +139,7 @@ public class PannelloInformazioni {
         }
     }
 
-    public void impostaFermataPref(String nomeFermata) {
+    private void impostaFermataPref(String nomeFermata) {
         for (var al : tastoFermataPref.getActionListeners()) {
             tastoFermataPref.removeActionListener(al);
         }
@@ -152,7 +161,7 @@ public class PannelloInformazioni {
         }
     }
 
-    public void impostaLineaPref(String nomeLinea)
+    private void impostaLineaPref(String nomeLinea)
     {
         for (var al : tastoLineaPref.getActionListeners()) {
             tastoLineaPref.removeActionListener(al);
@@ -175,8 +184,16 @@ public class PannelloInformazioni {
         }
     }
 
+    /**
+     * Ritorna il tasto per attivare la visualizzazione dei mezzi sulla mappa.
+     */
     public JButton getMostraMezziButton() {return mostraMezzi;}
 
+    /**
+     * Imposta le linee servite da ogni fermata.
+     * @param linee è la lista delle linee servite.
+     * @param gestore è il gestore delle informazioni.
+     */
     public void setLineeServite(ArrayList<Route> linee, GestoreInformazioni gestore) {
         pulsantiLinee.removeAll();
         for (Route r : linee) {
@@ -196,6 +213,11 @@ public class PannelloInformazioni {
         pannello.repaint();
     }
 
+    /**
+     * Mostra le informazioni sulla linea selezionata.
+     * @param routeId è l'Id della linea.
+     * @param daComboBox indica se la chiamata della funzione deriva dalla selezione tramite ComboBox.
+     */
     public void mostraInfoLineaUI(String routeId, boolean daComboBox) {
         infoLinea.removeAll();
         infoLinea.add(testoLinea);
@@ -237,30 +259,48 @@ public class PannelloInformazioni {
         pannello.repaint();
     }
 
+    /**
+     * Imposta il prossimo arrivo.
+     */
     public void setProssimoArrivo(String tempo) {
         prossimoArrivo.setText(tempo);
     }
 
+    /**
+     * Imposta l'avviso se i dati sono previsti staticamente o meno.
+     */
     public void setAvvisoPrevisione(String avviso) {
         avvisoPrevisione.setText(avviso);
     }
 
+    /**
+     * Imposta lo stato della corsa e l'eventuale ritardo.
+     */
     public void setStatoCorsa(String stato, String ritardo) {
         statoCorsa.setText("Stato corsa: " + stato);
         ritardoCorsa.setText(ritardo);
     }
 
+    /**
+     * Imposta la segnalazione del caso in cui non è stato possibile tracciare i mezzi.
+     */
     public void setAvvisoTracciamento(String avviso)
     {
         avvisoTracciamento.setText("<html>" + avviso + "</html>");
     }
 
+    /**
+     * Aggiorna le informazioni sulla linea.
+     */
     public void updateLineaInfo(String routeId, String tipo, String arrivo) {
         testoLinea.setText("Linea selezionata: " + routeId);
         tipoMezzo.setText("Tipo mezzo: " + tipo);
         prossimoArrivo.setText(arrivo);
     }
 
+    /**
+     * Resetta il pannello informazioni.
+     */
     public void resetPannello() {
         nome.setText("Seleziona una fermata.");
         lineeServite.setText("");

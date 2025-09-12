@@ -14,10 +14,16 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Questa classe crea la pagina di gestione dei preferiti.
+ */
 public class FavoritesPage extends Page
 {
     private final GestoreInformazioni gestoreInformazioni;
 
+    /**
+     * Costruttore.
+     */
     public FavoritesPage(GestoreInformazioni gestoreInform)
     {
         gestoreInformazioni = gestoreInform;
@@ -39,7 +45,7 @@ public class FavoritesPage extends Page
         page.setVisible(true);
     }
 
-    public void creaIfLogged(JPanel panel)
+    private void creaIfLogged(JPanel panel)
     {
         panel.setBounds(0, 0, 450, 240);
         page.setBackground(rossoscuro);
@@ -83,7 +89,7 @@ public class FavoritesPage extends Page
 
     }
 
-    public void creaIfNotLogged(JPanel panel)
+    private void creaIfNotLogged(JPanel panel)
     {
         panel.setBounds(0, 0, 450, 280);
         panel.add(Box.createVerticalStrut(75));
@@ -111,7 +117,8 @@ public class FavoritesPage extends Page
 
     }
 
-    void disegnaPreferiti(List<String> preferiti, JPanel scrollPanel, boolean fermata, GestoreInformazioni gestoreInform)
+    //questo metodo popola lo scrollPanel con le fermate e le linee preferite
+    private void disegnaPreferiti(List<String> preferiti, JPanel scrollPanel, boolean fermata, GestoreInformazioni gestoreInform)
     {
         if (preferiti.isEmpty())
         {

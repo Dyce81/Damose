@@ -5,6 +5,9 @@ import View.LoginPage;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Questa è la superclasse di molte delle pagine del progetto.
+ */
 public class Page
 {
     protected JDialog page;

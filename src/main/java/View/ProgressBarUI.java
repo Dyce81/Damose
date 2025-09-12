@@ -1,11 +1,11 @@
-package Model;
+package View;
 
 import javax.swing.JComponent;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-public class ProgressBarUI extends BasicProgressBarUI {
+class ProgressBarUI extends BasicProgressBarUI {
 
     private final Color foregroundColor;
     private final Color backgroundColor;

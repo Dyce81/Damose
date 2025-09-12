@@ -8,8 +8,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Questa classe crea la pagina di Login / LogOut
+ */
 public class LoginPage extends Page
 {
+    /**
+     * Costruttore.
+     */
     public LoginPage()
     {
         //setup finestra
@@ -43,7 +49,7 @@ public class LoginPage extends Page
     }
 
 
-    public void creaPaginaLogin(JPanel panel, JDialog dialog)
+    private void creaPaginaLogin(JPanel panel, JDialog dialog)
     {
         //scritta di benvenuto
         JLabel benvenuto = new JLabel("benvenuto");
@@ -196,7 +202,7 @@ public class LoginPage extends Page
         panel.add(avviso);
     }
 
-    public void creaPaginaLogout(JPanel panel, JDialog dialog)
+    private void creaPaginaLogout(JPanel panel, JDialog dialog)
     {
         JLabel benvenuto = new JLabel("HAI GIA EFFETTUATO IL LOGIN");
         benvenuto.setAlignmentX(Component.CENTER_ALIGNMENT);

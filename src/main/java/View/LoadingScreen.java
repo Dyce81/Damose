@@ -1,7 +1,6 @@
 package View;
 
 import Controller.FileReader;
-import Model.ProgressBarUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,10 +8,16 @@ import java.io.IOException;
 import java.util.Random;
 import javax.swing.border.Border;
 
+/**
+ * Questa classe crea la schermata di caricamento iniziale.
+ */
 public class LoadingScreen extends JDialog {
 
     public static JProgressBar progressBar;
 
+    /**
+     * Costruttore.
+     */
     public LoadingScreen()
     {
         Color rosso = new Color(175, 62, 62);
@@ -84,7 +89,9 @@ public class LoadingScreen extends JDialog {
         add(panel);
     }
 
-    //questo metodo riempie la barra di caricamento
+    /**
+     * Aggiorna il valore della barra di caricamento.
+     */
     public static void updateProgress(int value1, int value2, JProgressBar progressBar)
     {
         if (progressBar == null) return;

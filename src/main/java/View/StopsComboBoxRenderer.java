@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class StopsComboBoxRenderer extends JLabel implements ListCellRenderer<CustomWaypoint>
+class StopsComboBoxRenderer extends JLabel implements ListCellRenderer<CustomWaypoint>
 {
     private static final Image iconaAutobus = new ImageIcon("assets/autobus_icona.png").getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
     private static final Image iconaMetro = new ImageIcon("assets/metro_icona.png").getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH);
