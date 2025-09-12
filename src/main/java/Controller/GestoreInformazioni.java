@@ -7,7 +7,6 @@ import View.Frame;
 import View.PannelloInformazioni;
 import org.jxmapviewer.viewer.GeoPosition;
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -179,7 +178,8 @@ public class GestoreInformazioni {
     private void gestisciTracciamento(String routeId)
     {
         // Ottiene una lista delle coordinate di tutti i veicoli in circolazione
-        // sulla linea selezionata
+        // sulla linea selezionata. Se la linea selezionata è una linea della metropolitana
+        // è inutile provare a tracciare i mezzi: non sono disponibili
         ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(routeId);
 
         // Se la lista è vuota prova a fare una stima della posizione dei mezzi (tramite
