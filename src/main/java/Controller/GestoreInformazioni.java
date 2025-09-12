@@ -214,13 +214,15 @@ public class GestoreInformazioni {
 
     private void gestisciAvvisi(String routeId) {
         String problema = DynamicGTFS.getServiceAlert(routeId);
-        if (!problema.isBlank() && !avvisoMostrato) {
+        if (!problema.isBlank() && !avvisoMostrato)
+        {
             avvisoMostrato = true;
             padre.mostraAvviso(problema);
         }
     }
 
-    public String getTipoMezzoString(int tipo) {
+    public String getTipoMezzoString(int tipo)
+    {
         return switch (tipo) {
             case 0 -> "Tram";
             case 1 -> "Metropolitana";
@@ -249,7 +251,6 @@ public class GestoreInformazioni {
             if (!chiamataDaComboBox)
             {
                 Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
-                System.out.println("NON chiamato dal combobox");
             }
         }
         else
