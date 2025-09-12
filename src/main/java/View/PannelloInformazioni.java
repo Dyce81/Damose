@@ -200,29 +200,38 @@ public class PannelloInformazioni {
         infoLinea.removeAll();
         infoLinea.add(testoLinea);
         infoLinea.add(tastoLineaPref);
-        if (LoginManager.logged) {
+
+        if (LoginManager.logged)
+        {
             tastoLineaPref.setVisible(true);
             impostaLineaPref(routeId);
-        } else {
+        }
+        else
+        {
             tastoLineaPref.setVisible(false);
         }
         infoLinea.add(tipoMezzo);
         infoLinea.add(new JLabel("                                                                 "));
-        if (!daComboBox)
+
+        if (!daComboBox && !StaticGTFS.lineaDellaMetro(routeId))
         {
             infoLinea.add(prossimoArrivo);
             infoLinea.add(statoCorsa);
             infoLinea.add(ritardoCorsa);
             infoLinea.add(avvisoPrevisione);
-            infoLinea.add(avvisoTracciamento);
         }
+
+        infoLinea.add(avvisoTracciamento);
+
         infoLinea.revalidate();
         infoLinea.repaint();
 
         // Rimuove il pulsante dei mezzi prima di aggiungerlo
-        if (mostraMezzi.getParent() != null) {
+        if (mostraMezzi.getParent() != null)
+        {
             mostraMezzi.getParent().remove(mostraMezzi);
         }
+
         pannello.add(mostraMezzi);
         pannello.revalidate();
         pannello.repaint();
@@ -241,7 +250,8 @@ public class PannelloInformazioni {
         ritardoCorsa.setText(ritardo);
     }
 
-    public void setAvvisoTracciamento(String avviso) {
+    public void setAvvisoTracciamento(String avviso)
+    {
         avvisoTracciamento.setText("<html>" + avviso + "</html>");
     }
 
@@ -263,10 +273,11 @@ public class PannelloInformazioni {
         infoLinea.revalidate();
         infoLinea.repaint();
 
-
         tastoFermataPref.setVisible(false);
         prossimoArrivo.setText("");
-        if (mostraMezzi != null) {
+        avvisoTracciamento.setText("");
+        if (mostraMezzi != null)
+        {
             pannello.remove(mostraMezzi);
         }
 

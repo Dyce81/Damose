@@ -148,7 +148,7 @@ public class Frame extends JFrame {
                 editor2.selectAll();}
             @Override
             public void focusLost(FocusEvent e) {
-                editor.setText("Seleziona una linea");
+                editor2.setText("Seleziona una linea");
             }
         });
     }
