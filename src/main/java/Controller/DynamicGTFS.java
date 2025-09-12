@@ -210,7 +210,7 @@ public class DynamicGTFS
 
     /**
      * Ottiene lo stato della corsa passata come parametro (tramite TripDescriptor).
-     * @param trip
+     * @param trip il TripDescriptor del viaggio di cui si vuole conoscere lo stato.
      * @return una stringa che specifica se la corsa è in orario, cancellata, ecc.
      */
     public static String getStato(TripDescriptor trip)
