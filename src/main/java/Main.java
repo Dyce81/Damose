@@ -6,6 +6,8 @@ import View.PannelloInformazioni;
 import Controller.WiFi;
 
 import javax.swing.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //disclaimer: il progetto potrebbe essere organizzato meglio - magari separando ulteriormente la logica
 //della creazione delle fermate, creando un'altra classe WaypointManager che si occupa di piazzare
@@ -15,14 +17,14 @@ public class Main
 {
     public static void main(String[] args)
     {
+        Logger jxMapViewerLogger = Logger.getLogger("org.jxmapviewer");
+        jxMapViewerLogger.setLevel(Level.OFF);
+
         LoadingScreen loadingScreen = new LoadingScreen();
         loadingScreen.setVisible(true);
 
         DatabaseManager.createUsersTable();
         DatabaseManager.createPreferencesTables();
-
-        //per debugging
-        DatabaseManager.printAllUsers();
 
         StaticGTFS.inizializzaDati();
         WiFi.inizializza();

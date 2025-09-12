@@ -49,10 +49,9 @@ public class LoginManager
         username = "";
     }
 
-    public static void eliminaAccount(String username)
+    public static boolean eliminaAccount(String username)
     {
         logged = false;
-        username = "";
-        DatabaseManager.removeUser(username);
+        return DatabaseManager.removeUser(username);
     }
 }

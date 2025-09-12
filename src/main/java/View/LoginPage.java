@@ -19,29 +19,37 @@ public class LoginPage extends Page
         page.setLocationRelativeTo(null);
         page.setModal(true);
         page.setLayout(null);
+        page.setForeground(rossoscuro);
+
+        //pannello che ricopre la pagina
+        JPanel backPanel = new JPanel();
+        backPanel.setBounds(0, 0, 450, 280);
+        backPanel.setBackground(rossoscuro);
+        backPanel.setLayout(null);
 
         //pannello in cui inserire i componenti
         JPanel panel = new JPanel();
         panel.setBounds(68, 20, 300, 210);
+        panel.setBackground(rossoscuro);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         if (LoginManager.logged) {creaPaginaLogout(panel, page);}
         else {creaPaginaLogin(panel, page);}
 
 
-        page.add(panel);
+        page.add(backPanel);
+        backPanel.add(panel);
         page.setVisible(true);
     }
 
 
     public void creaPaginaLogin(JPanel panel, JDialog dialog)
     {
-        Color green = new Color(4, 175, 27);
-
         //scritta di benvenuto
         JLabel benvenuto = new JLabel("benvenuto");
         benvenuto.setText("BENVENUTO NELLA PAGINA DI LOGIN");
         benvenuto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        benvenuto.setForeground(Color.WHITE);
         panel.add(benvenuto);
         panel.add(Box.createVerticalStrut(10));
 
@@ -61,6 +69,7 @@ public class LoginPage extends Page
         JLabel usrn_txt = new JLabel("username:");
         usrn_txt.setLabelFor(username);
         usrn_txt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        usrn_txt.setForeground(Color.WHITE);
         panel.add(usrn_txt);
         panel.add(username);
         panel.add(Box.createVerticalStrut(10));
@@ -82,6 +91,7 @@ public class LoginPage extends Page
         JLabel pswd_txt = new JLabel("password:");
         pswd_txt.setLabelFor(password);
         pswd_txt.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pswd_txt.setForeground(Color.WHITE);
         panel.add(pswd_txt);
         panel.add(password);
         panel.add(Box.createVerticalStrut(10));
@@ -90,11 +100,13 @@ public class LoginPage extends Page
         //tasto di accesso o registrazione
         JButton acc_reg = new JButton("acc_reg");
         acc_reg.setText("Accedi");
-        acc_reg.setAlignmentX(Component.CENTER_ALIGNMENT);
+        acc_reg.setPreferredSize(new Dimension(75, 25));
+        acc_reg.setMaximumSize(new Dimension(75, 25));
+        impostaButton(acc_reg);
         panel.add(acc_reg);
         panel.add(Box.createVerticalStrut(10));
         JLabel avviso = new JLabel("testo deafault");
-        avviso.setForeground(dialog.getBackground());
+        avviso.setForeground(rossoscuro);
         avviso.setAlignmentX(Component.CENTER_ALIGNMENT);
         acc_reg.addActionListener(e -> {
             String username_input = username.getText();
@@ -104,16 +116,16 @@ public class LoginPage extends Page
             {
                 case 0:
                     avviso.setText("username troppo corto!");
-                    avviso.setForeground(Color.RED);
+                    avviso.setForeground(Color.WHITE);
                 case 1:
                     avviso.setText("username troppo lungo!");
-                    avviso.setForeground(Color.RED);
+                    avviso.setForeground(Color.WHITE);
                 case 2:
                     avviso.setText("password troppo corta!");
-                    avviso.setForeground(Color.RED);
+                    avviso.setForeground(Color.WHITE);
                 case 3:
                     avviso.setText("password troppo lunga!");
-                    avviso.setForeground(Color.RED);
+                    avviso.setForeground(Color.WHITE);
                 case 4:
 
             }
@@ -124,14 +136,14 @@ public class LoginPage extends Page
                     if (LoginManager.registra(username_input, password_input))
                     {
                         avviso.setText("Registrazione completata! Accesso eseguito!");
-                        avviso.setForeground(green);
+                        avviso.setForeground(verde);
 
                         chiudiPagina(dialog, false, 1200);
                     }
 
                     else {
                         avviso.setText("Registrazione fallita, utente già registrato.");
-                        avviso.setForeground(Color.RED);
+                        avviso.setForeground(Color.WHITE);
                     }
                 }
 
@@ -141,13 +153,13 @@ public class LoginPage extends Page
                     if (LoginManager.accedi(username_input, password_input))
                     {
                         avviso.setText("Accesso eseguito!");
-                        avviso.setForeground(green);
+                        avviso.setForeground(verde);
 
                         chiudiPagina(dialog, false, 1200);
                     }
                     else {
                         avviso.setText("Accesso fallito, password o username errato.");
-                        avviso.setForeground(Color.RED);
+                        avviso.setForeground(Color.WHITE);
                     }
                 }
             }
@@ -157,7 +169,9 @@ public class LoginPage extends Page
         //cambia tra modalità di accesso e registrazione
         JButton cambia_mod = new JButton("cambia_modalità");
         cambia_mod.setText("Non sei registrato? Registrati ora!");
-        cambia_mod.setAlignmentX(Component.CENTER_ALIGNMENT);
+        impostaButton(cambia_mod);
+        cambia_mod.setPreferredSize(new Dimension(205, 25));
+        cambia_mod.setMaximumSize(new Dimension(205, 25));
         panel.add(cambia_mod);
         panel.add(Box.createVerticalStrut(10));
         cambia_mod.addActionListener(e -> {
@@ -186,12 +200,15 @@ public class LoginPage extends Page
     {
         JLabel benvenuto = new JLabel("HAI GIA EFFETTUATO IL LOGIN");
         benvenuto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        benvenuto.setForeground(Color.WHITE);
         panel.add(benvenuto);
 
         panel.add(Box.createVerticalStrut(5));
 
         JButton disconnetti = new JButton("Disconnetti");
-        disconnetti.setAlignmentX(Component.CENTER_ALIGNMENT);
+        impostaButton(disconnetti);
+        disconnetti.setPreferredSize(new Dimension(100, 25));
+        disconnetti.setMaximumSize(new Dimension(100, 25));
         panel.add(disconnetti);
         disconnetti.addActionListener(e -> {
             LoginManager.disconnetti();
@@ -202,12 +219,15 @@ public class LoginPage extends Page
 
         JLabel cambia = new JLabel("Se vuoi cambiare password:");
         cambia.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cambia.setForeground(Color.WHITE);
         panel.add(cambia);
 
         panel.add(Box.createVerticalStrut(5));
 
         JButton cambiaPassword = new JButton("Cambia Password");
-        cambiaPassword.setAlignmentX(Component.CENTER_ALIGNMENT);
+        impostaButton(cambiaPassword);
+        cambiaPassword.setPreferredSize(new Dimension(125, 25));
+        cambiaPassword.setMaximumSize(new Dimension(125, 25));
         panel.add(cambiaPassword);
         //crea la pagina per cambiare la password
         cambiaPassword.addActionListener(e -> new ChangePasswordPage());
@@ -216,6 +236,7 @@ public class LoginPage extends Page
 
         JLabel elimina = new JLabel("Se vuoi eliminare il tuo account:");
         elimina.setAlignmentX(Component.CENTER_ALIGNMENT);
+        elimina.setForeground(Color.WHITE);
         panel.add(elimina);
 
         panel.add(Box.createVerticalStrut(5));
@@ -235,14 +256,29 @@ public class LoginPage extends Page
 
         panel.add(Box.createVerticalStrut(5));
 
+        JLabel avviso = new JLabel("testo deafault");
+        avviso.setForeground(rossoscuro);
+        avviso.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         JButton eliminaAccount = new JButton("Elimina Account");
-        eliminaAccount.setAlignmentX(Component.CENTER_ALIGNMENT);
+        impostaButton(eliminaAccount);
+        eliminaAccount.setPreferredSize(new Dimension(100, 25));
+        eliminaAccount.setMaximumSize(new Dimension(100, 25));
         panel.add(eliminaAccount);
         eliminaAccount.addActionListener(e -> {
-            LoginManager.eliminaAccount(nomeAccount.getText());
-            chiudiPagina(dialog, true, 1200);
+            if (LoginManager.eliminaAccount(nomeAccount.getText()))
+            {
+                chiudiPagina(dialog, true, 1200);
+                avviso.setText("Eliminazione riuscita");
+                avviso.setForeground(verde);
+            }
+            else {
+                avviso.setText("username errato");
+                avviso.setForeground(Color.WHITE);
+            }
         });
 
-        panel.add(Box.createVerticalStrut(20));
+        panel.add(Box.createVerticalStrut(5));
+        panel.add(avviso);
     }
 }

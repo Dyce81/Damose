@@ -123,7 +123,7 @@ public class DatabaseManager {
     }
 
     // Rimuove un utente
-    public static void removeUser(String username)
+    public static boolean removeUser(String username)
     {
         String deleteSQL = "DELETE FROM users WHERE username = ?";
         try (Connection conn = getConnection();
@@ -132,11 +132,14 @@ public class DatabaseManager {
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Utente '" + username + "' rimosso con successo.");
+                return true;
             } else {
                 System.out.println("Nessun utente trovato con lo username '" + username + "'.");
+                return false;
             }
         } catch (SQLException e) {
             System.err.println("Errore durante la rimozione dell'utente: " + e.getMessage());
+            return false;
         }
     }
 
