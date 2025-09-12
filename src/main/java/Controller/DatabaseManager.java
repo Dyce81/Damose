@@ -15,8 +15,6 @@ public class DatabaseManager {
     private static final String USER = "sa";
     private static final String PASS = "password";
 
-    public static boolean logged = false;
-
     public DatabaseManager() {
         try {
             Class.forName(JDBC_DRIVER);
@@ -213,6 +211,9 @@ public class DatabaseManager {
         }
     }
 
+        //METODI USATI PER DEBUG
+
+        /*
         // Metodo per svuotare le tabelle e risolvere l'errore di integrità referenziale
         public static void deleteUsersTable() {
             String truncateFavoriteLinesSQL = "TRUNCATE TABLE favorite_lines";
@@ -270,5 +271,5 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.err.println("Errore durante il recupero degli utenti: " + e.getMessage());
         }
-    }
+    }*/
 }

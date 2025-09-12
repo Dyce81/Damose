@@ -23,7 +23,6 @@ public class Mappa
 {
     private static JXMapViewer mappa;
     private static Painter<JXMapViewer> painter = null;
-    private static boolean compound = false;
 
     private static final TileFactoryInfo info = new OSMTileFactoryInfo();
     private static final DefaultTileFactory tileFactory = new DefaultTileFactory(info);
