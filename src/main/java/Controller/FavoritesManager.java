@@ -92,7 +92,7 @@ public class FavoritesManager
      * Questo metodo controlla se la fermata interessata è già nel database (quindi già tra i preferiti).
      * @param userId il nome utente dell'utente attualmente loggato.
      * @param stopName il nome della fermata da controllare.
-     * @return
+     * @return restituisce true se la fermata è nel database, false altrimenti.
      */
     public static boolean isFavoriteStopPresent(Integer userId, String stopName) {
         String sql = "SELECT COUNT(*) FROM favorite_stops WHERE user_id = ? AND stop_name = ?";
@@ -115,14 +115,11 @@ public class FavoritesManager
         return false;
     }
 
-    // Metodo per controllare se una linea è già nel database
-    // NOTA: Ora riceve l'ID utente direttamente
-
     /**
      * Questo metodo controlla se la linea interessata è già nel database (quindi già tra i preferiti).
      * @param userId il nome utente dell'utente attualmente loggato.
      * @param lineName il nome della linea da controllare.
-     * @return
+     * @return restituisce true se la linea è nel database, false altrimenti.
      */
     public static boolean isFavoriteLinePresent(Integer userId, String lineName)
     {
