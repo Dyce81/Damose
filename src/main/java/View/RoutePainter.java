@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.List;
 
-public class RoutePainter implements Painter<JXMapViewer>
+class RoutePainter implements Painter<JXMapViewer>
 {
     private final List<GeoPosition> percorso;
 
@@ -18,7 +18,8 @@ public class RoutePainter implements Painter<JXMapViewer>
     }
 
     @Override
-    public void paint(Graphics2D g, JXMapViewer map, int width, int height) {
+    public void paint(Graphics2D g, JXMapViewer map, int width, int height)
+    {
         g = (Graphics2D) g.create();
 
         Rectangle rect = map.getViewportBounds();

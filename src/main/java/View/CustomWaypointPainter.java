@@ -10,8 +10,14 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+/**
+ * Questa classe si occupa di disegnare sia le fermate che gli autobus.
+ */
 public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
 {
+    /**
+     * Costruttore.
+     */
     public CustomWaypointPainter()
     {
         setCacheable(false);
@@ -70,18 +76,21 @@ public class CustomWaypointPainter extends WaypointPainter<CustomWaypoint>
                     || y > altezza + offsetVisibilita) continue;
 
             Image icona = wp.getIcona();
-            //g.drawImage(icona, x, y, null);
             g.drawImage(icona, x - icona.getWidth(null) / 2, y - icona.getHeight(null) / 2, null);
-            //JButton icona = wp.getIcona();
-            //icona.setLocation(iconaX - icona.getWidth() / 2, iconaY - icona.getHeight() / 2);
         }
     }
 
+    /**
+     * Imposta il tracciamentoAttivo.
+     */
     public static void setTracciamentoAttivo(boolean attivo)
     {
         tracciamentoAttivo = attivo;
     }
 
+    /**
+     * Imposta la lista delle posizioni dei mezzi.
+     */
     public static void setPosizioniMezzi(ArrayList<GeoPosition> pos)
     {
         posizioniMezzi = pos;

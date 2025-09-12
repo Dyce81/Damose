@@ -9,8 +9,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Questa classe crea la pagina per il cambio password.
+ */
 public class ChangePasswordPage extends Page
 {
+    /**
+     * Costruttore.
+     */
     public ChangePasswordPage()
     {
         page = new JDialog();

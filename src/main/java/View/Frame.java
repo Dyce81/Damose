@@ -14,6 +14,9 @@ import Controller.WiFi;
 import Model.*;
 import org.jxmapviewer.viewer.GeoPosition;
 
+/**
+ * Questa classe crea la finestra principale dell'applicazione.
+ */
 public class Frame extends JFrame {
     private final JFrame frame;
     private final Mappa mappa;
@@ -30,6 +33,9 @@ public class Frame extends JFrame {
     public static final Color verde = new Color(22, 189, 88);
     public static final Color rosso = new Color(191, 63, 24);
 
+    /**
+     * Costruttore.
+     */
     public Frame(int height, int width, String title) {
         //Creazione finestra e definizione dimensione e operazione di chiusura
         frame = new JFrame(title);
@@ -106,7 +112,9 @@ public class Frame extends JFrame {
         frame.setVisible(true);
     }
 
-    //Fa esattamente quello che sembra
+    /**
+     * Imposta le JComboBox personalizzate.
+     */
     public void impostaComboBox() {
         testoFermata.setPreferredSize(new Dimension(330, 30));
         testoLinea.setPreferredSize(new Dimension(160, 30));
@@ -196,6 +204,9 @@ public class Frame extends JFrame {
         }
     }
 
+    /**
+     * Si occupa di aggiornare il pannello in cui viene visualizzata la presenza di connessione.
+     */
     public void cambiaStatoWiFi() {
         if (WiFi.connesso()) {
             testoWiFi.setText("WiFi connesso");
@@ -208,18 +219,33 @@ public class Frame extends JFrame {
         testoWiFi.repaint();
     }
 
+    /**
+     * Ritorna la mappa.
+     * @return la mappa mostrata dal Frame.
+     */
     public Mappa getMappa() {
         return mappa;
     }
 
+    /**
+     * Ritorna il PannelloInformazioni del Frame.
+     * @return il pannello delle informazioni mostrato nel Frame.
+     */
     public PannelloInformazioni getPannelloInformazioni() {
         return this.pannelloInformazioni;
     }
 
+    /**
+     * Imposta il gestore informazioni usato dal pannello.
+     */
     public void setGestoreInformazioni(GestoreInformazioni gestore) {
         this.gestoreInformazioni = gestore;
     }
 
+    /**
+     * Si occupa di mostrare un avviso in caso di problemi su una linea.
+     * @param testo è il testo dell'avviso.
+     */
     public void mostraAvviso(String testo)
     {
         if (finestraAvvisoAperta)

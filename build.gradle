@@ -1,5 +1,6 @@
 // Applica il plugin di Gradle per jar eseguibili
 plugins {
+    id 'java'
     id 'application'
 }
 

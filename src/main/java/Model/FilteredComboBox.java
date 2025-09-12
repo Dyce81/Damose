@@ -5,19 +5,25 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// Questa classe è stata realizzata praticamente copiando
-// https://stackoverflow.com/questions/27753375/jcombobox-search-list
+/**
+ * // Questa classe è stata realizzata con l'aiuto di questa pagina
+ * <a href="https://stackoverflow.com/questions/27753375/jcombobox-search-list">...</a>
+ * e si occupa della ricerca degli elementi all'interno della ComboBox.
+ */
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class FilteredComboBox<T> extends JComboBox<T>
 {
     private final List<T> entries;
 
-    public List<T> getEntries()
+    List<T> getEntries()
     {
         return entries;
     }
 
+    /**
+     * Costruttore.
+     */
     public FilteredComboBox()
     {
         this.entries = new ArrayList<>();
@@ -35,12 +41,18 @@ public class FilteredComboBox<T> extends JComboBox<T>
         });
     }
 
+    /**
+     * Questo metodo sovrascrive il metodo addItem della JComboBox.
+     */
     @Override
     public void addItem(T oggetto)
     {
         entries.add(oggetto);
     }
 
+    /**
+     * Filtra gli elementi in base al testo inserito.
+     */
     public void filtra(String testo)
     {
         if (testo.isBlank())

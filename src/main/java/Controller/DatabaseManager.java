@@ -9,12 +9,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Questa classe è stata realizzata con l'aiuto di Google Gemini e si occupa della gestione del Database in cui
+ * vengono memorizzate le credenziali dei vari utenti.
+ */
 public class DatabaseManager {
     private static final String JDBC_DRIVER = "org.h2.Driver";
     private static final String DB_URL = "jdbc:h2:./data/mydb";
     private static final String USER = "sa";
     private static final String PASS = "password";
 
+    /**
+     * Costruttore.
+     */
     public DatabaseManager() {
         try {
             Class.forName(JDBC_DRIVER);
@@ -23,11 +30,13 @@ public class DatabaseManager {
         }
     }
 
-    public static Connection getConnection() throws SQLException {
+    static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DB_URL, USER, PASS);
     }
 
-    // Crea la tabella per gli utenti
+    /**
+     * Crea la tabella per gli utenti.
+     */
     public static void createUsersTable() {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS users (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY," +
@@ -43,6 +52,9 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Crea la tabella per i preferiti.
+     */
     public static void createPreferencesTables() {
         String createStopsTableSQL = "CREATE TABLE IF NOT EXISTS favorite_stops (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY," +
@@ -69,19 +81,19 @@ public class DatabaseManager {
     }
 
     // Metodo per hashare la password
-    public static String hashPassword(String plainTextPassword)
+    static String hashPassword(String plainTextPassword)
     {
         return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
     }
 
     // Metodo per controllare una password e l'hash esistente
-    public static boolean checkPassword(String plainTextPassword, String hashedPassword)
+    static boolean checkPassword(String plainTextPassword, String hashedPassword)
     {
         return BCrypt.checkpw(plainTextPassword, hashedPassword);
     }
 
     // Aggiunge un utente al database (ora riceve la password in chiaro)
-    public static void addUser(String username, String plainTextPassword)
+    static void addUser(String username, String plainTextPassword)
     {
         if (userExists(username))
         {
@@ -104,7 +116,7 @@ public class DatabaseManager {
     }
 
     // Controlla se un utente esiste già
-    public static boolean userExists(String username)
+    static boolean userExists(String username)
     {
         String checkSql = "SELECT COUNT(*) FROM users WHERE username = ?";
         try (Connection conn = getConnection();
@@ -121,7 +133,7 @@ public class DatabaseManager {
     }
 
     // Rimuove un utente
-    public static boolean removeUser(String username)
+    static boolean removeUser(String username)
     {
         String deleteSQL = "DELETE FROM users WHERE username = ?";
         try (Connection conn = getConnection();
@@ -142,7 +154,7 @@ public class DatabaseManager {
     }
 
     // Recupera l'hash della password di un utente
-    public static String getUserPasswordHash(String username)
+    static String getUserPasswordHash(String username)
     {
         String selectSQL = "SELECT password_hash FROM users WHERE username = ?";
         try (Connection conn = getConnection();
@@ -158,7 +170,11 @@ public class DatabaseManager {
         return null; // Utente non trovato o errore
     }
 
-    // Metodo per recuperare l'ID di un utente tramite lo username
+    /**
+     * Metodo per recuperare l'ID di un utente tramite lo username.
+     * @param username il nome dell'utente.
+     * @return ritorna l'Id.
+     */
     public static Integer getUserId(String username) {
         String sql = "SELECT id FROM users WHERE username = ?";
         try (Connection conn = getConnection();
@@ -174,6 +190,13 @@ public class DatabaseManager {
         return null;
     }
 
+    /**
+     * Cambia password all'utente.
+     * @param username il nome dell'utente.
+     * @param oldPassword la vecchia password.
+     * @param newPassword la nuova password.
+     * @return ritorna un boolean per controllare se il cambio password ha avuto successo o meno.
+     */
     public static boolean changePassword(String username, String oldPassword, String newPassword) {
         String hashedPassword = getUserPasswordHash(username);
 

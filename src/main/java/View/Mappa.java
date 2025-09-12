@@ -19,6 +19,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Questa classe crea e popola la mappa, aggiungendoci le funzionalità di visualizzazione
+ */
 public class Mappa
 {
     private static JXMapViewer mappa;
@@ -30,7 +33,9 @@ public class Mappa
     private static final TileFactoryInfo offlineInfo = new OSMTileFactoryInfo("offline", "file:///" + System.getProperty("user.home").replace('\\', '/') + "/.jxmapviewer2/tile.openstreetmap.org");
     private static final TileFactory offlineTileFactory = new DefaultTileFactory(offlineInfo);
 
-    //costruttore
+    /**
+     * Costruttore.
+     */
     public Mappa(JFrame frame)
     {
         mappa = new JXMapViewer();
@@ -64,26 +69,35 @@ public class Mappa
         mappa.addKeyListener(new PanKeyListener(mappa));
     }
 
-    public static void impostaPosizione(double latitude, double longitude)
+    static void impostaPosizione(double latitude, double longitude)
     {
         GeoPosition posizione = new GeoPosition(latitude, longitude);
         mappa.setAddressLocation(posizione);
         mappa.setZoom(2);
     }
 
+    /**
+     * Imposta il Painter.
+     * @param p è il painter di JXMapViewer.
+     */
     public static void setPainter(Painter<JXMapViewer> p)
     {
-        //if (compound) return;
         if (painter == null) painter = p;
 
         mappa.setOverlayPainter(p);
     }
 
+    /**
+     * Ritorna la mappa.
+     */
     public static JXMapViewer getMapViewer()
     {
         return mappa;
     }
 
+    /**
+     * Si occupa di cambiare la visualizzazione della mappa da online ad offline.
+     */
     public void cambiaStatoMappa()
     {
         if (WiFi.connesso())
@@ -98,23 +112,19 @@ public class Mappa
         }
     }
 
+    /**
+     * Disegna la linea sulla mappa.
+     */
     public static void disegnaLinea(List<GeoPosition> percorso)
     {
         // Viene creato un painter con la route disegnata + il painter attualmente utilizzato
         // (quello con i waypoint)
 
-        //TODO: il campo compound è commentato perché non ricordo cosa fa - comunque per adesso
-        // non pare influenzare nulla, quindi continuiamo ad usare il programma, e se non accade
-        // niente di male, lo togliamo
         RoutePainter rPainter = new RoutePainter(percorso);
         List<Painter<JXMapViewer>> painters = new ArrayList<>();
         painters.add(painter);
         painters.add(rPainter);
         CompoundPainter<JXMapViewer> painter = new CompoundPainter<>(painters);
-        //compound = false;
         setPainter(painter);
-        //compound = true;
-
-        //mappa.zoomToBestFit(new HashSet<>(percorso), 0.7);
     }
 }
