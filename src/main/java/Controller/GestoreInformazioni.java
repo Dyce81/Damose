@@ -121,6 +121,11 @@ public class GestoreInformazioni {
         return lineeTrovate;
     }
 
+
+    public static JButton getMostraMezziButton() {
+        return mostraMezzi;
+    }
+
     public void mostraInfoLinea(String routeId, boolean daComboBox)
     {
         Route linea = StaticGTFS.getLinea(routeId);
@@ -130,6 +135,7 @@ public class GestoreInformazioni {
         pannelloInformazioni.updateLineaInfo(routeId, getTipoMezzoString(linea.tipo()), "<html>Calcolo del prossimo arrivo in corso...</html>");
         pannelloInformazioni.mostraInfoLineaUI(routeId, daComboBox);
         avvisoMostrato = false;
+        chiamataDaComboBox = daComboBox;
 
         if (task != null) task.cancel(true);
         task = scheduler.scheduleAtFixedRate(() -> gestisciAggiornamento(routeId, fermata, daComboBox), 0, 5, TimeUnit.SECONDS);
@@ -137,9 +143,11 @@ public class GestoreInformazioni {
 
     private void gestisciAggiornamento(String routeId, CustomWaypoint fermata, boolean daComboBox)
     {
-        if (!StaticGTFS.lineaDellaMetro(routeId) && !daComboBox) {gestisciProssimoArrivo(routeId, fermata);}
+        if (!StaticGTFS.lineaDellaMetro(routeId) && !daComboBox)
+            gestisciProssimoArrivo(routeId, fermata);
 
-        if (tracciamentoAttivo) {gestisciTracciamento(routeId);}
+        if (tracciamentoAttivo)
+            gestisciTracciamento(routeId);
 
         gestisciAvvisi(routeId);
     }
@@ -147,15 +155,21 @@ public class GestoreInformazioni {
     private void gestisciProssimoArrivo(String routeId, CustomWaypoint fermata)
     {
         String tempo = DynamicGTFS.getTripUpdate(routeId, fermata.getId());
-        if (tempo.isBlank()) {
+        if (tempo.isBlank())
+        {
             tempo = StaticGTFS.getTripUpdate(fermata.getId(), routeId);
-            if (tempo.isBlank()) {
+            if (tempo.isBlank())
+            {
                 pannelloInformazioni.setProssimoArrivo("<html>Impossibile calcolare l'orario di arrivo.</html>");
-            } else {
+            }
+            else
+            {
                 pannelloInformazioni.setAvvisoPrevisione("<html><u><i>Attenzione: questo orario non<br>è basato su dati in tempo reale,<br>ma è l'orario di arrivo<br>programmato.</i></u></html>");
                 pannelloInformazioni.setProssimoArrivo("<html>Prossimo arrivo previsto: " + tempo + "</html>");
             }
-        } else {
+        }
+        else
+        {
             pannelloInformazioni.setAvvisoPrevisione("");
             String stato = DynamicGTFS.getStato(DynamicGTFS.getUltimoTripDescriptor());
             int ritardo = DynamicGTFS.getRitardo(DynamicGTFS.getUltimoTripUpdate());
@@ -165,24 +179,40 @@ public class GestoreInformazioni {
         }
     }
 
+    // Questo metodo si occupa del tracciamento dei mezzi (statico e dinamico)
     private void gestisciTracciamento(String routeId)
     {
-        pannelloInformazioni.setAvvisoTracciamento("");
-
+        // Ottiene una lista delle coordinate di tutti i veicoli in circolazione
+        // sulla linea selezionata
         ArrayList<GeoPosition> lista = DynamicGTFS.getVehiclePosition(routeId);
-        if (lista.isEmpty() && !StaticGTFS.lineaDellaMetro(routeId)) {
-            lista = StaticGTFS.getPosizioneVeicolo(routeId);
-            if (lista.isEmpty()) {
+
+        // Se la lista è vuota prova a fare una stima della posizione dei mezzi (tramite
+        // dati statici). Il controllo viene saltato se la linea selezionata è una linea
+        // della metro, in quanto non è mai possibile stimare dinamicamente la posizione
+        // dei mezzi. Si potrebbe tracciarli staticamente, ma per semplicità dell'interfaccia
+        // è stato scelto di non mostrarli comunque, disegnando solo la linea
+        if (lista.isEmpty())
+        {
+            System.out.println("DEBUG: Tentativo di tracciamento statico");
+            if (!StaticGTFS.lineaDellaMetro(routeId))
+                lista = StaticGTFS.getPosizioneVeicolo(routeId);
+
+            // Se la lista dei veicoli è ancora vuota, allora non è stato possibile tracciare
+            // alcun veicolo; la linea viene comunque disegnata sulla mappa (sotto)
+            if (lista.isEmpty())
+            {
                 pannelloInformazioni.setAvvisoTracciamento("<html><u><i>Attenzione: non è stato<br> possibile tracciare alcun mezzo.</i></u></html>");
             }
-        } else {
-            pannelloInformazioni.setAvvisoTracciamento("");
         }
+        else
+            pannelloInformazioni.setAvvisoTracciamento("");
 
         CustomWaypointPainter.setPosizioniMezzi(lista);
         CustomWaypointPainter.setTracciamentoAttivo(true);
+
         List<GeoPosition> percorso = StaticGTFS.getPercorso(routeId);
         Mappa.disegnaLinea(percorso);
+
         Mappa.getMapViewer().repaint();
     }
 
@@ -208,14 +238,26 @@ public class GestoreInformazioni {
         return ultimaFermataSelezionata;
     }
 
-    public void tracciaMezzi() {
-        if (tracciamentoAttivo) {
+    // Metodo invocato dal pulsante per cambiare lo stato del tracciamento (attivo o disattivato)
+    public void tracciaMezzi()
+    {
+        if (tracciamentoAttivo)
+        {
             tracciamentoAttivo = false;
             mostraMezzi.setText(" Mostra mezzi sulla linea ");
             CustomWaypointPainter.setTracciamentoAttivo(false);
-            Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
+
+            // Se il metodo mostraInfoLinea è stato chiamato dalla combo box delle linee, allora
+            // la linea deve rimanere visibile anche quando il tracciamento non è attivo. La linea
+            // viene disegnata quando si chiama il metodo "cercaLinea()" [in Frame.java]
+            if (!chiamataDaComboBox)
+            {
+                Mappa.getMapViewer().setOverlayPainter(GestoreWaypoint.getWaypointPainter());
+                System.out.println("NON chiamato dal combobox");
+            }
         }
-        else {
+        else
+        {
             tracciamentoAttivo = true;
             mostraMezzi.setText("Nascondi mezzi sulla linea");
         }
