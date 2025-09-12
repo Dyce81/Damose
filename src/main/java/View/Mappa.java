@@ -35,6 +35,7 @@ public class Mappa
 
     /**
      * Costruttore.
+     * @param frame è il frame che contiene la mappa.
      */
     public Mappa(JFrame frame)
     {
@@ -114,6 +115,7 @@ public class Mappa
 
     /**
      * Disegna la linea sulla mappa.
+     * @param percorso è la lista della GeoPosition che compongono il percorso
      */
     public static void disegnaLinea(List<GeoPosition> percorso)
     {

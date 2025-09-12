@@ -128,6 +128,7 @@ public class PannelloInformazioni {
 
     /**
      * Imposta la fermata visualizzata nel pannello.
+     * @param fermata è l'oggetto CustomWaypoint che rappresenta la fermata.
      */
     public void impostaFermata(CustomWaypoint fermata) {
         nome.setText(fermata.getNome());
